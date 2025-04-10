@@ -2,17 +2,17 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>Posts on onecybit blog</title>
-    <link>http://localhost:1313/posts/</link>
+    <link>https://onecybit.github.io.git/posts/</link>
     <description>Recent content in Posts on onecybit blog</description>
     <generator>Hugo -- gohugo.io</generator>
     <language>en-gb</language>
-    <lastBuildDate>Thu, 10 Apr 2025 19:21:50 +0000</lastBuildDate><atom:link href="http://localhost:1313/posts/index.xml" rel="self" type="application/rss+xml" />
+    <lastBuildDate>Thu, 10 Apr 2025 19:21:50 +0000</lastBuildDate><atom:link href="https://onecybit.github.io.git/posts/index.xml" rel="self" type="application/rss+xml" />
     <item>
       <title>Hello</title>
-      <link>http://localhost:1313/posts/hello/</link>
+      <link>https://onecybit.github.io.git/posts/hello/</link>
       <pubDate>Mon, 01 Jan 0001 00:00:00 +0000</pubDate>
       
-      <guid>http://localhost:1313/posts/hello/</guid>
+      <guid>https://onecybit.github.io.git/posts/hello/</guid>
       
       <description>&lt;p&gt;test
 &amp;quot;&amp;quot;&amp;quot;
