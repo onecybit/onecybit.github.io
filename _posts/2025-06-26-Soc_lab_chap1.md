@@ -1,5 +1,5 @@
 ---
-title: "Lab - SOC project - Phase 1"
+title: "Lab - SOC project - Chapter 1"
 date: 2025-06-26 14:00:00 +0000
 categories: [SOC project]
 tags: [SOC, pentest, logs, wazuh, IncidentResponse, Threat Detection]
