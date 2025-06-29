@@ -28,11 +28,11 @@ I will chose option - packaged distributions.
 
 Packaged Distributions - GitHub release 
 
-1) Install a 64bit node.js on your Windows, MacOS or Linux machine
-2) Download juice-shop-<version>_<node-version>_<os>_x64.zip (or .tgz) attached to latest release
-3) Unpack and cd into the unpacked folder
-4) Run npm start
-5) Browse to http://localhost:3000
+- Install a 64bit node.js on your Windows, MacOS or Linux machine
+- Download juice-shop-<version>_<node-version>_<os>_x64.zip (or .tgz) attached to latest release
+- Unpack and cd into the unpacked folder
+- Run npm start
+- Browse to http://localhost:3000
 Each packaged distribution includes some binaries for sqlite3 and libxmljs2 bound to the OS and node.js version which npm install was executed on.
 
 ![Juice_shop](/assets/img/soc_lab/juice_shop.png)

@@ -102,7 +102,7 @@ avatar: assets/img/OneCyBit_logo_compressed.jpg
 
 # The URL of the site-wide social preview image used in SEO `og:image` meta tag.
 # It can be overridden by a customized `page.image` in front matter.
-social_preview_image: # string, local or CORS resources
+social_preview_image: assets/img/OneCyBit_logo_compressed.jpg # string, local or CORS resources
 
 # boolean type, the global switch for TOC in posts.
 toc: true
@@ -119,7 +119,7 @@ comments:
     issue_term: # < url | pathname | title | ...>
   # Giscus options › https://giscus.app
   giscus:
-    repo: onecybit# <gh-username>/<repo>
+    repo: onecybit/onecybit.github.io # <gh-username>/<repo>
     repo_id: R_kgDOO9ZqrQ
     category: General
     category_id: DIC_kwDOO9Zqrc4CsEgn
