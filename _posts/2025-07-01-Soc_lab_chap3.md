@@ -280,4 +280,6 @@ Writes to eve.json → Wazuh parses alerts
 | Data exfiltration | Suricata                 | Large DNS, HTTP uploads         |
 | Persistence       | Sysmon                   | Registry Run keys, scheduled tasks |
 | Tampering         | Sysmon + Wazuh           | Security log cleared (1102)     |
+
+
 ---------------------------------------------------
