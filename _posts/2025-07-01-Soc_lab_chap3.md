@@ -128,8 +128,8 @@ outputs:
             tags: yes
  ```
 
-Here is my suricata.yaml: 
-[Download filename](/assets/files/labs/surciata.yaml)
+Here is my suricata.yaml config file: 
+[Suricata](/assets/files/labs/suricata.yaml)
 
 Your HOME_NET should be set to:
 
