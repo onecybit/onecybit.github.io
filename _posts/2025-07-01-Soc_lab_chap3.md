@@ -129,7 +129,7 @@ outputs:
  ```
 
 Here is my suricata.yaml: 
-[Download filename](assets/files/labs/surciata.yaml)
+[Download filename](/assets/files/labs/surciata.yaml)
 
 Your HOME_NET should be set to:
 
