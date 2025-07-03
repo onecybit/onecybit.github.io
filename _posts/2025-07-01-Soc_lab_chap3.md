@@ -8,16 +8,15 @@ toc: true
 comments: true
 ---
 
+We're going to set up Wazuh to properly monitor security events on our Windows endpoint. While we perform penetration testing on the Windows machine using Kali Linux, Wazuh will collect and forward the relevant logs.
 
-
-Today, we gonna set up Wazuh for proper monitoring security events on our windows-endpoint. We suppose to receive information about our penetration testing windows machine. 
 
 ### Enable Windows Event Log Monitoring
 
 By default, the Wazuh agent collects logs from key sources. 
 You can customize this on the Windows machine in:
 
-```java
+```cmd
 C:\Program Files (x86)\ossec-agent\ossec.conf
 ```
 
@@ -282,4 +281,8 @@ Writes to eve.json → Wazuh parses alerts
 | Tampering         | Sysmon + Wazuh           | Security log cleared (1102)     |
 
 
+<<<<<<< HEAD
 ---------------------------------------------------
+=======
+---------------------------------------------------
+>>>>>>> 7ae86d2 (np)
