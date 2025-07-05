@@ -1,8 +1,8 @@
 ---
-title: "Lab - SOC project - Chapter 3"
+title: "Lab - SOC project - Chapter 2"
 date: 2025-07-01 14:00:00 +0000
 categories: [SOC project]
-tags: [SOC, OWASP juice shop , wazuh, IncidentResponse, Threat Detection]
+tags: [SOC, wazuh, IncidentResponse, Threat Detection]
 pin: false
 toc: true
 comments: true
@@ -281,8 +281,5 @@ Writes to eve.json → Wazuh parses alerts
 | Tampering         | Sysmon + Wazuh           | Security log cleared (1102)     |
 
 
-<<<<<<< HEAD
+
 ---------------------------------------------------
-=======
----------------------------------------------------
->>>>>>> 7ae86d2 (np)
