@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="About onecybit — security researcher, CTF player, and developer. Skills, certifications, and current focus.">
+
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
+  <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+
+  <title>about — onecybit</title>
+
+  <link rel="icon" href="assets/img/favicons/favicon.ico">
+  <link rel="stylesheet" href="assets/css/style.css">
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@100;300;700;900&family=Share+Tech+Mono&display=swap"
+  >
+</head>
+
+<body>
+
+  <div class="cursor" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"></div>
+
+  <!-- ── SHARED: update all pages if this changes ── -->
+  <div class="grid-bg"   aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+  <div class="sweep"     aria-hidden="true"></div>
+  <div class="noise"     aria-hidden="true"></div>
+  <!-- ── END SHARED ── -->
+
+  <header class="site-header">
+    <nav class="nav container" role="navigation" aria-label="Main navigation">
+      <a href="/" class="nav-logo" aria-label="onecybit — home">
+        <span class="nav-logo-text" data-glitch="onecybit">onecybit</span>
+      </a>
+
+      <ul class="nav-links" role="list">
+        <li><a href="/"               class="nav-link">home</a></li>
+        <li><a href="/cybersecurity/" class="nav-link">cybersecurity</a></li>
+        <li><a href="/projects/"      class="nav-link">projects</a></li>
+        <li><a href="/notes/"         class="nav-link">notes</a></li>
+        <li><a href="/tags/"          class="nav-link">tags</a></li>
+        <li><a href="/about.html"     class="nav-link active">about</a></li>
+      </ul>
+
+      <time
+        class="nav-clock"
+        id="js-clock"
+        datetime=""
+        aria-live="polite"
+        aria-label="Current time"
+      ></time>
+    </nav>
+  </header>
+
+  <main>
+    <section class="section">
+      <div class="container">
+
+        <!-- Page header -->
+        <div class="cat-hero">
+          <p class="cat-hero-label">operator profile</p>
+          <h1 class="cat-hero-title cat-hero-title--white">// about</h1>
+          <p class="cat-hero-desc">
+            Security researcher, CTF player, developer. Exploring offensive and
+            defensive security — building things worth sharing along the way.
+          </p>
+        </div>
+
+        <!-- Skills -->
+        <div class="about-section">
+          <h2 class="section-title">// skills</h2>
+          <ul class="skills-grid" aria-label="Skills and proficiency">
+            <li class="skill-item">
+              <span class="skill-name">Web Application Pentesting</span>
+              <span class="skill-status skill-status--active">active</span>
+            </li>
+            <li class="skill-item">
+              <span class="skill-name">Network Enumeration</span>
+              <span class="skill-status skill-status--active">active</span>
+            </li>
+            <li class="skill-item">
+              <span class="skill-name">Linux Privilege Escalation</span>
+              <span class="skill-status skill-status--active">active</span>
+            </li>
+            <li class="skill-item">
+              <span class="skill-name">Burp Suite</span>
+              <span class="skill-status skill-status--active">active</span>
+            </li>
+            <li class="skill-item">
+              <span class="skill-name">Metasploit</span>
+              <span class="skill-status skill-status--familiar">familiar</span>
+            </li>
+            <li class="skill-item">
+              <span class="skill-name">Active Directory</span>
+              <span class="skill-status skill-status--learning">learning</span>
+            </li>
+            <li class="skill-item">
+              <span class="skill-name">Python Scripting</span>
+              <span class="skill-status skill-status--active">active</span>
+            </li>
+            <li class="skill-item">
+              <span class="skill-name">Linux / Arch Administration</span>
+              <span class="skill-status skill-status--advanced">advanced</span>
+            </li>
+          </ul>
+        </div>
+
+        <!-- Philosophy -->
+        <div class="about-section">
+          <h2 class="section-title">// philosophy</h2>
+          <p class="about-intro">
+            Exploring new tools, building useful projects, creating things that didn't
+            exist before. Security is about understanding systems deeply enough to
+            see what others miss. This site is a living knowledge base — writeups
+            from lab work, cheatsheets for field use, notes on whatever's currently
+            being learned.
+          </p>
+        </div>
+
+        <!-- Certifications -->
+        <div class="about-section">
+          <h2 class="section-title">// certifications</h2>
+          <div class="cert-item">
+            <span class="cert-name">Jr Penetration Tester</span>
+            <span class="cert-platform">
+              TryHackMe —
+              <a href="https://tryhackme.com" target="_blank" rel="noopener noreferrer">tryhackme.com ↗</a>
+            </span>
+          </div>
+        </div>
+
+        <!-- Status table -->
+        <div class="about-section">
+          <h2 class="section-title">// status</h2>
+          <table class="about-status-table" aria-label="Current setup">
+            <tbody>
+              <tr>
+                <td class="row-label">os</td>
+                <td class="row-value">Arch Linux</td>
+              </tr>
+              <tr>
+                <td class="row-label">shell</td>
+                <td class="row-value">zsh</td>
+              </tr>
+              <tr>
+                <td class="row-label">editor</td>
+                <td class="row-value">neovim</td>
+              </tr>
+              <tr>
+                <td class="row-label">focus</td>
+                <td class="row-value">offensive security</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- Links -->
+        <nav class="about-links" aria-label="External profiles">
+          <a href="https://github.com/onecybit" class="about-link" target="_blank" rel="noopener noreferrer">github ↗</a>
+        </nav>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span class="footer-copy">© 2025 onecybit</span>
+      <span class="footer-status">// status: <span class="status-ok">operational</span></span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="js-back-top" aria-label="Back to top" hidden>↑</button>
+
+  <script src="assets/js/main.js" defer></script>
+
+</body>
+</html>

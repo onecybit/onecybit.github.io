@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Browse all tags or search posts by keyword — onecybit security research, CTF writeups, and developer notes.">
+
+  <!-- Content Security Policy
+       NOTE: connect-src is 'self' — required for search.js and tags.js to fetch
+       posts.json. form-action is 'none' — search input is JS-controlled, no form
+       submission occurs. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
+
+  <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+
+  <title>tags — onecybit</title>
+
+  <link rel="icon" href="/assets/img/favicons/favicon.ico">
+  <link rel="stylesheet" href="/assets/css/style.css">
+
+  <!-- Google Fonts — see index.html for SRI TODO note -->
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@100;300;700;900&family=Share+Tech+Mono&display=swap"
+  >
+</head>
+
+<body>
+
+  <div class="cursor" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"></div>
+
+  <!-- ── SHARED: update all pages if this changes ── -->
+  <div class="grid-bg"   aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+  <div class="sweep"     aria-hidden="true"></div>
+  <div class="noise"     aria-hidden="true"></div>
+  <!-- ── END SHARED ── -->
+
+  <header class="site-header">
+    <nav class="nav container" role="navigation" aria-label="Main navigation">
+      <a href="/" class="nav-logo" aria-label="onecybit — home">
+        <span class="nav-logo-text" data-glitch="onecybit">onecybit</span>
+      </a>
+
+      <ul class="nav-links" role="list">
+        <li><a href="/"               class="nav-link">home</a></li>
+        <li><a href="/cybersecurity/" class="nav-link">cybersecurity</a></li>
+        <li><a href="/projects/"      class="nav-link">projects</a></li>
+        <li><a href="/notes/"         class="nav-link">notes</a></li>
+        <li><a href="/tags/"          class="nav-link">tags</a></li>
+        <li><a href="/about.html"     class="nav-link">about</a></li>
+      </ul>
+
+      <time
+        class="nav-clock"
+        id="js-clock"
+        datetime=""
+        aria-live="polite"
+        aria-label="Current time"
+      ></time>
+    </nav>
+  </header>
+
+  <main>
+    <section class="section" aria-label="Tags and search">
+      <div class="container">
+
+        <div class="cat-hero">
+          <p class="cat-hero-label">index</p>
+          <h1 class="cat-hero-title cat-hero-title--white">tags</h1>
+          <p class="cat-hero-desc">Browse posts by tag, or search by title, keyword, or excerpt.</p>
+        </div>
+
+        <!-- ── Search ── -->
+        <div class="search-bar" role="search" aria-label="Search posts">
+          <h2 class="section-title">// search</h2>
+          <div class="search-form">
+            <input
+              type="search"
+              id="js-search-input"
+              class="search-input"
+              placeholder="search by title, tag, or keyword..."
+              autocomplete="off"
+              maxlength="100"
+              aria-label="Search posts"
+            >
+          </div>
+          <p
+            class="search-count"
+            id="js-search-count"
+            aria-live="polite"
+            aria-atomic="true"
+          ></p>
+        </div>
+
+        <div
+          id="js-search-results"
+          aria-label="Search results"
+          aria-live="polite"
+        ></div>
+
+        <!-- ── Tag cloud ── -->
+        <section aria-label="Browse by tag">
+          <h2 class="section-title">// all tags</h2>
+
+          <div id="js-tag-cloud" class="tag-cloud" aria-label="Post tags">
+            <p class="loading-state">loading tags...</p>
+          </div>
+
+          <div id="js-tag-filter-bar" class="tag-filter-bar" hidden>
+            <span class="tag-filter-label">showing:</span>
+            <span class="tag-filter-active" id="js-tag-active"></span>
+            <button
+              class="clear-filter-btn"
+              id="js-tag-clear"
+              type="button"
+              aria-label="Clear tag filter"
+            >clear ×</button>
+          </div>
+
+          <div
+            id="js-tag-posts"
+            aria-label="Posts for selected tag"
+            aria-live="polite"
+          ></div>
+        </section>
+
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span class="footer-copy">© 2025 onecybit</span>
+      <span class="footer-status">// status: <span class="status-ok">operational</span></span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="js-back-top" aria-label="Back to top" hidden>↑</button>
+
+  <script src="/assets/js/main.js" defer></script>
+  <script src="/assets/js/search.js" defer></script>
+  <script src="/assets/js/tags.js" defer></script>
+
+</body>
+</html>

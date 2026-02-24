@@ -1,0 +1,44 @@
+[
+  {
+    "title": "SOC Lab — Ch.2: Sysmon, Suricata & Wazuh Integration",
+    "date": "2025-07-01",
+    "category": "cybersecurity",
+    "subcategory": "writeups",
+    "tags": [
+      "soc",
+      "wazuh",
+      "suricata"
+    ],
+    "excerpt": "Expanding the SOC lab with Sysmon deep-logging on Windows and Suricata IDS on the server. Configuring Wazuh to ingest both host-based and network telemetry.",
+    "url": "/posts/cybersecurity/writeups/soc-lab-wazuh-ch2/",
+    "reading_time": "4 min read"
+  },
+  {
+    "title": "SOC Lab — Ch.1: Setup & SIEM Deployment",
+    "date": "2025-06-26",
+    "category": "cybersecurity",
+    "subcategory": "writeups",
+    "tags": [
+      "soc",
+      "wazuh",
+      "threat-detection"
+    ],
+    "excerpt": "Building a home SOC lab with Wazuh SIEM, a Windows 10 endpoint, and Kali Linux as attacker. Covers internal networking, static IPs, and agent registration.",
+    "url": "/posts/cybersecurity/writeups/soc-lab-wazuh-ch1/",
+    "reading_time": "4 min read"
+  },
+  {
+    "title": "Nmap: Tips & Techniques for CTF",
+    "date": "2025-06-23",
+    "category": "cybersecurity",
+    "subcategory": "cheatsheets",
+    "tags": [
+      "nmap",
+      "pentest",
+      "recon"
+    ],
+    "excerpt": "Practical Nmap command reference for CTF and pentesting. SYN scanning, firewall evasion, NSE scripting, output formats, and scan delta comparison.",
+    "url": "/posts/cybersecurity/cheatsheets/nmap-tips-ctf/",
+    "reading_time": "3 min read"
+  }
+]

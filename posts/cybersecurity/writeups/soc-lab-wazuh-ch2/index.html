@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Expanding the SOC lab with Sysmon deep-logging on Windows and Suricata IDS on the server. Configuring Wazuh to ingest both host-based and network telemetry.">
+
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
+  <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+
+  <title>SOC Lab — Ch.2: Sysmon, Suricata &amp; Wazuh Integration — onecybit</title>
+
+  <link rel="icon" href="/assets/img/favicons/favicon.ico">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@100;300;700;900&family=Share+Tech+Mono&display=swap"
+  >
+</head>
+
+<body>
+
+  <div class="cursor" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"></div>
+
+  <!-- ── SHARED: update all pages if this changes ── -->
+  <div class="grid-bg"   aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+  <div class="sweep"     aria-hidden="true"></div>
+  <div class="noise"     aria-hidden="true"></div>
+  <!-- ── END SHARED ── -->
+
+  <header class="site-header">
+    <nav class="nav container" role="navigation" aria-label="Main navigation">
+      <a href="/" class="nav-logo" aria-label="onecybit — home">
+        <span class="nav-logo-text" data-glitch="onecybit">onecybit</span>
+      </a>
+
+      <ul class="nav-links" role="list">
+        <li><a href="/"               class="nav-link">home</a></li>
+        <li><a href="/cybersecurity/" class="nav-link">cybersecurity</a></li>
+        <li><a href="/projects/"      class="nav-link">projects</a></li>
+        <li><a href="/notes/"         class="nav-link">notes</a></li>
+        <li><a href="/tags/"          class="nav-link">tags</a></li>
+        <li><a href="/about.html"     class="nav-link">about</a></li>
+      </ul>
+
+      <time
+        class="nav-clock"
+        id="js-clock"
+        datetime=""
+        aria-live="polite"
+        aria-label="Current time"
+      ></time>
+    </nav>
+  </header>
+
+  <main>
+    <article class="section" aria-label="SOC Lab — Ch.2: Sysmon, Suricata &amp; Wazuh Integration">
+      <div class="container post-full">
+
+        <header class="post-full-header">
+          <nav class="post-breadcrumb" aria-label="Breadcrumb">
+            <a href="/">home</a>
+            <span class="post-breadcrumb-sep" aria-hidden="true">/</span>
+            <a href="/cybersecurity/">cybersecurity</a>
+            <span class="post-breadcrumb-sep" aria-hidden="true">/</span>
+            <span>writeups</span>
+          </nav>
+
+          <div class="post-full-meta">
+            <time class="post-date" datetime="2025-07-01">2025-07-01</time>
+            <span class="cat-badge cat-badge--writeup">writeups</span>
+            <span class="reading-time">4 min read</span>
+          </div>
+
+          <h1 class="post-full-title">SOC Lab — Ch.2: Sysmon, Suricata &amp; Wazuh Integration</h1>
+
+          <ul class="post-full-tags post-tags" aria-label="Tags">
+            <li class="post-tag">soc</li><li class="post-tag">wazuh</li><li class="post-tag">suricata</li>
+          </ul>
+        </header>
+
+        
+
+        <div class="post-body">
+          <p>We're going to set up Wazuh to properly monitor security events on our Windows endpoint. While we perform penetration testing on the Windows machine using Kali Linux, Wazuh will collect and forward the relevant logs.</p>
+<h3 id="enable-windows-event-log-monitoring">Enable Windows Event Log Monitoring</h3>
+<p>By default, the Wazuh agent collects logs from key sources. You can customize this on the Windows machine in:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-cmd">C:\Program Files (x86)\ossec-agent\ossec.conf
+</code></pre></div>
+<p>Ensure you have these &lt;localfile&gt; entries:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-xml">&lt;localfile&gt;
+  &lt;location&gt;Security&lt;/location&gt;
+  &lt;log_format&gt;eventchannel&lt;/log_format&gt;
+&lt;/localfile&gt;
+
+&lt;localfile&gt;
+  &lt;location&gt;System&lt;/location&gt;
+  &lt;log_format&gt;eventchannel&lt;/log_format&gt;
+&lt;/localfile&gt;
+
+&lt;localfile&gt;
+  &lt;location&gt;Application&lt;/location&gt;
+  &lt;log_format&gt;eventchannel&lt;/log_format&gt;
+&lt;/localfile&gt;
+
+&lt;localfile&gt;
+  &lt;location&gt;Microsoft-Windows-PowerShell/Operational&lt;/location&gt;
+  &lt;log_format&gt;eventchannel&lt;/log_format&gt;
+&lt;/localfile&gt;
+</code></pre></div>
+<p>Restart Wazuh agent (on Windows):</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-powershell">net stop wazuh
+net start wazuh
+</code></pre></div>
+<h3 id="installing-sysmon">Installing Sysmon </h3>
+<p>Sysmon = detailed logging for process creation, registry, network connections.</p>
+<p>Steps:</p>
+<ul><li><a href="https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon" target="_blank" rel="noopener noreferrer">Download sysmon</a></li></ul>
+<ul><li>Use SwiftOnSecurity's config:</li></ul>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">https://github.com/SwiftOnSecurity/sysmon-config
+</code></pre></div>
+<p>As the author mentioned, we'll install Sysmon in the C: directory. While we don't have a system-wide setup, it's still good practice to do so.</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-text">Design notes
+This configuration expects software to be installed system-wide and NOT in the C:\Users folder. 
+Various pieces of software install themselves in User directories, which are subject to extra monitoring. 
+Where possible, you should install the system-wide version of these pieces of software, like Chrome. See the configuration file for more instructions.
+</code></pre></div>
+<p><img src="/assets/img/soc_lab/sysmon_localization.png" alt="sysmon_loc" loading="lazy"></p>
+<p>Install:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-cmd">sysmon.exe -accepteula -i sysmonconfig.xml
+</code></pre></div>
+<p><img src="/assets/img/soc_lab/sysmon_config.png" alt="sysmon_config" loading="lazy"></p>
+<p>In Wazuh agent config, add:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-xml">&lt;localfile&gt;
+  &lt;location&gt;Microsoft-Windows-Sysmon/Operational&lt;/location&gt;
+  &lt;log_format&gt;eventchannel&lt;/log_format&gt;
+&lt;/localfile&gt;
+</code></pre></div>
+<p>Restart Wazuh agent.</p>
+<h3 id="installing-suricata">Installing Suricata</h3>
+<p>To monitor Windows endpoint traffic from your Ubuntu Wazuh server, we'll install and integrate a Network IDS like Suricata on the Ubuntu server, and use port mirroring (SPAN) or a tapped interface to observe Windows traffic.</p>
+<p>Installing Suricata (recommended over Snort for Wazuh integration), and integrating it with Wazuh.</p>
+<ul><li>Fully open-source and modern IDS/IPS/NSM engine</li><li>JSON output is easily parsed by Wazuh</li><li>Multi-threaded (better performance)</li><li>Native Wazuh module support</li></ul>
+<p>Install Suricata on Ubuntu (Wazuh Server)</p>
+<ol><li>Add Suricata PPA and install</li></ol>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">   sudo add-apt-repository ppa:oisf/suricata-stable
+   sudo apt update
+   sudo apt install suricata -y
+   </code></pre></div>
+<ol><li>Enable eve.json logging for Wazuh</li></ol>
+<p>Edit /etc/suricata/suricata.yaml</p>
+<p>Find the outputs: section and ensure eve-log is enabled:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-yaml">outputs:
+  - eve-log:
+      enabled: yes
+      filetype: regular
+      filename: /var/log/suricata/eve.json
+      types:
+        - alert:
+            metadata: yes
+            tags: yes
+ </code></pre></div>
+<p>Here is my suricata.yaml config file: <a href="/assets/files/labs/suricata.yaml">Suricata</a></p>
+<p>Your HOME_NET should be set to:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-yaml">vars:
+  address-groups:
+    HOME_NET: &quot;[192.168.1.100]&quot;
+</code></pre></div>
+<p>Interface to sniff (af-packet, pcap, or nfqueue) Make sure Suricata knows which NIC to monitor.</p>
+<p>For example, if your internal network uses eth0 or ens3:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-yaml">af-packet:
+  - interface: eth0   # or ens3 or whatever interface connects to internal network
+    cluster-id: 99
+    cluster-type: cluster_flow
+    defrag: yes
+</code></pre></div>
+<p>You can find your interface name via "ip a" command.</p>
+<ol><li>Using Emerging Threats Rules (Recommended)</li></ol>
+<p>Install and update ET rules:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">sudo apt install suricata-update
+sudo suricata-update
+</code></pre></div>
+<p>This will download:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-swift">/var/lib/suricata/rules/suricata.rules
+</code></pre></div>
+<p>. Test suricata</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">   sudo suricata -T -c /etc/suricata/suricata.yaml -v
+   </code></pre></div>
+<p><img src="/assets/img/soc_lab/suricata_test.png" alt="on_loc" loading="lazy"></p>
+<p>Once you've changed the config:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">sudo systemctl restart suricata
+</code></pre></div>
+<h3 id="enable-wazuh-integration">Enable Wazuh integration</h3>
+<p>Wazuh comes with a Suricata decoder and rules.</p>
+<p>Edit Wazuh config:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">sudo nano /var/ossec/etc/ossec.conf
+</code></pre></div>
+<p>Add inside &lt;localfile&gt; section (&lt;ossec&gt; tags):</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-xml">&lt;localfile&gt;
+  &lt;log_format&gt;json&lt;/log_format&gt;
+  &lt;location&gt;/var/log/suricata/eve.json&lt;/location&gt;
+&lt;/localfile&gt;
+</code></pre></div>
+<p>Restart Wazuh manager</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">sudo systemctl restart wazuh-manager
+</code></pre></div>
+<h4>Suricata rules </h4>
+<p>A Suricata rule has the format:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-scss">action protocol src_ip src_port direction dst_ip dst_port (options)
+</code></pre></div>
+<p>Example:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-text">alert tcp any any -&gt; any 3389 (msg:&quot;RDP Connection Attempt&quot;; sid:1000001; rev:1;)
+</code></pre></div>
+<p>This means:</p>
+<ul><li>alert: Generate an alert</li><li>tcp: Protocol</li><li>any any: Source IP and Port</li><li>-&gt;: Direction</li><li>any 3389: Destination IP and port (RDP)</li><li>Inside () are rule options like:</li></ul>
+<p> - msg: Message shown  - sid: Unique rule ID  - rev: Revision</p>
+<p>After alerts are generated:</p>
+<ul><li>Wazuh reads /var/log/suricata/eve.json</li><li>Alerts will appear in the Wazuh dashboard</li><li>Filter by: rule.name: "RDP Connection Attempt Detected" or data.alert.signature_id: 1000001</li></ul>
+<p><img src="/assets/img/soc_lab/threat_hunting_d_w.png" alt="on_loc" loading="lazy"></p>
+<hr>
+<h3 id="summary">Summary</h3>
+<ol><li>Wazuh</li></ol>
+<p>Central SIEM-like platform for logs &amp; alerting -Installed on Ubuntu Collects logs from: -Windows Agent</p>
+<ul><li>Suricata IDS (eve.json)</li><li>Sysmon (via Windows agent)</li></ul>
+<ol><li>Sysmon (on Windows)</li></ol>
+<p>Logs detailed system events:</p>
+<ul><li>Process creation</li><li>File drops</li><li>Registry changes</li><li>Network connections</li></ul>
+<p>Events collected by Wazuh Agent → sent to Wazuh Server</p>
+<ol><li>Suricata (on Ubuntu)</li></ol>
+<p>Network-based Intrusion Detection System (NIDS) Monitors network traffic to/from Windows Detects:</p>
+<ul><li>Nmap scans</li><li>Exploits</li><li>Malware traffic (C2, etc.)</li></ul>
+<p>Writes to eve.json → Wazuh parses alerts</p>
+<hr>
+<h3 id="what-we-can-monitor">What we can monitor</h3>
+<table><thead><tr><th>Threat Category</th><th>Detection Source</th><th>Example</th></tr></thead><tbody><tr><td>Brute-force</td><td>Sysmon + Wazuh rules</td><td>4625 login failures</td></tr><tr><td>Malware dropper</td><td>Sysmon (proc/file create)</td><td>powershell.exe downloading files</td></tr><tr><td>Reconnaissance</td><td>Suricata</td><td>Nmap, port scans</td></tr><tr><td>Lateral movement</td><td>Suricata + Sysmon</td><td>SMB, PsExec, RDP</td></tr><tr><td>Data exfiltration</td><td>Suricata</td><td>Large DNS, HTTP uploads</td></tr><tr><td>Persistence</td><td>Sysmon</td><td>Registry Run keys, scheduled tasks</td></tr><tr><td>Tampering</td><td>Sysmon + Wazuh</td><td>Security log cleared (1102)</td></tr></tbody></table>
+<hr>
+        </div>
+
+        <nav class="post-nav" aria-label="Post navigation">
+          <a class="post-nav-item post-nav-item--prev" href="/posts/cybersecurity/writeups/soc-lab-wazuh-ch1/"><span class="post-nav-label">← older</span><span class="post-nav-title">SOC Lab — Ch.1: Setup &amp; SIEM Deployment</span></a>
+          
+        </nav>
+
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span class="footer-copy">© 2025 onecybit</span>
+      <span class="footer-status">// status: <span class="status-ok">operational</span></span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="js-back-top" aria-label="Back to top" hidden>↑</button>
+
+  <script src="/assets/js/main.js" defer></script>
+
+</body>
+</html>

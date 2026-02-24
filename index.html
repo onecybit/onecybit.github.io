@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="onecybit — security research, CTF writeups, and tooling. Offensive and defensive security, lab notes, and cheatsheets.">
+
+  <!-- Content-Security-Policy
+       connect-src 'self' — required for search.js to fetch posts.json.
+       form-action 'self' — hero search form submits to /tags/ on same origin. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'self';">
+
+  <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+
+  <title>onecybit</title>
+
+  <link rel="icon" href="assets/img/favicons/favicon.ico">
+  <link rel="stylesheet" href="assets/css/style.css">
+
+  <!-- Google Fonts
+       TODO: Add integrity="sha384-<HASH>" and crossorigin="anonymous" per
+       CLAUDE.md SRI requirement. Google Fonts returns UA-dependent CSS, so
+       the hash must be computed for your target browser:
+         curl -s -H "User-Agent: <browser-ua>" "<url>" \
+           | openssl dgst -sha384 -binary | openssl base64 -A
+       Without SRI the fonts load fine; with a wrong hash they silently fall
+       back to the system fonts defined in --mono and --cond. -->
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@100;300;700;900&family=Share+Tech+Mono&display=swap"
+  >
+</head>
+
+<body>
+
+  <div class="cursor" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"></div>
+
+  <!-- ── SHARED: update all pages if this changes ── -->
+  <div class="grid-bg"   aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+  <div class="sweep"     aria-hidden="true"></div>
+  <div class="noise"     aria-hidden="true"></div>
+  <!-- ── END SHARED ── -->
+
+  <header class="site-header">
+    <nav class="nav container" role="navigation" aria-label="Main navigation">
+      <a href="/" class="nav-logo" aria-label="onecybit — home">
+        <span class="nav-logo-text" data-glitch="onecybit">onecybit</span>
+      </a>
+
+      <ul class="nav-links" role="list">
+        <li><a href="/"               class="nav-link">home</a></li>
+        <li><a href="/cybersecurity/" class="nav-link">cybersecurity</a></li>
+        <li><a href="/projects/"      class="nav-link">projects</a></li>
+        <li><a href="/notes/"         class="nav-link">notes</a></li>
+        <li><a href="/tags/"          class="nav-link">tags</a></li>
+        <li><a href="/about.html"     class="nav-link">about</a></li>
+      </ul>
+
+      <time
+        class="nav-clock"
+        id="js-clock"
+        datetime=""
+        aria-live="polite"
+        aria-label="Current time"
+      ></time>
+    </nav>
+  </header>
+
+  <main>
+
+    <section class="hero section" aria-label="Introduction">
+      <div class="container hero-inner">
+
+        <div class="hero-content">
+          <div class="hero-handle" aria-label="Handle: onecybit">
+            <span class="hero-prompt" aria-hidden="true">&gt;</span>
+            <span class="hero-name" data-glitch="onecybit">onecybit</span>
+            <span class="hero-cursor" aria-hidden="true">_</span>
+          </div>
+
+          <p class="hero-tagline">security researcher // developer // ctf player</p>
+
+          <ul class="hero-stats" aria-label="Site statistics">
+            <li class="hero-stat">
+              <span class="hero-stat-num">03</span>
+              <span class="hero-stat-label">posts</span>
+            </li>
+            <li class="hero-stat">
+              <span class="hero-stat-num">06</span>
+              <span class="hero-stat-label">tags</span>
+            </li>
+            <li class="hero-stat">
+              <span class="hero-stat-num">02</span>
+              <span class="hero-stat-label">categories</span>
+            </li>
+          </ul>
+
+          <form
+            class="hero-search"
+            action="/tags/"
+            method="get"
+            role="search"
+            aria-label="Search posts"
+          >
+            <input
+              type="search"
+              name="q"
+              class="hero-search-input"
+              placeholder="search posts..."
+              autocomplete="off"
+              maxlength="100"
+              aria-label="Search all posts"
+            >
+            <button type="submit" class="hero-search-btn" aria-label="Submit search">→</button>
+          </form>
+        </div>
+
+        <!-- Radar SVG — decorative, aria-hidden -->
+        <div class="hero-radar" aria-hidden="true">
+          <svg
+            class="radar-svg"
+            viewBox="0 0 200 200"
+            xmlns="http://www.w3.org/2000/svg"
+            role="presentation"
+          >
+            <circle cx="100" cy="100" r="92" class="radar-ring"/>
+            <circle cx="100" cy="100" r="62" class="radar-ring"/>
+            <circle cx="100" cy="100" r="32" class="radar-ring"/>
+            <line x1="100" y1="8"   x2="100" y2="192" class="radar-line"/>
+            <line x1="8"   y1="100" x2="192" y2="100" class="radar-line"/>
+
+            <!-- Sweep arm — rotates via CSS radar-spin keyframe -->
+            <g class="radar-arm">
+              <line x1="100" y1="100" x2="100" y2="8" class="radar-beam"/>
+            </g>
+
+            <!-- Blips — blink in on radar-blip--* delay offsets -->
+            <circle cx="142" cy="60"  r="2.5" class="radar-blip radar-blip--1"/>
+            <circle cx="70"  cy="132" r="2"   class="radar-blip radar-blip--2"/>
+            <circle cx="156" cy="112" r="2.5" class="radar-blip radar-blip--3"/>
+          </svg>
+        </div>
+
+      </div>
+    </section>
+
+    <section class="section" id="recent-posts" aria-label="Recent posts">
+      <div class="container">
+        <h2 class="section-title">// recent posts</h2>
+
+        <div class="posts-grid">
+
+          <article class="post-item fade-up-target">
+            <div class="post-meta">
+              <time class="post-date" datetime="2025-07-01">2025-07-01</time>
+              <span class="cat-badge cat-badge--writeup">writeup</span>
+            </div>
+            <h3 class="post-title">
+              <a href="/posts/cybersecurity/writeups/soc-lab-wazuh-ch2/">
+                SOC Lab — Ch.2: Sysmon, Suricata &amp; Wazuh Integration
+              </a>
+            </h3>
+            <p class="post-excerpt">
+              Expanding the SOC lab with Sysmon deep-logging on Windows and Suricata
+              IDS on the server. Configuring Wazuh to ingest both host-based and
+              network telemetry.
+            </p>
+            <ul class="post-tags" aria-label="Tags">
+              <li class="post-tag">soc</li>
+              <li class="post-tag">wazuh</li>
+              <li class="post-tag">suricata</li>
+            </ul>
+          </article>
+
+          <article class="post-item fade-up-target">
+            <div class="post-meta">
+              <time class="post-date" datetime="2025-06-26">2025-06-26</time>
+              <span class="cat-badge cat-badge--writeup">writeup</span>
+            </div>
+            <h3 class="post-title">
+              <a href="/posts/cybersecurity/writeups/soc-lab-wazuh-ch1/">
+                SOC Lab — Ch.1: Setup &amp; SIEM Deployment
+              </a>
+            </h3>
+            <p class="post-excerpt">
+              Building a home SOC lab with Wazuh SIEM, a Windows 10 endpoint, and
+              Kali Linux as attacker. Covers internal networking, static IPs, and
+              agent registration.
+            </p>
+            <ul class="post-tags" aria-label="Tags">
+              <li class="post-tag">soc</li>
+              <li class="post-tag">wazuh</li>
+              <li class="post-tag">threat-detection</li>
+            </ul>
+          </article>
+
+          <article class="post-item fade-up-target">
+            <div class="post-meta">
+              <time class="post-date" datetime="2025-06-23">2025-06-23</time>
+              <span class="cat-badge cat-badge--cheatsheet">cheatsheet</span>
+            </div>
+            <h3 class="post-title">
+              <a href="/posts/cybersecurity/cheatsheets/nmap-tips-ctf/">
+                Nmap: Tips &amp; Techniques for CTF
+              </a>
+            </h3>
+            <p class="post-excerpt">
+              Practical Nmap command reference for CTF and pentesting. SYN scanning,
+              firewall evasion, NSE scripting, output formats, and scan delta
+              comparison.
+            </p>
+            <ul class="post-tags" aria-label="Tags">
+              <li class="post-tag">nmap</li>
+              <li class="post-tag">pentest</li>
+              <li class="post-tag">recon</li>
+            </ul>
+          </article>
+
+        </div>
+
+        <a href="/cybersecurity/" class="view-all">view all posts →</a>
+      </div>
+    </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span class="footer-copy">© 2025 onecybit</span>
+      <span class="footer-status">// status: <span class="status-ok">operational</span></span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="js-back-top" aria-label="Back to top" hidden>↑</button>
+
+  <script src="assets/js/main.js" defer></script>
+
+</body>
+</html>

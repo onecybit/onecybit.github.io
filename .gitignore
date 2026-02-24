@@ -1,0 +1,62 @@
+# Build output
+_site/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Secrets
+.env
+*.env
+.anthropic*
+# Claude Code local settings — don't expose session history
+.claude/
+.mcp.json
+
+# AI tooling — not for public repo
+CLAUDE.md
+.claude/
+.mcp.json
+tests/
+build.py
+_templates/
+_posts/
+
+# Dotfiles — never track these
+.bash*
+.zsh*
+.profile
+.zprofile
+.gitconfig
+.ripgreprc
+
+# Claude and editor tooling
+.claude/
+.mcp.json
+.idea/
+.vscode/
+
+# Source files — keep local only
+_posts/
+_templates/
+build.py
+tests/
+CLAUDE.md
+
+# Git internals — should never appear but guard anyway
+HEAD
+config
+hooks/
+objects/
+refs/

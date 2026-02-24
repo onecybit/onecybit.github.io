@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Practical Nmap command reference for CTF and pentesting. SYN scanning, firewall evasion, NSE scripting, output formats, and scan delta comparison.">
+
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
+  <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+
+  <title>Nmap: Tips &amp; Techniques for CTF — onecybit</title>
+
+  <link rel="icon" href="/assets/img/favicons/favicon.ico">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@100;300;700;900&family=Share+Tech+Mono&display=swap"
+  >
+</head>
+
+<body>
+
+  <div class="cursor" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"></div>
+
+  <!-- ── SHARED: update all pages if this changes ── -->
+  <div class="grid-bg"   aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+  <div class="sweep"     aria-hidden="true"></div>
+  <div class="noise"     aria-hidden="true"></div>
+  <!-- ── END SHARED ── -->
+
+  <header class="site-header">
+    <nav class="nav container" role="navigation" aria-label="Main navigation">
+      <a href="/" class="nav-logo" aria-label="onecybit — home">
+        <span class="nav-logo-text" data-glitch="onecybit">onecybit</span>
+      </a>
+
+      <ul class="nav-links" role="list">
+        <li><a href="/"               class="nav-link">home</a></li>
+        <li><a href="/cybersecurity/" class="nav-link">cybersecurity</a></li>
+        <li><a href="/projects/"      class="nav-link">projects</a></li>
+        <li><a href="/notes/"         class="nav-link">notes</a></li>
+        <li><a href="/tags/"          class="nav-link">tags</a></li>
+        <li><a href="/about.html"     class="nav-link">about</a></li>
+      </ul>
+
+      <time
+        class="nav-clock"
+        id="js-clock"
+        datetime=""
+        aria-live="polite"
+        aria-label="Current time"
+      ></time>
+    </nav>
+  </header>
+
+  <main>
+    <article class="section" aria-label="Nmap: Tips &amp; Techniques for CTF">
+      <div class="container post-full">
+
+        <header class="post-full-header">
+          <nav class="post-breadcrumb" aria-label="Breadcrumb">
+            <a href="/">home</a>
+            <span class="post-breadcrumb-sep" aria-hidden="true">/</span>
+            <a href="/cybersecurity/">cybersecurity</a>
+            <span class="post-breadcrumb-sep" aria-hidden="true">/</span>
+            <span>cheatsheets</span>
+          </nav>
+
+          <div class="post-full-meta">
+            <time class="post-date" datetime="2025-06-23">2025-06-23</time>
+            <span class="cat-badge cat-badge--cheatsheet">cheatsheets</span>
+            <span class="reading-time">3 min read</span>
+          </div>
+
+          <h1 class="post-full-title">Nmap: Tips &amp; Techniques for CTF</h1>
+
+          <ul class="post-full-tags post-tags" aria-label="Tags">
+            <li class="post-tag">nmap</li><li class="post-tag">pentest</li><li class="post-tag">recon</li>
+          </ul>
+        </header>
+
+        
+
+        <div class="post-body">
+          <h2 id="syn-scan-with-performance-and-detection-control">SYN Scan with Performance and Detection Control</h2>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -sS -Pn -n -T4 --max-retries 2 --host-timeout 60s 10.0.0.0/24
+</code></pre></div>
+<p><strong>Explanation</strong>:</p>
+<ul><li><code>-sS</code>: TCP SYN scan (stealth scan, sends SYN, expects SYN/ACK or RST).</li><li><code>-Pn</code>: Skip host discovery (assume hosts are up, useful against firewalled hosts).</li><li><code>-n</code>: Disable DNS resolution (faster, avoids DNS noise).</li><li><code>-T4</code>: Aggressive timing (shorter delays, faster scan).</li><li><code>--max-retries 2</code>: Retries each probe max 2 times.</li><li><code>--host-timeout 60s</code>: Drop hosts taking too long (avoid bottlenecks).</li></ul>
+<p><strong>Packets</strong>:</p>
+<ul><li>Sends SYN packets to each target port. No full handshake.</li><li>No reverse DNS or ICMP used.</li></ul>
+<hr>
+<h2 id="firewall-evasion-and-spoofing">Firewall Evasion and Spoofing</h2>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -sS -T1 -D 192.168.1.1,10.10.10.10,RND,RND --data-length 31 --source-port 53 10.0.0.1
+</code></pre></div>
+<p><strong>Explanation</strong>:</p>
+<ul><li><code>-T1</code>: Slow scan for stealth.</li><li><code>-D</code>: Use decoys to obfuscate source IP.</li><li><code>--data-length 31</code>: Adds padding to packets (random length).</li><li><code>--source-port 53</code>: Set source port to 53 (DNS) to exploit weak firewall rules.</li></ul>
+<p><strong>Packets</strong>:</p>
+<ul><li>TCP SYN packets with decoy source IPs.</li><li>Each packet is 31 bytes longer, sent slowly with fake origins.</li></ul>
+<hr>
+<h2 id="full-port-discovery-enumeration">Full Port Discovery + Enumeration</h2>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -p- -T4 -sS -oA tcp_fullscan &lt;target&gt;
+nmap -sV -sC -p$(grep -oP &#x27;\d+/open&#x27; tcp_fullscan.gnmap | cut -d/ -f1 | paste -sd, -) &lt;target&gt;
+</code></pre></div>
+<p><strong>Explanation</strong>:</p>
+<ul><li><code>-p-</code>: Scan all 65535 ports.</li><li><code>-oA</code>: Output in all formats (XML, grepable, text).</li><li><code>-sV</code>: Version detection (active banner grabs).</li><li><code>-sC</code>: Default NSE scripts.</li></ul>
+<p><strong>Packets</strong>:</p>
+<ul><li>SYN for discovery, followed by TCP connect or protocol-specific probes for versioning.</li></ul>
+<hr>
+<h2 id="nse-examples-service-analysis">NSE Examples: Service Analysis</h2>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -p80,443 --script http-headers,http-title,http-server-header &lt;target&gt;
+nmap -p445 --script smb-vuln-ms17-010 &lt;target&gt;
+</code></pre></div>
+<p><strong>Explanation</strong>:</p>
+<ul><li>Uses Lua scripts to interact with protocols.</li><li>Custom headers, titles, and SMB probes.</li></ul>
+<p><strong>Packets</strong>:</p>
+<ul><li>HTTP requests for metadata.</li><li>SMB probes for EternalBlue/MS17-010 detection.</li></ul>
+<hr>
+<h2 id="credential-brute-forcing">Credential Brute Forcing</h2>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -p22 --script ssh-brute --script-args userdb=users.txt,passdb=passes.txt &lt;target&gt;
+</code></pre></div>
+<p><strong>Explanation</strong>:</p>
+<ul><li>Attempts SSH login with user/pass combinations.</li></ul>
+<p><strong>Packets</strong>:</p>
+<ul><li>SSH handshake + login attempts for each combo.</li></ul>
+<hr>
+<h2 id="host-discovery-with-minimal-fingerprint">Host Discovery with Minimal Fingerprint</h2>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -sn -PE -PS21,22,80,443 -PA3389 -n --disable-arp-ping 10.0.0.0/24
+</code></pre></div>
+<p><strong>Explanation</strong>:</p>
+<ul><li><code>-sn</code>: Ping-only scan (no port scan).</li><li><code>-PE</code>: ICMP Echo Request.</li><li><code>-PS</code>: TCP SYN to specific ports.</li><li><code>-PA</code>: TCP ACK to detect stateless filtering.</li><li><code>--disable-arp-ping</code>: Donât send L2 pings.</li></ul>
+<p><strong>Packets</strong>:</p>
+<ul><li>ICMP Echo, TCP SYN/ACK to simulate normal client traffic.</li></ul>
+<hr>
+<h2 id="stack-fingerprint-obfuscation">Stack Fingerprint Obfuscation</h2>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -sS --data-length 25 --ip-options &quot;R&quot; &lt;target&gt;
+</code></pre></div>
+<p><strong>Explanation</strong>:</p>
+<ul><li>Adds raw IP options (<code>R</code>) and alters payload length.</li></ul>
+<p><strong>Packets</strong>:</p>
+<ul><li>TCP SYN with IP header options and non-standard lengths to alter OS fingerprint profile.</li></ul>
+<hr>
+<h2 id="scan-delta-comparison">Scan Delta Comparison</h2>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -sS -oX scan1.xml &lt;targets&gt;
+nmap -sS -oX scan2.xml &lt;targets&gt;
+ndiff scan1.xml scan2.xml
+</code></pre></div>
+<p><strong>Explanation</strong>:</p>
+<ul><li>Compare two scan outputs to find open/closed/different services.</li></ul>
+<hr>
+<h2 id="udp-scan-enumeration">UDP Scan + Enumeration</h2>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -sU -T3 -F --top-ports 100 &lt;target&gt;
+nmap -sU -p123 --script=ntp-info &lt;target&gt;
+</code></pre></div>
+<p><strong>Explanation</strong>:</p>
+<ul><li><code>-sU</code>: UDP scan (no handshake; relies on ICMP unreachable or response).</li><li><code>-F</code>: Fast mode (top 100 ports).</li><li><code>--script=ntp-info</code>: Extracts NTP config and system info.</li></ul>
+<p><strong>Packets</strong>:</p>
+<ul><li>Raw UDP packets sent to ports; analysis based on responses or ICMP errors.</li></ul>
+<hr>
+<h2 id="output-and-parsing">Output and Parsing</h2>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -oA project --stats-every 30s -vv -p- -sS &lt;target&gt;
+xsltproc project.xml -o report.html
+</code></pre></div>
+<p><strong>Explanation</strong>:</p>
+<ul><li>Real-time stats and detailed logging.</li><li>Converts XML to HTML report.</li></ul>
+<hr>
+<h2 id="mac-address-spoofing">MAC Address Spoofing</h2>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -sS --spoof-mac 00:11:22:33:44:55 &lt;target&gt;
+nmap -sS --spoof-mac Apple &lt;target&gt;
+</code></pre></div>
+<p><strong>Explanation</strong>:</p>
+<ul><li>Spoofs Ethernet frame source MAC to bypass local profiling or controls.</li></ul>
+<hr>
+<h2 id="tcp-fragmentation-and-ids-evasion">TCP Fragmentation and IDS Evasion</h2>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -sS -f --mtu 24 --ttl 1337 &lt;target&gt;
+</code></pre></div>
+<p><strong>Explanation</strong>:</p>
+<ul><li><code>-f</code>: Fragment packets to bypass simple IDS.</li><li><code>--mtu</code>: Force specific fragment size.</li><li><code>--ttl</code>: Obfuscate host distance estimation.</li></ul>
+<hr>
+        </div>
+
+        <nav class="post-nav" aria-label="Post navigation">
+          
+          <a class="post-nav-item post-nav-item--next" href="/posts/cybersecurity/writeups/soc-lab-wazuh-ch1/"><span class="post-nav-label">newer →</span><span class="post-nav-title">SOC Lab — Ch.1: Setup &amp; SIEM Deployment</span></a>
+        </nav>
+
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span class="footer-copy">© 2025 onecybit</span>
+      <span class="footer-status">// status: <span class="status-ok">operational</span></span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="js-back-top" aria-label="Back to top" hidden>↑</button>
+
+  <script src="/assets/js/main.js" defer></script>
+
+</body>
+</html>

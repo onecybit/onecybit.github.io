@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Building a home SOC lab with Wazuh SIEM, a Windows 10 endpoint, and Kali Linux as attacker. Covers internal networking, static IPs, and agent registration.">
+
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
+  <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+
+  <title>SOC Lab — Ch.1: Setup &amp; SIEM Deployment — onecybit</title>
+
+  <link rel="icon" href="/assets/img/favicons/favicon.ico">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@100;300;700;900&family=Share+Tech+Mono&display=swap"
+  >
+</head>
+
+<body>
+
+  <div class="cursor" aria-hidden="true"></div>
+  <div class="scroll-progress" aria-hidden="true"></div>
+
+  <!-- ── SHARED: update all pages if this changes ── -->
+  <div class="grid-bg"   aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+  <div class="sweep"     aria-hidden="true"></div>
+  <div class="noise"     aria-hidden="true"></div>
+  <!-- ── END SHARED ── -->
+
+  <header class="site-header">
+    <nav class="nav container" role="navigation" aria-label="Main navigation">
+      <a href="/" class="nav-logo" aria-label="onecybit — home">
+        <span class="nav-logo-text" data-glitch="onecybit">onecybit</span>
+      </a>
+
+      <ul class="nav-links" role="list">
+        <li><a href="/"               class="nav-link">home</a></li>
+        <li><a href="/cybersecurity/" class="nav-link">cybersecurity</a></li>
+        <li><a href="/projects/"      class="nav-link">projects</a></li>
+        <li><a href="/notes/"         class="nav-link">notes</a></li>
+        <li><a href="/tags/"          class="nav-link">tags</a></li>
+        <li><a href="/about.html"     class="nav-link">about</a></li>
+      </ul>
+
+      <time
+        class="nav-clock"
+        id="js-clock"
+        datetime=""
+        aria-live="polite"
+        aria-label="Current time"
+      ></time>
+    </nav>
+  </header>
+
+  <main>
+    <article class="section" aria-label="SOC Lab — Ch.1: Setup &amp; SIEM Deployment">
+      <div class="container post-full">
+
+        <header class="post-full-header">
+          <nav class="post-breadcrumb" aria-label="Breadcrumb">
+            <a href="/">home</a>
+            <span class="post-breadcrumb-sep" aria-hidden="true">/</span>
+            <a href="/cybersecurity/">cybersecurity</a>
+            <span class="post-breadcrumb-sep" aria-hidden="true">/</span>
+            <span>writeups</span>
+          </nav>
+
+          <div class="post-full-meta">
+            <time class="post-date" datetime="2025-06-26">2025-06-26</time>
+            <span class="cat-badge cat-badge--writeup">writeups</span>
+            <span class="reading-time">4 min read</span>
+          </div>
+
+          <h1 class="post-full-title">SOC Lab — Ch.1: Setup &amp; SIEM Deployment</h1>
+
+          <ul class="post-full-tags post-tags" aria-label="Tags">
+            <li class="post-tag">soc</li><li class="post-tag">wazuh</li><li class="post-tag">threat-detection</li>
+          </ul>
+        </header>
+
+        
+
+        <div class="post-body">
+          <h2 id="project-overview">🗂️ Project Overview</h2>
+<table><thead><tr><th>Component</th><th>Goal</th></tr></thead><tbody><tr><td>Endpoint VMs</td><td>Generate and send logs</td><td></td></tr><tr><td>SIEM Server</td><td>Collect, analyze, and alert on logs</td></tr><tr><td>IDS/IPS</td><td>Monitor network traffics</td></tr><tr><td>Visualization</td><td>Use dashboards to analyze activity</td></tr><tr><td>Attacker Box</td><td>Launch simulated attacks for testing</td></tr></tbody></table>
+<hr>
+<h2 id="phase-1-lab-setup">Phase 1: Lab Setup</h2>
+<h3 id="step-1">Step 1</h3>
+<p>1) Install Virtualization Software    Download VirtualBox or VMware Workstation 2) Enable Intel VT-x / AMD-V in BIOS for virtualization</p>
+<h3 id="step-2-download-os-isos">Step 2: Download OS ISOs</h3>
+<h4>Ubuntu Server 22.04 (SIEM server)</h4>
+<p><a href="https://ubuntu.com/download/server/thank-you?version=22.04.5&amp;architecture=amd64&amp;lts=true" target="_blank" rel="noopener noreferrer">https://ubuntu.com/download/server#architectures</a></p>
+<p>It's recommended to have around 45G space, to run server and Wazuh (with logs).</p>
+<h4>Installing Wazuh on the server</h4>
+<p>First, we need to update</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">sudo apt update
+sudo apt full-upgrade -y
+</code></pre></div>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">curl -sO https://packages.wazuh.com/4.12/wazuh-install.sh &amp;&amp; sudo bash ./wazuh-install.sh -a
+</code></pre></div>
+<p>After succssefull installation, we will get our creds to dashboard login.</p>
+<p><img src="/assets/img/soc_lab/succssefull_install_wazuh.png" alt="Wazuh_install" loading="lazy"></p>
+<h4>Kali linux</h4>
+<ul><li>Kali Linux (offensive machine) <a href="https://www.kali.org/get-kali/#kali-platforms" target="_blank" rel="noopener noreferrer">https://www.kali.org/get-kali/#kali-platforms</a></li></ul>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">sudo apt update        # Fetches the list of available updates
+sudo apt full-upgrade  # Installs updates; may also remove some packages,
+</code></pre></div>
+<h4>Windows 10 (endpt)</h4>
+<ul><li>Windows 10 (target endpoint)</li></ul>
+<p>Installing Wazuh Agent on Windows https://documentation.wazuh.com/current/installation-guide/wazuh-agent/wazuh-agent-package-windows.html</p>
+<h3 id="step-3-internal-network-setup">Step 3: Internal Network Setup</h3>
+<p>Set all VMs to "Host-only" or "Internal Network" Assign static IPs or use DHCP with fixed leases</p>
+<p>Create an "Internal Network"</p>
+<p>I'll do it using virt-manager GUI, because i have QEMU/KVM VirtManager.</p>
+<p>1) Open virt-manager 2) Go to Edit → Connection Details → Virtual Networks 3) Click + (Add network)</p>
+<p>Set:</p>
+<ul><li>Name: internal-net</li><li>Mode: Isolated network (no NAT or DHCP unless you want to add DHCP manually)</li><li>Leave DHCP unchecked (for static IP)</li><li>Finish &amp; apply</li></ul>
+<p>Next, attach VM to the Internal Network: Using virt-manager: 1) Open your VM → Details 2) Go to NIC (Network Interface)</p>
+<p>Select:</p>
+<ul><li>Network source: internal-net</li><li>Device model: virtio (recommended) (don't work for WIN10, choose another one)</li></ul>
+<p><img src="/assets/img/soc_lab/internal-net_qemu_kvm.png" alt="Internal-net" loading="lazy"></p>
+<h4>Assign Static IP in Ubuntu Server (Guest VM)</h4>
+<p>Edit the Netplan config:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">sudo nano /etc/netplan/50-cloud-init.yaml
+</code></pre></div>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">network:
+  version: 2
+  ethernets:
+    enp1s0:
+      dhcp4: no
+      addresses:
+        - 192.168.100.10/24
+      gateway4: 192.168.100.1
+      nameservers:
+        addresses: [8.8.8.8, 1.1.1.1]
+</code></pre></div>
+<p><img src="/assets/img/soc_lab/nano_netplan_config.png" alt="netplan" loading="lazy"></p>
+<p>Apply:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">sudo netplan apply
+</code></pre></div>
+<p>Test:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">ip a
+ping 192.168.100.1
+</code></pre></div>
+<h4>Assign to Win10</h4>
+<p>Open Network Settings</p>
+<ul><li>Press Windows Key + R, type ncpa.cpl, hit Enter.</li><li>Right-click your network adapter (usually called Ethernet, or Ethernet 2).</li><li>Click Properties.</li></ul>
+<p>Next, set Static IP</p>
+<ul><li>Scroll and select Internet Protocol Version 4 (TCP/IPv4).</li><li>Click Properties.</li><li>Select:</li><li>Use the following IP address:</li></ul>
+<p>Fill in the fields:</p>
+<p>Field	Value IP address	192.168.100.20 Subnet mask	255.255.255.0 Default gateway	192.168.100.1 Preferred DNS	8.8.8.8 Alternate DNS	1.1.1.1</p>
+<p>Click OK, then Close. <img src="/assets/img/soc_lab/setting_win.png" alt="Win_network" loading="lazy"></p>
+<p>Confirm Static IP Is Active Open Command Prompt:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">ipconfig
+</code></pre></div>
+<p>You should see:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">IPv4 Address. . . . . . . . . . . : 192.168.100.20
+Subnet Mask . . . . . . . . . . . : 255.255.255.0
+Default Gateway . . . . . . . . . : 192.168.100.1
+</code></pre></div>
+<p>Test connectivity:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">ping 192.168.100.10   # (Wazuh server)
+</code></pre></div>
+<p><img src="/assets/img/soc_lab/win_10networking_verification.png" alt="Win_verfication" loading="lazy"></p>
+<h4>Wazuh agent</h4>
+<p>We need to register this agent to Wazuh server (soc server)</p>
+<p>Open Terminal on your Wazuh server (SOC-Server):</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">sudo /var/ossec/bin/manage_agents
+</code></pre></div>
+<p>You’ll see a menu like:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">Wazuh v4.X Agent Manager
+Choose your action:
+   (A)dd an agent (A).
+   (E)xtract key for an agent (E).
+   (L)ist already added agents (L).
+   (R)emove an agent (R).
+   (Q)uit.
+</code></pre></div>
+<p>➕ Add Agent Press A and hit Enter</p>
+<p>Fill in: Agent name → Win10-Endpt Agent IP → 192.168.100.20 (or leave blank if not used) Press Enter to finish</p>
+<p><img src="/assets/img/soc_lab/wazuh_agent.png" alt="Wazuh_agent" loading="lazy"></p>
+<h4>Kali set up </h4>
+<p>Add new connection <img src="/assets/img/soc_lab/kali_con.png" alt="Kali_network" loading="lazy"> Check with ping command.</p>
+<hr>
+<p>Okay, all set.</p>
+<h4>Wazuh dashboard</h4>
+<p>On your's host machine open https://192.168.100.10/ And we should see one active agent connected - win10 endpoint <img src="/assets/img/soc_lab/Wazuh_dashboard.png" alt="Wazuh_dash" loading="lazy"></p>
+<p>Now, we'll try to perform nmap scan on Win10.</p>
+<p><img src="/assets/img/soc_lab/scan_perform.png" alt="Scan_perform" loading="lazy"></p>
+<p>Lab graph:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-markdown">                        +-----------------------------+
+                        |      Internal Network       |
+                        |        (SOC-Net)            |
+                        +-------------+---------------+
+                                      |
+          +---------------------------+---------------------------+
+          |                           |                           |
++--------------------+     +----------------------+     +-----------------------+
+|   SOC-Server       |     |   Win10-Endpoint     |     |     Kali-Lab          |
+|  Ubuntu 22.04      |     |   Windows 10         |     |   Kali Linux          |
+|  IP: 192.168.100.10|     |   IP: 192.168.100.20 |     |   IP: 192.168.100.30  |
+|  Wazuh SIEM        |     |   OSSEC Agent        |     |   Adversary Simulator |
++--------+-----------+     +----------+-----------+     +-----------+-----------+
+         |                          |                             |
+         +-------------+------------+-------------+---------------+
+                       | Log Data &amp; Events Sent To SOC-Server
+                       |
+                       |
++-------------------------------------------------------------+
+|        Web Dashboard  on SOC-Server                         |
+|     URL: http://192.168.100.10:5601                         |
+|     Credentials: admin / (default)                          |
++-------------------------------------------------------------+
+</code></pre></div>
+<p>Next, we’ll simulate attacks using Kali to test detection capabilities.</p>
+        </div>
+
+        <nav class="post-nav" aria-label="Post navigation">
+          <a class="post-nav-item post-nav-item--prev" href="/posts/cybersecurity/cheatsheets/nmap-tips-ctf/"><span class="post-nav-label">← older</span><span class="post-nav-title">Nmap: Tips &amp; Techniques for CTF</span></a>
+          <a class="post-nav-item post-nav-item--next" href="/posts/cybersecurity/writeups/soc-lab-wazuh-ch2/"><span class="post-nav-label">newer →</span><span class="post-nav-title">SOC Lab — Ch.2: Sysmon, Suricata &amp; Wazuh Integration</span></a>
+        </nav>
+
+      </div>
+    </article>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span class="footer-copy">© 2025 onecybit</span>
+      <span class="footer-status">// status: <span class="status-ok">operational</span></span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="js-back-top" aria-label="Back to top" hidden>↑</button>
+
+  <script src="/assets/js/main.js" defer></script>
+
+</body>
+</html>
