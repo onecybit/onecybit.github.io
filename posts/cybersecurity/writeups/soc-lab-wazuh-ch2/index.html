@@ -9,9 +9,20 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
 
+  <!-- Open Graph -->
+  <meta property="og:type"        content="article">
+  <meta property="og:site_name"   content="onecybit">
+  <meta property="og:title"       content="SOC Lab — Ch.2: Sysmon, Suricata &amp; Wazuh Integration — onecybit">
+  <meta property="og:description" content="Expanding the SOC lab with Sysmon deep-logging on Windows and Suricata IDS on the server. Configuring Wazuh to ingest both host-based and network telemetry.">
+  <meta property="og:url"         content="https://onecybit.github.io/posts/cybersecurity/writeups/soc-lab-wazuh-ch2/">
+  <meta property="og:image"       content="https://onecybit.github.io/assets/img/OneCyBit_logo_compressed.jpg">
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="SOC Lab — Ch.2: Sysmon, Suricata &amp; Wazuh Integration — onecybit">
+  <meta name="twitter:description" content="Expanding the SOC lab with Sysmon deep-logging on Windows and Suricata IDS on the server. Configuring Wazuh to ingest both host-based and network telemetry.">
+
   <title>SOC Lab — Ch.2: Sysmon, Suricata &amp; Wazuh Integration — onecybit</title>
 
-  <link rel="icon" href="/assets/img/favicons/favicon.ico">
+  <link rel="icon" type="image/x-icon" href="/assets/img/favicons/favicon.ico">
   <link rel="stylesheet" href="/assets/css/style.css">
   <link
     rel="stylesheet"
@@ -252,6 +263,14 @@ sudo suricata-update
 
       </div>
     </article>
+
+  <section class="related-posts section" id="js-related-posts" aria-label="Related posts" hidden>
+    <div class="container">
+      <h2 class="section-title">// related posts</h2>
+      <div class="related-posts-grid" id="js-related-grid"></div>
+    </div>
+  </section>
+
   </main>
 
   <footer class="site-footer">
@@ -264,6 +283,7 @@ sudo suricata-update
   <button class="back-to-top" id="js-back-top" aria-label="Back to top" hidden>↑</button>
 
   <script src="/assets/js/main.js" defer></script>
+  <script src="/assets/js/related.js" defer></script>
 
 </body>
 </html>

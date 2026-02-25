@@ -7,6 +7,7 @@ const OCB = {
 
     init() {
         this.initScrollProgress();
+        this.initReadingProgress();
         this.initCursor();
         this.initNav();
         this.initHamburger();
@@ -17,9 +18,13 @@ const OCB = {
         this.initCopyButtons();
     },
 
-    // ── Scroll progress bar ────────────────────────────────────────────────────
+    // ── Scroll progress bar (non-post pages) ──────────────────────────────────
 
     initScrollProgress() {
+        // Post pages use initReadingProgress() instead — avoids two listeners
+        // fighting over the same bar.
+        if (document.querySelector('.post-body')) return;
+
         const bar = document.querySelector('.scroll-progress');
         if (!bar) return;
 
@@ -31,6 +36,28 @@ const OCB = {
         }
 
         window.addEventListener('scroll', updateBar, { passive: true });
+    },
+
+    // ── Reading progress bar (post pages only) ────────────────────────────────
+
+    initReadingProgress() {
+        const bar     = document.querySelector('.scroll-progress');
+        const content = document.querySelector('.post-body');
+        if (!bar || !content) return;
+
+        function updateProgress() {
+            const contentTop    = content.getBoundingClientRect().top + window.scrollY;
+            const contentHeight = content.offsetHeight;
+            const viewHeight    = window.innerHeight;
+            const scrollable    = contentHeight - viewHeight;
+            const pct = scrollable > 0
+                ? Math.min(100, Math.max(0, (window.scrollY - contentTop) / scrollable * 100))
+                : 100;
+            bar.style.width = pct + '%';
+        }
+
+        window.addEventListener('scroll', updateProgress, { passive: true });
+        updateProgress();
     },
 
     // ── Custom cursor ──────────────────────────────────────────────────────────
@@ -184,24 +211,58 @@ const OCB = {
     // ── Copy buttons on code blocks ───────────────────────────────────────────
 
     initCopyButtons() {
-        const buttons = document.querySelectorAll('.copy-btn');
-        if (!buttons.length) return;
+        const blocks = document.querySelectorAll('.code-block');
+        if (!blocks.length) return;
 
-        buttons.forEach(function(btn) {
+        blocks.forEach(function(block) {
+            // Inject button if build.py didn't produce one (template/future-proofing)
+            let btn = block.querySelector('.copy-btn');
+            if (!btn) {
+                btn = document.createElement('button');
+                btn.className = 'copy-btn';
+                btn.setAttribute('aria-label', 'Copy code');
+                btn.textContent = 'copy';
+                block.insertBefore(btn, block.firstChild);
+            }
             btn.addEventListener('click', handleCopy);
         });
 
         function handleCopy() {
-            const codeEl = this.closest('.code-block').querySelector('code');
+            const block  = this.closest('.code-block');
+            const codeEl = block ? block.querySelector('code') : null;
             if (!codeEl) return;
+            const text = codeEl.textContent;
+            const btn  = this;
 
-            navigator.clipboard.writeText(codeEl.textContent).then(function() {
-                markCopied(this);
-            }.bind(this));
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(text)
+                    .then(function() { markCopied(btn); })
+                    .catch(function() { fallbackCopy(text, btn); });
+            } else {
+                fallbackCopy(text, btn);
+            }
+        }
+
+        function fallbackCopy(text, btn) {
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            ta.setAttribute('readonly', '');
+            ta.style.position = 'fixed';
+            ta.style.opacity  = '0';
+            ta.style.top      = '-9999px';
+            document.body.appendChild(ta);
+            ta.select();
+            try {
+                document.execCommand('copy');
+                markCopied(btn);
+            } catch (err) {
+                // clipboard unavailable — silently fail
+            }
+            document.body.removeChild(ta);
         }
 
         function markCopied(btn) {
-            btn.textContent = 'copied';
+            btn.textContent = 'copied!';
             btn.classList.add('is-copied');
             setTimeout(function() {
                 btn.textContent = 'copy';

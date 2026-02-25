@@ -30,6 +30,27 @@
 html {
   font-size: 16px;
   scroll-behavior: smooth;
+  /* Firefox */
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 255, 159, 0.4) var(--bg2);
+}
+
+/* Chromium/WebKit scrollbar */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg2);
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 255, 159, 0.4);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 255, 159, 0.7);
 }
 
 body {
@@ -497,6 +518,16 @@ body.cursor-hover .cursor {
   grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
   gap: 1.5rem;
   margin-bottom: 2rem;
+}
+
+.related-posts {
+  border-top: 1px solid var(--border);
+}
+
+.related-posts-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 1.5rem;
 }
 
 .post-item {
@@ -1248,6 +1279,105 @@ mark {
 }
 
 .about-link:hover {
+  color: var(--neon);
+  border-color: var(--neon);
+}
+
+
+/* ── 404 ERROR PAGE ── */
+
+.error-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  z-index: 1;
+  padding: 2rem;
+}
+
+.error-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+.error-label {
+  font-size: 0.62rem;
+  color: var(--text2);
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+}
+
+.error-code {
+  font-family: var(--cond);
+  font-size: clamp(6rem, 20vw, 12rem);
+  font-weight: 900;
+  color: var(--neon);
+  letter-spacing: 0.04em;
+  line-height: 1;
+  position: relative;
+}
+
+.error-code::before,
+.error-code::after {
+  content: attr(data-glitch);
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  font-family: inherit;
+  font-size: inherit;
+  font-weight: inherit;
+  letter-spacing: inherit;
+  pointer-events: none;
+}
+
+.error-code::before { color: var(--red); }
+.error-code::after  { color: var(--neon2); }
+
+.error-code.is-glitching::before {
+  opacity: 1;
+  animation: glitch-1 0.2s steps(3) forwards;
+}
+
+.error-code.is-glitching::after {
+  opacity: 1;
+  animation: glitch-2 0.2s steps(3) forwards;
+}
+
+.error-title {
+  font-family: var(--mono);
+  font-size: 0.88rem;
+  color: var(--text2);
+  letter-spacing: 0.12em;
+}
+
+.error-desc {
+  font-size: 0.78rem;
+  color: var(--text);
+  line-height: 1.65;
+  max-width: 360px;
+}
+
+.error-home {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.78rem;
+  letter-spacing: 0.1em;
+  color: var(--text2);
+  border: 1px solid var(--border);
+  padding: 0.6rem 1.25rem;
+  transition: color 0.2s, border-color 0.2s;
+  margin-top: 0.5rem;
+}
+
+.error-home:hover {
   color: var(--neon);
   border-color: var(--neon);
 }

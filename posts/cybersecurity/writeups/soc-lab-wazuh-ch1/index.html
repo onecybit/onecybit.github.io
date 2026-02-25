@@ -9,9 +9,20 @@
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
 
+  <!-- Open Graph -->
+  <meta property="og:type"        content="article">
+  <meta property="og:site_name"   content="onecybit">
+  <meta property="og:title"       content="SOC Lab — Ch.1: Setup &amp; SIEM Deployment — onecybit">
+  <meta property="og:description" content="Building a home SOC lab with Wazuh SIEM, a Windows 10 endpoint, and Kali Linux as attacker. Covers internal networking, static IPs, and agent registration.">
+  <meta property="og:url"         content="https://onecybit.github.io/posts/cybersecurity/writeups/soc-lab-wazuh-ch1/">
+  <meta property="og:image"       content="https://onecybit.github.io/assets/img/OneCyBit_logo_compressed.jpg">
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="SOC Lab — Ch.1: Setup &amp; SIEM Deployment — onecybit">
+  <meta name="twitter:description" content="Building a home SOC lab with Wazuh SIEM, a Windows 10 endpoint, and Kali Linux as attacker. Covers internal networking, static IPs, and agent registration.">
+
   <title>SOC Lab — Ch.1: Setup &amp; SIEM Deployment — onecybit</title>
 
-  <link rel="icon" href="/assets/img/favicons/favicon.ico">
+  <link rel="icon" type="image/x-icon" href="/assets/img/favicons/favicon.ico">
   <link rel="stylesheet" href="/assets/css/style.css">
   <link
     rel="stylesheet"
@@ -232,6 +243,14 @@ Choose your action:
 
       </div>
     </article>
+
+  <section class="related-posts section" id="js-related-posts" aria-label="Related posts" hidden>
+    <div class="container">
+      <h2 class="section-title">// related posts</h2>
+      <div class="related-posts-grid" id="js-related-grid"></div>
+    </div>
+  </section>
+
   </main>
 
   <footer class="site-footer">
@@ -244,6 +263,7 @@ Choose your action:
   <button class="back-to-top" id="js-back-top" aria-label="Back to top" hidden>↑</button>
 
   <script src="/assets/js/main.js" defer></script>
+  <script src="/assets/js/related.js" defer></script>
 
 </body>
 </html>
