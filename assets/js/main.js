@@ -9,6 +9,7 @@ const OCB = {
         this.initScrollProgress();
         this.initCursor();
         this.initNav();
+        this.initHamburger();
         this.initGlitch();
         this.initClock();
         this.initScrollAnimations();
@@ -72,6 +73,43 @@ const OCB = {
             if (isHome || isSection) {
                 link.classList.add('active');
             }
+        });
+    },
+
+    // ── Mobile hamburger menu ──────────────────────────────────────────────────
+
+    initHamburger() {
+        const btn     = document.getElementById('js-nav-hamburger');
+        const navList = document.getElementById('js-nav-links');
+        if (!btn || !navList) return;
+
+        function openMenu() {
+            navList.classList.add('is-open');
+            btn.setAttribute('aria-expanded', 'true');
+            btn.setAttribute('aria-label', 'Close navigation menu');
+        }
+
+        function closeMenu() {
+            navList.classList.remove('is-open');
+            btn.setAttribute('aria-expanded', 'false');
+            btn.setAttribute('aria-label', 'Open navigation menu');
+        }
+
+        function toggleMenu() {
+            if (navList.classList.contains('is-open')) {
+                closeMenu();
+            } else {
+                openMenu();
+            }
+        }
+
+        function handleLinkClick() {
+            closeMenu();
+        }
+
+        btn.addEventListener('click', toggleMenu);
+        navList.querySelectorAll('.nav-link').forEach(function(link) {
+            link.addEventListener('click', handleLinkClick);
         });
     },
 

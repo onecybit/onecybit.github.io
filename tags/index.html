@@ -44,7 +44,7 @@
         <span class="nav-logo-text" data-glitch="onecybit">onecybit</span>
       </a>
 
-      <ul class="nav-links" role="list">
+      <ul class="nav-links" id="js-nav-links" role="list">
         <li><a href="/"               class="nav-link">home</a></li>
         <li><a href="/cybersecurity/" class="nav-link">cybersecurity</a></li>
         <li><a href="/projects/"      class="nav-link">projects</a></li>
@@ -52,6 +52,12 @@
         <li><a href="/tags/"          class="nav-link">tags</a></li>
         <li><a href="/about.html"     class="nav-link">about</a></li>
       </ul>
+
+      <button class="nav-hamburger" id="js-nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="js-nav-links">
+        <span class="nav-hamburger-bar" aria-hidden="true"></span>
+        <span class="nav-hamburger-bar" aria-hidden="true"></span>
+        <span class="nav-hamburger-bar" aria-hidden="true"></span>
+      </button>
 
       <time
         class="nav-clock"

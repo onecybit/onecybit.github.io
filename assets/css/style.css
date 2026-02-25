@@ -260,6 +260,24 @@ body.cursor-hover .cursor {
   text-align: right;
 }
 
+.nav-hamburger {
+  display: none; /* shown only in 768px media query */
+  flex-direction: column;
+  justify-content: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  padding: 0.4rem;
+  flex-shrink: 0;
+}
+
+.nav-hamburger-bar {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--neon);
+}
+
 
 /* ── HERO SECTION ── */
 
@@ -341,9 +359,9 @@ body.cursor-hover .cursor {
 }
 
 .hero-tagline {
-  font-size: 0.85rem;
-  color: var(--text);
-  letter-spacing: 0.06em;
+  font-size: 1rem;
+  color: var(--white);
+  letter-spacing: 0.1em;
 }
 
 .hero-stats {
@@ -380,7 +398,7 @@ body.cursor-hover .cursor {
 
 .hero-search {
   display: flex;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(0, 255, 159, 0.42);
   background: var(--bg2);
   max-width: 420px;
   transition: border-color 0.2s;
@@ -1072,7 +1090,7 @@ body.cursor-hover .cursor {
 
 .search-form {
   display: flex;
-  border: 1px solid var(--border);
+  border: 1px solid rgba(0, 255, 159, 0.42);
   background: var(--bg2);
   max-width: 600px;
   transition: border-color 0.2s;
@@ -1371,6 +1389,48 @@ mark {
   }
 }
 
+@media (max-width: 768px) {
+  .nav-clock {
+    display: none;
+  }
+
+  .nav-hamburger {
+    display: flex;
+  }
+
+  /* Full-width dropdown — anchored to the sticky site-header */
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 56px;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    gap: 0;
+    background: rgba(3, 6, 3, 0.97);
+    border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(4px);
+    z-index: 99;
+    padding: 0.5rem 0;
+  }
+
+  .nav-links.is-open {
+    display: flex;
+  }
+
+  .nav-link {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.8rem;
+    border: none;
+    width: 100%;
+  }
+
+  .nav-link:hover,
+  .nav-link.active {
+    border-color: transparent;
+  }
+}
+
 @media (max-width: 640px) {
   .skills-grid {
     grid-template-columns: 1fr;
@@ -1399,11 +1459,6 @@ mark {
 
   .section {
     padding: 3rem 0;
-  }
-
-  .nav-links {
-    display: none;
-    /* TODO: mobile hamburger menu */
   }
 
   .hero-stats {
