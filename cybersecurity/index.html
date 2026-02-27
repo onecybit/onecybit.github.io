@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Cybersecurity — writeups, CTF walkthroughs, cheatsheets, and lab notes from onecybit.">
+  <meta name="description" content="Cybersecurity — CTF writeups, lab walkthroughs, malware analysis, and cheatsheets from onecybit.">
 
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
@@ -13,12 +13,12 @@
   <meta property="og:type"        content="website">
   <meta property="og:site_name"   content="onecybit">
   <meta property="og:title"       content="cybersecurity — onecybit">
-  <meta property="og:description" content="Cybersecurity — writeups, CTF walkthroughs, cheatsheets, and lab notes from onecybit.">
+  <meta property="og:description" content="Cybersecurity — CTF writeups, lab walkthroughs, malware analysis, and cheatsheets from onecybit.">
   <meta property="og:url"         content="https://onecybit.github.io/cybersecurity/">
   <meta property="og:image"       content="https://onecybit.github.io/assets/img/OneCyBit_logo_compressed.jpg">
   <meta name="twitter:card"        content="summary">
   <meta name="twitter:title"       content="cybersecurity — onecybit">
-  <meta name="twitter:description" content="Cybersecurity — writeups, CTF walkthroughs, cheatsheets, and lab notes from onecybit.">
+  <meta name="twitter:description" content="Cybersecurity — CTF writeups, lab walkthroughs, malware analysis, and cheatsheets from onecybit.">
 
   <title>cybersecurity — onecybit</title>
 
@@ -74,25 +74,47 @@
   </header>
 
   <main>
-    <section class="section">
-      <div class="container">
 
-        <div class="cat-hero">
-          <p class="cat-hero-label">category</p>
-          <h1 class="cat-hero-title cat-hero-title--red">// cybersecurity</h1>
-          <p class="cat-hero-desc">
-            Writeups, CTF walkthroughs, lab notes, and cheatsheets covering
-            offensive and defensive security.
-          </p>
+    <section class="cyber-tiles-section section" aria-label="Cybersecurity categories">
+      <div class="container cyber-tiles-inner">
+        <h1 class="cyber-tiles-heading">// cybersecurity</h1>
+
+        <div class="cyber-tiles" id="js-cyber-tiles">
+          <button class="cyber-tile" data-filter="ctf" type="button">
+            <span class="cyber-tile-title">Writeups CTF</span>
+            <span class="cyber-tile-count" data-subcat="ctf">&mdash;</span>
+            <span class="cyber-tile-label">posts</span>
+          </button>
+          <button class="cyber-tile" data-filter="labs" type="button">
+            <span class="cyber-tile-title">Labs</span>
+            <span class="cyber-tile-count" data-subcat="labs">&mdash;</span>
+            <span class="cyber-tile-label">posts</span>
+          </button>
+          <button class="cyber-tile" data-filter="malware" type="button">
+            <span class="cyber-tile-title">Malware Analysis</span>
+            <span class="cyber-tile-count" data-subcat="malware">&mdash;</span>
+            <span class="cyber-tile-label">posts</span>
+          </button>
+          <button class="cyber-tile" data-filter="cheatsheets" type="button">
+            <span class="cyber-tile-title">Cheatsheets</span>
+            <span class="cyber-tile-count" data-subcat="cheatsheets">&mdash;</span>
+            <span class="cyber-tile-label">posts</span>
+          </button>
         </div>
 
-        <!-- Posts injected here by category.js -->
-        <div id="js-posts-container" data-category="cybersecurity">
-          <p class="loading-state">// loading...</p>
-        </div>
-
+        <p class="scroll-indicator" aria-hidden="true">scroll for articles ↓</p>
       </div>
     </section>
+
+    <section class="cyber-articles-section section" aria-label="Articles">
+      <div class="container">
+        <h2 class="section-title" id="js-articles-heading">// all articles</h2>
+        <div id="js-articles-grid">
+          <p class="loading-state">// loading...</p>
+        </div>
+      </div>
+    </section>
+
   </main>
 
   <footer class="site-footer">

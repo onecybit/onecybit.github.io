@@ -143,6 +143,19 @@ pre {
 }
 
 
+.sweep {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+  background: var(--neon);
+  opacity: 0.12;
+  pointer-events: none;
+  z-index: 9001;
+  animation: sweep-down 10s linear infinite;
+}
+
 .noise {
   position: fixed;
   inset: 0;
@@ -1033,6 +1046,95 @@ body.cursor-hover .cursor {
   padding: 2rem 0;
 }
 
+/* ── CYBERSECURITY TILES ── */
+
+.cyber-tiles-section {
+  min-height: calc(100vh - 56px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4rem 0;
+  border-bottom: 1px solid var(--border);
+}
+
+.cyber-tiles-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  text-align: center;
+}
+
+.cyber-tiles-heading {
+  font-family: var(--mono);
+  font-size: clamp(2rem, 5vw, 3.5rem);
+  color: var(--neon);
+  letter-spacing: 0.06em;
+  font-weight: 700;
+}
+
+.cyber-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 1rem;
+  width: 100%;
+  max-width: 700px;
+}
+
+.cyber-tile {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 1.5rem 1rem;
+  background: var(--bg2);
+  border: 1px solid var(--neon);
+  color: var(--neon);
+  font-family: var(--mono);
+  transition: background 0.2s, color 0.2s;
+}
+
+.cyber-tile:hover {
+  background: var(--neon);
+  color: var(--bg);
+}
+
+.cyber-tile--active {
+  background: var(--neon);
+  color: var(--bg);
+}
+
+.cyber-tile-title {
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.cyber-tile-count {
+  font-family: var(--cond);
+  font-size: 1.75rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.cyber-tile-label {
+  font-size: 0.58rem;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+}
+
+.scroll-indicator {
+  font-size: 0.68rem;
+  color: var(--text2);
+  letter-spacing: 0.1em;
+  animation: scroll-bounce 2s ease-in-out infinite;
+}
+
+.cyber-articles-section {
+  border-top: 1px solid var(--border);
+}
+
 /* ── TAG CLOUD ── */
 
 .tag-cloud {
@@ -1402,12 +1504,28 @@ mark {
   letter-spacing: 0.08em;
 }
 
+.footer-copy {
+  color: var(--text2);
+}
+
 .status-ok {
   color: var(--neon);
 }
 
 
 /* ── UTILITY CLASSES ── */
+
+/* Focus indicators — replaces removed outlines (WCAG 2.4.7) */
+:focus-visible {
+  outline: 2px solid var(--neon);
+  outline-offset: 2px;
+}
+
+.hero-search-input:focus-visible,
+.search-input:focus-visible {
+  outline: none;
+  box-shadow: inset 0 -1px 0 var(--neon);
+}
 
 .sr-only {
   position: absolute;
@@ -1494,6 +1612,16 @@ mark {
   95%           { opacity: 0.4; transform: scale(1.2); }
 }
 
+@keyframes scroll-bounce {
+  0%, 100% { transform: translateY(0); opacity: 0.6; }
+  50%      { transform: translateY(6px); opacity: 1; }
+}
+
+@keyframes sweep-down {
+  0%   { transform: translateY(0); }
+  100% { transform: translateY(100vh); }
+}
+
 
 /* ── MEDIA QUERIES ── */
 
@@ -1528,6 +1656,11 @@ mark {
     display: flex;
   }
 
+  .cyber-tiles {
+    grid-template-columns: 1fr 1fr;
+    max-width: 400px;
+  }
+
   /* Full-width dropdown — anchored to the sticky site-header */
   .nav-links {
     display: none;
@@ -1549,8 +1682,8 @@ mark {
   }
 
   .nav-link {
-    padding: 0.75rem 1.5rem;
-    font-size: 0.8rem;
+    padding: 0.86rem 1.73rem;
+    font-size: 0.92rem;
     border: none;
     width: 100%;
   }
@@ -1558,6 +1691,15 @@ mark {
   .nav-link:hover,
   .nav-link.active {
     border-color: transparent;
+  }
+
+  .nav-hamburger {
+    width: 41px;
+    height: 41px;
+  }
+
+  .nav-hamburger-bar {
+    width: 23px;
   }
 }
 

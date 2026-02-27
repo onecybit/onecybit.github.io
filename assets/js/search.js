@@ -14,7 +14,9 @@ const SEARCH = {
     countEl:   null,
 
     BADGE_MAP: {
-        writeups:    'cat-badge--writeup',
+        ctf:         'cat-badge--writeup',
+        labs:        'cat-badge--writeup',
+        malware:     'cat-badge--writeup',
         cheatsheets: 'cat-badge--cheatsheet',
     },
 

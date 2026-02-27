@@ -2,60 +2,48 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://onecybit.github.io/</loc>
-    <lastmod>2026-02-25</lastmod>
+    <lastmod>2026-02-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://onecybit.github.io/about.html</loc>
-    <lastmod>2026-02-25</lastmod>
+    <lastmod>2026-02-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://onecybit.github.io/cybersecurity/</loc>
-    <lastmod>2026-02-25</lastmod>
+    <lastmod>2026-02-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://onecybit.github.io/cybersecurity/writeups/</loc>
-    <lastmod>2026-02-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://onecybit.github.io/cybersecurity/cheatsheets/</loc>
-    <lastmod>2026-02-25</lastmod>
-    <changefreq>weekly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
     <loc>https://onecybit.github.io/projects/</loc>
-    <lastmod>2026-02-25</lastmod>
+    <lastmod>2026-02-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://onecybit.github.io/notes/</loc>
-    <lastmod>2026-02-25</lastmod>
+    <lastmod>2026-02-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://onecybit.github.io/tags/</loc>
-    <lastmod>2026-02-25</lastmod>
+    <lastmod>2026-02-27</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://onecybit.github.io/posts/cybersecurity/writeups/soc-lab-wazuh-ch2/</loc>
+    <loc>https://onecybit.github.io/posts/cybersecurity/labs/soc-lab-wazuh-ch2/</loc>
     <lastmod>2025-07-01</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
-    <loc>https://onecybit.github.io/posts/cybersecurity/writeups/soc-lab-wazuh-ch1/</loc>
+    <loc>https://onecybit.github.io/posts/cybersecurity/labs/soc-lab-wazuh-ch1/</loc>
     <lastmod>2025-06-26</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>

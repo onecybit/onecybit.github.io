@@ -4,18 +4,18 @@
   <title>onecybit</title>
   <link>https://onecybit.github.io</link>
   <description>security research, CTF writeups, and tooling</description>
-  <lastBuildDate>Wed, 25 Feb 2026 22:54:18 +0000</lastBuildDate>
+  <lastBuildDate>Fri, 27 Feb 2026 07:45:33 +0000</lastBuildDate>
   <item>
     <title>SOC Lab — Ch.2: Sysmon, Suricata &amp; Wazuh Integration</title>
-    <link>https://onecybit.github.io/posts/cybersecurity/writeups/soc-lab-wazuh-ch2/</link>
-    <guid>https://onecybit.github.io/posts/cybersecurity/writeups/soc-lab-wazuh-ch2/</guid>
+    <link>https://onecybit.github.io/posts/cybersecurity/labs/soc-lab-wazuh-ch2/</link>
+    <guid>https://onecybit.github.io/posts/cybersecurity/labs/soc-lab-wazuh-ch2/</guid>
     <pubDate>Tue, 01 Jul 2025 00:00:00 +0000</pubDate>
     <description>Expanding the SOC lab with Sysmon deep-logging on Windows and Suricata IDS on the server. Configuring Wazuh to ingest both host-based and network telemetry.</description>
   </item>
   <item>
     <title>SOC Lab — Ch.1: Setup &amp; SIEM Deployment</title>
-    <link>https://onecybit.github.io/posts/cybersecurity/writeups/soc-lab-wazuh-ch1/</link>
-    <guid>https://onecybit.github.io/posts/cybersecurity/writeups/soc-lab-wazuh-ch1/</guid>
+    <link>https://onecybit.github.io/posts/cybersecurity/labs/soc-lab-wazuh-ch1/</link>
+    <guid>https://onecybit.github.io/posts/cybersecurity/labs/soc-lab-wazuh-ch1/</guid>
     <pubDate>Thu, 26 Jun 2025 00:00:00 +0000</pubDate>
     <description>Building a home SOC lab with Wazuh SIEM, a Windows 10 endpoint, and Kali Linux as attacker. Covers internal networking, static IPs, and agent registration.</description>
   </item>
