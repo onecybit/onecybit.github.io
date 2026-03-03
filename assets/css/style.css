@@ -187,21 +187,6 @@ html.light-mode .site-header { background: rgba(240, 244, 240, 0.95); }
   transition: width 0.08s linear;
 }
 
-.cursor {
-  position: fixed;
-  width: 10px;
-  height: 10px;
-  background: var(--neon);
-  mix-blend-mode: difference;
-  pointer-events: none;
-  z-index: 10001;
-  transform: translate(-50%, -50%);
-  transition: transform 0.1s ease;
-}
-
-body.cursor-hover .cursor {
-  transform: translate(-50%, -50%) scale(2);
-}
 
 .site-header {
   position: sticky;

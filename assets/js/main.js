@@ -8,7 +8,6 @@ const OCB = {
     init() {
         this.initScrollProgress();
         this.initReadingProgress();
-        this.initCursor();
         this.initNav();
         this.initHamburger();
         this.initGlitch();
@@ -59,29 +58,6 @@ const OCB = {
 
         window.addEventListener('scroll', updateProgress, { passive: true });
         updateProgress();
-    },
-
-    // ── Custom cursor ──────────────────────────────────────────────────────────
-
-    initCursor() {
-        const cursor = document.querySelector('.cursor');
-        // Skip on touch devices — coarse pointer means no mouse
-        if (!cursor || window.matchMedia('(pointer: coarse)').matches) return;
-
-        function moveCursor(e) {
-            cursor.style.left = e.clientX + 'px';
-            cursor.style.top  = e.clientY + 'px';
-        }
-
-        function onHoverStart() { document.body.classList.add('cursor-hover'); }
-        function onHoverEnd()   { document.body.classList.remove('cursor-hover'); }
-
-        document.addEventListener('mousemove', moveCursor);
-
-        document.querySelectorAll('a, button, [role="button"]').forEach(function(el) {
-            el.addEventListener('mouseenter', onHoverStart);
-            el.addEventListener('mouseleave', onHoverEnd);
-        });
     },
 
     // ── Navigation active state ────────────────────────────────────────────────
