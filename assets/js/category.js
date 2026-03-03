@@ -80,6 +80,13 @@ const CAT = {
                 CAT.updateTileStates();
                 CAT.renderArticles();
                 CAT.updateUrl();
+                // Delay scroll so filter renders before viewport moves
+                setTimeout(function scrollToArticles() {
+                    const section = document.getElementById('js-articles-section');
+                    if (section) {
+                        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                    }
+                }, 100);
             });
         });
     },
