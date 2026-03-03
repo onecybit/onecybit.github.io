@@ -9,6 +9,7 @@
   --red:     #ff0033;
   --amber:   #ffb300;
   --border:  #0f2010;
+  --border-dim: rgba(15, 32, 16, 0.6); /* --border at 60% opacity */
   --text:    #c2e8d0;
   --text2:   #6aaa84;
   --white:   #f8fff9;
@@ -380,7 +381,7 @@ body.cursor-hover .cursor {
 }
 
 .hero-tagline {
-  font-size: 1rem;
+  font-size: 1.2rem;
   color: var(--white);
   letter-spacing: 0.1em;
 }
@@ -389,8 +390,8 @@ body.cursor-hover .cursor {
   display: flex;
   gap: 2.5rem;
   padding: 1.5rem 0;
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
+  border-top: 1px solid var(--border-dim);
+  border-bottom: 1px solid var(--border-dim);
 }
 
 .hero-stat {
@@ -401,16 +402,16 @@ body.cursor-hover .cursor {
 
 .hero-stat-num {
   font-family: var(--cond);
-  font-size: 2.25rem;
+  font-size: 3rem;
   font-weight: 700;
   color: var(--neon);
   line-height: 1;
 }
 
 .hero-stat-label {
-  font-size: 0.6rem;
+  font-size: 0.85rem;
   color: var(--text2);
-  letter-spacing: 0.12em;
+  letter-spacing: 0.15em;
   text-transform: uppercase;
 }
 
@@ -419,7 +420,7 @@ body.cursor-hover .cursor {
 
 .hero-search {
   display: flex;
-  border: 1px solid rgba(0, 255, 159, 0.42);
+  border: 1px solid rgba(0, 255, 159, 0.5);
   background: var(--bg2);
   max-width: 420px;
   transition: border-color 0.2s;
@@ -435,8 +436,8 @@ body.cursor-hover .cursor {
   border: none;
   color: var(--text);
   font-family: var(--mono);
-  font-size: 0.78rem;
-  padding: 0.6rem 0.9rem;
+  font-size: 1rem;
+  padding: 0.85rem 1rem;
   outline: none;
   letter-spacing: 0.04em;
   min-width: 0;
@@ -447,7 +448,7 @@ body.cursor-hover .cursor {
 }
 
 .hero-search-btn {
-  padding: 0.6rem 0.9rem;
+  padding: 0.85rem 1rem;
   color: var(--text2);
   font-size: 0.85rem;
   transition: color 0.2s;
@@ -1689,6 +1690,14 @@ mark {
 @media (min-width: 900px) {
   .container {
     padding: 0 1.5rem;
+  }
+
+  .hero-name {
+    font-size: 7rem;
+  }
+
+  .hero-content {
+    max-width: 900px;
   }
 }
 
