@@ -2,10 +2,11 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
+  <script>if(localStorage.getItem('ocb-theme')==='light')document.documentElement.classList.add('light-mode');</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Practical Nmap command reference for CTF and pentesting. SYN scanning, firewall evasion, NSE scripting, output formats, and scan delta comparison.">
 
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-UBl4nLwKa5omrxuOUtH1s2RUUw9imT+HAxiRkiPAyTo='; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
 
@@ -61,6 +62,8 @@
         <span class="nav-hamburger-bar" aria-hidden="true"></span>
         <span class="nav-hamburger-bar" aria-hidden="true"></span>
       </button>
+
+      <button class="theme-toggle" id="js-theme-toggle" aria-label="Toggle theme">night</button>
 
       <time
         class="nav-clock"

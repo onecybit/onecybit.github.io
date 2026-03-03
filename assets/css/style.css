@@ -17,6 +17,20 @@
   --cond:    'Barlow Condensed', sans-serif;
 }
 
+html.light-mode {
+  --bg:      #f0f4f0;
+  --bg2:     #e4ebe4;
+  --bg3:     #d8e2d8;
+  --neon:    #007a4d;
+  --neon2:   #006666;
+  --red:     #cc0022;
+  --amber:   #996600;
+  --border:  #b0c8b0;
+  --text:    #1a2e1a;
+  --text2:   #2d4a2d;
+  --white:   #0d1a0d;
+}
+
 
 /* ── RESET AND BASE ── */
 
@@ -155,6 +169,9 @@ pre {
   z-index: 9002;
 }
 
+html.light-mode .grid-bg   { opacity: 0.3; }
+html.light-mode .scanlines { opacity: 0.02; }
+
 
 /* ── HEADER AND NAVIGATION ── */
 
@@ -198,7 +215,7 @@ body.cursor-hover .cursor {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 56px;
+  height: 68px;
   gap: 1.5rem;
 }
 
@@ -210,7 +227,7 @@ body.cursor-hover .cursor {
 
 .nav-logo-text {
   font-family: var(--cond);
-  font-size: 1.4rem;
+  font-size: 1.54rem;
   font-weight: 700;
   letter-spacing: 0.1em;
   color: var(--neon);
@@ -257,10 +274,10 @@ body.cursor-hover .cursor {
 
 .nav-link {
   font-family: var(--mono);
-  font-size: 0.72rem;
+  font-size: 1rem;
   letter-spacing: 0.08em;
   color: var(--text2);
-  padding: 0.35rem 0.7rem;
+  padding: 0.5rem 1.2rem;
   border: 1px solid transparent;
   transition: color 0.2s, border-color 0.2s;
   text-transform: lowercase;
@@ -274,7 +291,7 @@ body.cursor-hover .cursor {
 
 .nav-clock {
   font-family: var(--mono);
-  font-size: 0.7rem;
+  font-size: 1rem;
   color: var(--text2);
   letter-spacing: 0.1em;
   flex-shrink: 0;
@@ -298,6 +315,22 @@ body.cursor-hover .cursor {
   width: 20px;
   height: 2px;
   background: var(--neon);
+}
+
+.theme-toggle {
+  font-family: var(--mono);
+  font-size: 0.72rem;
+  color: var(--neon);
+  border: 1px solid var(--neon);
+  padding: 0.2rem 0.6rem;
+  letter-spacing: 0.08em;
+  flex-shrink: 0;
+  transition: background 0.2s, color 0.2s;
+}
+
+.theme-toggle:hover {
+  background: var(--neon);
+  color: var(--bg);
 }
 
 
@@ -1648,7 +1681,7 @@ mark {
   .nav-links {
     display: none;
     position: absolute;
-    top: 56px;
+    top: 68px;
     left: 0;
     right: 0;
     flex-direction: column;
@@ -1686,7 +1719,7 @@ mark {
   }
 }
 
-/* Wider layout — desktop only, no mobile impact */
+/* Wider layout + centered hero — desktop only, no mobile impact */
 @media (min-width: 900px) {
   .container {
     padding: 0 1.5rem;
@@ -1696,8 +1729,34 @@ mark {
     font-size: 7rem;
   }
 
+  /* Hero: single centered column — radar floats absolutely as right decoration */
+  .hero-inner {
+    display: block;
+  }
+
   .hero-content {
-    max-width: 900px;
+    max-width: 1100px;
+    margin: 0 auto;
+    text-align: center;
+    align-items: center;
+  }
+
+  .hero-handle {
+    justify-content: center;
+  }
+
+  .hero-stats {
+    justify-content: center;
+  }
+
+  .hero-radar {
+    position: absolute;
+    right: 2rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 280px;
+    height: 280px;
+    pointer-events: none;
   }
 }
 

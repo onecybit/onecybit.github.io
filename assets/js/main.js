@@ -13,6 +13,7 @@ const OCB = {
         this.initHamburger();
         this.initGlitch();
         this.initClock();
+        this.initThemeToggle();
         this.initScrollAnimations();
         this.initBackToTop();
         this.initCopyButtons();
@@ -282,6 +283,37 @@ const OCB = {
 
         window.addEventListener('scroll', toggleBtn, { passive: true });
         btn.addEventListener('click', scrollUp);
+    },
+
+    // ── Day / night theme toggle ───────────────────────────────────────────────
+
+    initThemeToggle() {
+        const btn = document.getElementById('js-theme-toggle');
+        if (!btn) return;
+
+        const html        = document.documentElement;
+        const STORAGE_KEY = 'ocb-theme';
+
+        function applyTheme(isLight) {
+            if (isLight) {
+                html.classList.add('light-mode');
+                btn.textContent = 'day';
+            } else {
+                html.classList.remove('light-mode');
+                btn.textContent = 'night';
+            }
+        }
+
+        // Sync button label with class already set by the inline flash script
+        applyTheme(html.classList.contains('light-mode'));
+
+        function handleToggle() {
+            const nowLight = !html.classList.contains('light-mode');
+            applyTheme(nowLight);
+            localStorage.setItem(STORAGE_KEY, nowLight ? 'light' : 'dark');
+        }
+
+        btn.addEventListener('click', handleToggle);
     },
 
 };
