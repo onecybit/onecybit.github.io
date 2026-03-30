@@ -1,5 +1,20 @@
 [
   {
+    "title": "Proxy service. Ch.1: Why Most Proxy Protocols Fail Against Modern DPI",
+    "date": "2026-03-30",
+    "category": "projects",
+    "subcategory": "",
+    "tags": [
+      "proxy",
+      "dpi",
+      "tls",
+      "network-security"
+    ],
+    "excerpt": "How DPI fingerprints VPN traffic at the protocol level, and why TLS 1.3 impersonation is the only transport-level approach that survives modern inspection.",
+    "url": "/posts/projects/proxy-service-ch1-why-most-proxy-protocols-fail-against-modern-dpi/",
+    "reading_time": "5 min read"
+  },
+  {
     "title": "SOC Lab — Ch.2: Sysmon, Suricata & Wazuh Integration",
     "date": "2025-07-01",
     "category": "cybersecurity",
