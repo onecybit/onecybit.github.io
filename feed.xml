@@ -7,8 +7,8 @@
   <lastBuildDate>Mon, 30 Mar 2026 21:45:38 +0000</lastBuildDate>
   <item>
     <title>Proxy service. Ch.1: Why Most Proxy Protocols Fail Against Modern DPI</title>
-    <link>https://onecybit.github.io/posts/projects/proxy-service-ch1-why-most-proxy-protocols-fail-against-modern-dpi/</link>
-    <guid>https://onecybit.github.io/posts/projects/proxy-service-ch1-why-most-proxy-protocols-fail-against-modern-dpi/</guid>
+    <link>https://onecybit.github.io/posts/projects/vless-vpn/proxy-service-ch1-why-most-proxy-protocols-fail-against-modern-dpi/</link>
+    <guid>https://onecybit.github.io/posts/projects/vless-vpn/proxy-service-ch1-why-most-proxy-protocols-fail-against-modern-dpi/</guid>
     <pubDate>Mon, 30 Mar 2026 00:00:00 +0000</pubDate>
     <description>How DPI fingerprints VPN traffic at the protocol level, and why TLS 1.3 impersonation is the only transport-level approach that survives modern inspection.</description>
   </item>

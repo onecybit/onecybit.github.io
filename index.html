@@ -99,19 +99,19 @@
             <span class="hero-cursor" aria-hidden="true">_</span>
           </div>
 
-          <p class="hero-tagline">security researcher // developer // ctf player</p>
+          <p class="hero-tagline">security enthusiast</p>
 
           <ul class="hero-stats" aria-label="Site statistics">
             <li class="hero-stat">
-              <span class="hero-stat-num">03</span>
+              <span class="hero-stat-num" id="js-stat-posts">--</span>
               <span class="hero-stat-label">posts</span>
             </li>
             <li class="hero-stat">
-              <span class="hero-stat-num">06</span>
+              <span class="hero-stat-num" id="js-stat-tags">--</span>
               <span class="hero-stat-label">tags</span>
             </li>
             <li class="hero-stat">
-              <span class="hero-stat-num">02</span>
+              <span class="hero-stat-num" id="js-stat-categories">--</span>
               <span class="hero-stat-label">categories</span>
             </li>
           </ul>
@@ -169,74 +169,8 @@
       <div class="container">
         <h2 class="section-title">// recent posts</h2>
 
-        <div class="posts-grid">
-
-          <article class="post-item fade-up-target">
-            <div class="post-meta">
-              <time class="post-date" datetime="2025-07-01">2025-07-01</time>
-              <span class="cat-badge cat-badge--writeup">writeup</span>
-            </div>
-            <h3 class="post-title">
-              <a href="/posts/cybersecurity/writeups/soc-lab-wazuh-ch2/">
-                SOC Lab — Ch.2: Sysmon, Suricata &amp; Wazuh Integration
-              </a>
-            </h3>
-            <p class="post-excerpt">
-              Expanding the SOC lab with Sysmon deep-logging on Windows and Suricata
-              IDS on the server. Configuring Wazuh to ingest both host-based and
-              network telemetry.
-            </p>
-            <ul class="post-tags" aria-label="Tags">
-              <li class="post-tag">soc</li>
-              <li class="post-tag">wazuh</li>
-              <li class="post-tag">suricata</li>
-            </ul>
-          </article>
-
-          <article class="post-item fade-up-target">
-            <div class="post-meta">
-              <time class="post-date" datetime="2025-06-26">2025-06-26</time>
-              <span class="cat-badge cat-badge--writeup">writeup</span>
-            </div>
-            <h3 class="post-title">
-              <a href="/posts/cybersecurity/writeups/soc-lab-wazuh-ch1/">
-                SOC Lab — Ch.1: Setup &amp; SIEM Deployment
-              </a>
-            </h3>
-            <p class="post-excerpt">
-              Building a home SOC lab with Wazuh SIEM, a Windows 10 endpoint, and
-              Kali Linux as attacker. Covers internal networking, static IPs, and
-              agent registration.
-            </p>
-            <ul class="post-tags" aria-label="Tags">
-              <li class="post-tag">soc</li>
-              <li class="post-tag">wazuh</li>
-              <li class="post-tag">threat-detection</li>
-            </ul>
-          </article>
-
-          <article class="post-item fade-up-target">
-            <div class="post-meta">
-              <time class="post-date" datetime="2025-06-23">2025-06-23</time>
-              <span class="cat-badge cat-badge--cheatsheet">cheatsheet</span>
-            </div>
-            <h3 class="post-title">
-              <a href="/posts/cybersecurity/cheatsheets/nmap-tips-ctf/">
-                Nmap: Tips &amp; Techniques for CTF
-              </a>
-            </h3>
-            <p class="post-excerpt">
-              Practical Nmap command reference for CTF and pentesting. SYN scanning,
-              firewall evasion, NSE scripting, output formats, and scan delta
-              comparison.
-            </p>
-            <ul class="post-tags" aria-label="Tags">
-              <li class="post-tag">nmap</li>
-              <li class="post-tag">pentest</li>
-              <li class="post-tag">recon</li>
-            </ul>
-          </article>
-
+        <div id="js-recent-grid">
+          <p class="loading-state">// loading...</p>
         </div>
 
         <a href="/cybersecurity/" class="view-all">view all posts →</a>
@@ -255,6 +189,7 @@
   <button class="back-to-top" id="js-back-top" aria-label="Back to top" hidden>↑</button>
 
   <script src="assets/js/main.js" defer></script>
+  <script src="assets/js/home.js" defer></script>
 
 </body>
 </html>
