@@ -4,7 +4,7 @@
   <title>onecybit</title>
   <link>https://onecybit.github.io</link>
   <description>security research, CTF writeups, and tooling</description>
-  <lastBuildDate>Tue, 31 Mar 2026 21:43:39 +0000</lastBuildDate>
+  <lastBuildDate>Tue, 31 Mar 2026 21:44:32 +0000</lastBuildDate>
   <item>
     <title>Axios Supply Chain Attack: npm Account Hijack Deploys Cross-Platform RAT</title>
     <link>https://onecybit.github.io/posts/cybersecurity/malware/axios-supply-chain-attack-npm-rat/</link>
