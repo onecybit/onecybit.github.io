@@ -4,13 +4,13 @@
   <title>onecybit</title>
   <link>https://onecybit.github.io</link>
   <description>security research, CTF writeups, and tooling</description>
-  <lastBuildDate>Mon, 30 Mar 2026 21:45:38 +0000</lastBuildDate>
+  <lastBuildDate>Tue, 31 Mar 2026 21:43:39 +0000</lastBuildDate>
   <item>
-    <title>Proxy service. Ch.1: Why Most Proxy Protocols Fail Against Modern DPI</title>
-    <link>https://onecybit.github.io/posts/projects/vless-vpn/proxy-service-ch1-why-most-proxy-protocols-fail-against-modern-dpi/</link>
-    <guid>https://onecybit.github.io/posts/projects/vless-vpn/proxy-service-ch1-why-most-proxy-protocols-fail-against-modern-dpi/</guid>
-    <pubDate>Mon, 30 Mar 2026 00:00:00 +0000</pubDate>
-    <description>How DPI fingerprints VPN traffic at the protocol level, and why TLS 1.3 impersonation is the only transport-level approach that survives modern inspection.</description>
+    <title>Axios Supply Chain Attack: npm Account Hijack Deploys Cross-Platform RAT</title>
+    <link>https://onecybit.github.io/posts/cybersecurity/malware/axios-supply-chain-attack-npm-rat/</link>
+    <guid>https://onecybit.github.io/posts/cybersecurity/malware/axios-supply-chain-attack-npm-rat/</guid>
+    <pubDate>Tue, 31 Mar 2026 00:00:00 +0000</pubDate>
+    <description>Breakdown of the March 2026 axios npm supply chain attack — how a hijacked maintainer account pushed backdoored versions delivering a cross-platform RAT to millions of developers.</description>
   </item>
   <item>
     <title>SOC Lab — Ch.2: Sysmon, Suricata &amp; Wazuh Integration</title>
