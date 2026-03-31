@@ -66,7 +66,7 @@ const HOME = {
 
     buildCard(post) {
         const article = document.createElement('article');
-        article.className = 'post-item fade-up-target';
+        article.className = 'post-item';
 
         const meta = document.createElement('div');
         meta.className = 'post-meta';
