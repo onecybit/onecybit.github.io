@@ -209,11 +209,11 @@ const CAT = {
     },
 
     renderGrouped(posts, container) {
-        var groups = {};
-        var order = [];
+        const groups = {};
+        const order = [];
 
         posts.forEach(function groupPost(p) {
-            var key = p.subcategory || '_ungrouped';
+            const key = p.subcategory || '_ungrouped';
             if (!groups[key]) {
                 groups[key] = [];
                 order.push(key);
@@ -229,16 +229,16 @@ const CAT = {
         });
 
         order.forEach(function renderGroup(key) {
-            var section = document.createElement('div');
+            const section = document.createElement('div');
             section.className = 'project-group';
 
-            var heading = document.createElement('h2');
+            const heading = document.createElement('h2');
             heading.className = 'project-group-title';
-            var label = CAT.PROJECT_NAMES[key] || key.replace(/-/g, ' ');
+            const label = CAT.PROJECT_NAMES[key] || key.replace(/-/g, ' ');
             heading.textContent = '// ' + label;
             section.appendChild(heading);
 
-            var grid = document.createElement('div');
+            const grid = document.createElement('div');
             grid.className = 'posts-grid';
             groups[key].forEach(function addCard(p) {
                 grid.appendChild(CAT.buildCard(p));
