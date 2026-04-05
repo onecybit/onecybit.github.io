@@ -168,6 +168,10 @@ const CAT = {
 
     // ── Generic category page (projects, etc.) ──────────────────────────────
 
+    PROJECT_NAMES: {
+        'vless-vpn': 'vless-vpn server',
+    },
+
     initGeneric(container) {
         fetch('/posts.json')
             .then(function parseJson(r) { return r.json(); })
@@ -192,10 +196,57 @@ const CAT = {
             return;
         }
 
+        // Group by subcategory if on projects page
+        if (filterCat === 'projects') {
+            CAT.renderGrouped(filtered, container);
+            return;
+        }
+
         const grid = document.createElement('div');
         grid.className = 'posts-grid';
         filtered.forEach(function addCard(p) { grid.appendChild(CAT.buildCard(p)); });
         container.appendChild(grid);
+    },
+
+    renderGrouped(posts, container) {
+        var groups = {};
+        var order = [];
+
+        posts.forEach(function groupPost(p) {
+            var key = p.subcategory || '_ungrouped';
+            if (!groups[key]) {
+                groups[key] = [];
+                order.push(key);
+            }
+            groups[key].push(p);
+        });
+
+        // Sort posts within each group by date descending
+        order.forEach(function sortGroup(key) {
+            groups[key].sort(function byDate(a, b) {
+                return a.date.localeCompare(b.date);
+            });
+        });
+
+        order.forEach(function renderGroup(key) {
+            var section = document.createElement('div');
+            section.className = 'project-group';
+
+            var heading = document.createElement('h2');
+            heading.className = 'project-group-title';
+            var label = CAT.PROJECT_NAMES[key] || key.replace(/-/g, ' ');
+            heading.textContent = '// ' + label;
+            section.appendChild(heading);
+
+            var grid = document.createElement('div');
+            grid.className = 'posts-grid';
+            groups[key].forEach(function addCard(p) {
+                grid.appendChild(CAT.buildCard(p));
+            });
+            section.appendChild(grid);
+
+            container.appendChild(section);
+        });
     },
 
     renderGenericError(container) {

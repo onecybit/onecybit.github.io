@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script>if(localStorage.getItem('ocb-theme')==='light')document.documentElement.classList.add('light-mode');</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="The actual stack behind the proxy service — Marzban, XRay, Docker with host networking, and solving the asymmetric routing problem with XRay&#x27;s native WireGuard outbound.">
+
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-UBl4nLwKa5omrxuOUtH1s2RUUw9imT+HAxiRkiPAyTo='; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
+  <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="article">
+  <meta property="og:site_name"   content="onecybit">
+  <meta property="og:title"       content="Ftarg — Ch.2: Architecture — Marzban and XRay — onecybit">
+  <meta property="og:description" content="The actual stack behind the proxy service — Marzban, XRay, Docker with host networking, and solving the asymmetric routing problem with XRay&#x27;s native WireGuard outbound.">
+  <meta property="og:url"         content="https://onecybit.github.io/posts/projects/vless-vpn/ftarg-ch2-architecture-marzban-and-xray/">
+  <meta property="og:image"       content="https://onecybit.github.io/assets/img/OneCyBit_logo_compressed.jpg">
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="Ftarg — Ch.2: Architecture — Marzban and XRay — onecybit">
+  <meta name="twitter:description" content="The actual stack behind the proxy service — Marzban, XRay, Docker with host networking, and solving the asymmetric routing problem with XRay&#x27;s native WireGuard outbound.">
+
+  <title>Ftarg — Ch.2: Architecture — Marzban and XRay — onecybit</title>
+
+  <link rel="icon" type="image/x-icon" href="/assets/img/favicons/favicon.ico">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@100;300;700;900&family=Share+Tech+Mono&display=swap"
+  >
+</head>
+
+<body>
+
+  <div class="scroll-progress" aria-hidden="true"></div>
+
+  <!-- ── SHARED: update all pages if this changes ── -->
+  <div class="grid-bg"   aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+  <div class="noise"     aria-hidden="true"></div>
+  <!-- ── END SHARED ── -->
+
+  <header class="site-header">
+    <nav class="nav container" role="navigation" aria-label="Main navigation">
+      <a href="/" class="nav-logo" aria-label="onecybit — home">
+        <span class="nav-logo-text" data-glitch="onecybit">onecybit</span>
+      </a>
+
+      <ul class="nav-links" id="js-nav-links" role="list">
+        <li><a href="/"               class="nav-link">home</a></li>
+        <li><a href="/cybersecurity/" class="nav-link">cybersecurity</a></li>
+        <li><a href="/projects/"      class="nav-link">projects</a></li>
+        <li><a href="/notes/"         class="nav-link">notes</a></li>
+        <li><a href="/tags/"          class="nav-link">tags</a></li>
+        <li><a href="/about.html"     class="nav-link">about</a></li>
+      </ul>
+
+      <button class="nav-hamburger" id="js-nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="js-nav-links">
+        <span class="nav-hamburger-bar" aria-hidden="true"></span>
+        <span class="nav-hamburger-bar" aria-hidden="true"></span>
+        <span class="nav-hamburger-bar" aria-hidden="true"></span>
+      </button>
+
+      <button class="theme-toggle" id="js-theme-toggle" aria-label="Toggle theme">night</button>
+
+      <time
+        class="nav-clock"
+        id="js-clock"
+        datetime=""
+        aria-live="polite"
+        aria-label="Current time"
+      ></time>
+    </nav>
+  </header>
+
+  <main>
+    <article class="section" aria-label="Ftarg — Ch.2: Architecture — Marzban and XRay">
+      <div class="container post-full">
+
+        <header class="post-full-header">
+          <nav class="post-breadcrumb" aria-label="Breadcrumb">
+            <a href="/">home</a>
+            <span class="post-breadcrumb-sep" aria-hidden="true">/</span>
+            <a href="/projects/">projects</a>
+            <span class="post-breadcrumb-sep" aria-hidden="true">/</span>
+            <span>vless-vpn</span>
+          </nav>
+
+          <div class="post-full-meta">
+            <time class="post-date" datetime="2026-04-05">2026-04-05</time>
+            <span class="cat-badge cat-badge--project">vless-vpn</span>
+            <span class="reading-time">4 min read</span>
+          </div>
+
+          <h1 class="post-full-title">Ftarg — Ch.2: Architecture — Marzban and XRay</h1>
+
+          <ul class="post-full-tags post-tags" aria-label="Tags">
+            <li class="post-tag">proxy</li><li class="post-tag">xray</li><li class="post-tag">docker</li><li class="post-tag">wireguard</li><li class="post-tag">infrastructure</li>
+          </ul>
+        </header>
+
+        
+
+        <div class="post-body">
+          <h1>Ftarg — Ch.2: Architecture — Marzban and XRay</h1>
+<h1>Ftarg — Ch.2: Architecture — Marzban, XRay, and the Routing Problem</h1>
+<p>Previous chapter covered why most protocols get caught by DPI and how REALITY avoids that. This one is about the actual stack — what's running and why.</p>
+<hr>
+<h2 id="marzban">Marzban</h2>
+<p>Marzban is an open-source management panel for XRay. Handles user creation, subscription links, traffic tracking, expiry. Has a built-in Telegram admin bot.</p>
+<p>Why Marzban over 3x-ui or others:</p>
+<ul><li>Cleaner API</li><li>Docker-native</li><li>Better multi-node support in its architecture</li><li>You configure XRay directly</li></ul>
+<p>It's not the proxy. It's the control panel. XRay does the actual work.</p>
+<hr>
+<h2 id="docker-setup">Docker setup</h2>
+<p>Marzban runs in Docker with host network mode. Improtant part is the REALITY needs direct access to port 443 for the TLS handshake. Docker's default bridge networking adds a NAT layer in between — the handshake gets mangled, connections behave unpredictably or just drop.</p>
+<p>Host network mode = container uses the host's network stack directly. No NAT, no bridge. Port 443 works as expected.</p>
+<p>Single compose file, XRay config mounted as a volume.</p>
+<hr>
+<h2 id="the-routing-problem">The routing problem</h2>
+<p>This was the biggest headache of the whole build.</p>
+<h3 id="what-i-needed">What I needed</h3>
+<p>The proxy server accepts connections on port 443 (VLESS+REALITY). Traffic comes in, gets decrypted, needs to go out to the internet. Simple.</p>
+<p>But I didn't want outbound traffic going from my server's real IP. Reasons: privacy, IP reputation, separation between the proxy identity and the underlying host. So I needed an outbound tunnel.</p>
+<h3 id="what-i-tried-first">What I tried first</h3>
+<p>ProtonVPN. WireGuard-based, seemed solid. Set it up as a system-level VPN on the host. <code>wg-quick up</code>, routing table updated, traffic going through the tunnel. Looked good.</p>
+<p>Then port 443 stopped accepting connections.</p>
+<p>I spent a while trying to make it work — policy routing, ip rules, different configs. Couldn't get inbound and outbound to coexist. At that point I moved on and started looking at other approaches.</p>
+<h3 id="why-system-level-vpn-breaks-inbound">Why system-level VPN breaks inbound</h3>
+<p>Later I understood the actual problem. When you bring up a system-level VPN, it takes over the default route. Every packet leaving the host goes through the tunnel — including responses to incoming connections.</p>
+<p>So, what happens:</p>
+<ol><li>Client sends SYN to your real IP on port 443</li><li>Your server accepts, sends SYN-ACK</li><li>But SYN-ACK goes out through the VPN tunnel</li><li>Client gets a response from a completely different IP</li><li>Connection dropped</li></ol>
+<p>Classic asymmetric routing. The incoming path and outgoing path don't match.</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code>BROKEN (system-level VPN):
+ 
+Client --[SYN to real IP:443]--&gt; Server
+                                   |
+              response routed ---&gt; VPN tunnel ---&gt; different IP
+                                                      |
+Client &lt;-- [SYN-ACK from wrong IP] &lt;-----------------+
+         connection rejected
+</code></pre></div>
+<p>This is a fundamental conflict. A server that needs to accept inbound connections on a specific port AND route outbound through a tunnel — system-level VPN can't do both cleanly.</p>
+<h3 id="the-fix-xray-native-wireguard-outbound">The fix: XRay native WireGuard outbound</h3>
+<p>Turns out XRay has built-in support for WireGuard as an outbound protocol. Instead of tunneling all system traffic, only the proxied traffic goes through it.</p>
+<p>I switched to Cloudflare WARP — free WireGuard-based tunnel. But instead of running it as a system VPN, configured it as an outbound inside XRay.</p>
+<p>System networking stays completely untouched. Port 443 inbound works normally. XRay handles the tunnel internally for proxy traffic only.</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code>WORKING (XRay native WireGuard outbound):
+ 
+Client --[443]--&gt; Server (direct, normal routing)
+                    |
+                    +--&gt; XRay
+                           |
+                           +--&gt; proxy traffic --&gt; WARP tunnel --&gt; internet
+                           |
+                    +--&gt; response back to client (correct source IP)
+</code></pre></div>
+<p>Clean separation. Inbound = direct. Outbound = tunneled. No routing conflicts.</p>
+<p>The solution isn't obvious unless you know XRay can do WireGuard natively. Application-level routing instead of system-level routing — that's the key.</p>
+<hr>
+<h2 id="current-stack">Current stack</h2>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code>+------------------------------------------+
+|              Host (Fedora)               |
+|                                          |
+|  +------------------------------------+  |
+|  |     Docker (host network mode)     |  |
+|  |                                    |  |
+|  |   Marzban panel                    |  |
+|  |     └── XRay core                  |  |
+|  |           ├── Inbound:             |  |
+|  |           │   VLESS+REALITY (443)  |  |
+|  |           └── Outbound:            |  |
+|  |               WireGuard (WARP)     |  |
+|  +------------------------------------+  |
+|                                          |
+|  DuckDNS (dynamic DNS)                   |
+|  firewalld (443 only)                    |
++------------------------------------------+
+</code></pre></div>
+<p>Running on residential fiber with dynamic IP. DuckDNS handles DNS updates. Not ideal for production but fine for dev — residential IPs are less likely to be on blocklists, which is actually an advantage during testing.</p>
+<hr>
+<p>Protocol layer handled. Stack is running. Next problem: making sure the operational side doesn't leak what the protocol layer protects.</p>
+<p>Next: Ftarg — Ch.3: Threat Modeling and Security Hardening</p>
+        </div>
+
+        <nav class="post-nav" aria-label="Post navigation">
+          <a class="post-nav-item post-nav-item--prev" href="/posts/cybersecurity/malware/axios-supply-chain-attack-npm-rat/"><span class="post-nav-label">← older</span><span class="post-nav-title">Axios Supply Chain Attack: npm Account Hijack Deploys Cross-Platform RAT</span></a>
+          
+        </nav>
+
+      </div>
+    </article>
+
+  <section class="related-posts section" id="js-related-posts" aria-label="Related posts" hidden>
+    <div class="container">
+      <h2 class="section-title">// related posts</h2>
+      <div class="related-posts-grid" id="js-related-grid"></div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span class="footer-copy">© 2025 onecybit</span>
+      <span class="footer-status">// status: <span class="status-ok">operational</span></span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="js-back-top" aria-label="Back to top" hidden>↑</button>
+
+  <script src="/assets/js/main.js" defer></script>
+  <script src="/assets/js/related.js" defer></script>
+
+</body>
+</html>

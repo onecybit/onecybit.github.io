@@ -4,13 +4,27 @@
   <title>onecybit</title>
   <link>https://onecybit.github.io</link>
   <description>security research, CTF writeups, and tooling</description>
-  <lastBuildDate>Sun, 05 Apr 2026 15:15:00 +0000</lastBuildDate>
+  <lastBuildDate>Sun, 05 Apr 2026 15:17:56 +0000</lastBuildDate>
+  <item>
+    <title>Ftarg — Ch.2: Architecture — Marzban and XRay</title>
+    <link>https://onecybit.github.io/posts/projects/vless-vpn/ftarg-ch2-architecture-marzban-and-xray/</link>
+    <guid>https://onecybit.github.io/posts/projects/vless-vpn/ftarg-ch2-architecture-marzban-and-xray/</guid>
+    <pubDate>Sun, 05 Apr 2026 00:00:00 +0000</pubDate>
+    <description>The actual stack behind the proxy service — Marzban, XRay, Docker with host networking, and solving the asymmetric routing problem with XRay&apos;s native WireGuard outbound.</description>
+  </item>
   <item>
     <title>Axios Supply Chain Attack: npm Account Hijack Deploys Cross-Platform RAT</title>
     <link>https://onecybit.github.io/posts/cybersecurity/malware/axios-supply-chain-attack-npm-rat/</link>
     <guid>https://onecybit.github.io/posts/cybersecurity/malware/axios-supply-chain-attack-npm-rat/</guid>
     <pubDate>Tue, 31 Mar 2026 00:00:00 +0000</pubDate>
     <description>Breakdown of the March 2026 axios npm supply chain attack — how a hijacked maintainer account pushed backdoored versions delivering a cross-platform RAT to millions of developers.</description>
+  </item>
+  <item>
+    <title>Proxy service. Ch.1: Why Most Proxy Protocols Fail Against Modern DPI</title>
+    <link>https://onecybit.github.io/posts/projects/vless-vpn/proxy-service-ch1-why-most-proxy-protocols-fail-against-modern-dpi/</link>
+    <guid>https://onecybit.github.io/posts/projects/vless-vpn/proxy-service-ch1-why-most-proxy-protocols-fail-against-modern-dpi/</guid>
+    <pubDate>Mon, 30 Mar 2026 00:00:00 +0000</pubDate>
+    <description>How DPI fingerprints VPN traffic at the protocol level, and why TLS 1.3 impersonation is the only transport-level approach that survives modern inspection.</description>
   </item>
   <item>
     <title>SOC Lab — Ch.2: Sysmon, Suricata &amp; Wazuh Integration</title>

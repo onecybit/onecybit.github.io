@@ -1,5 +1,21 @@
 [
   {
+    "title": "Ftarg — Ch.2: Architecture — Marzban and XRay",
+    "date": "2026-04-05",
+    "category": "projects",
+    "subcategory": "vless-vpn",
+    "tags": [
+      "proxy",
+      "xray",
+      "docker",
+      "wireguard",
+      "infrastructure"
+    ],
+    "excerpt": "The actual stack behind the proxy service — Marzban, XRay, Docker with host networking, and solving the asymmetric routing problem with XRay's native WireGuard outbound.",
+    "url": "/posts/projects/vless-vpn/ftarg-ch2-architecture-marzban-and-xray/",
+    "reading_time": "4 min read"
+  },
+  {
     "title": "Axios Supply Chain Attack: npm Account Hijack Deploys Cross-Platform RAT",
     "date": "2026-03-31",
     "category": "cybersecurity",
@@ -14,6 +30,21 @@
     "excerpt": "Breakdown of the March 2026 axios npm supply chain attack — how a hijacked maintainer account pushed backdoored versions delivering a cross-platform RAT to millions of developers.",
     "url": "/posts/cybersecurity/malware/axios-supply-chain-attack-npm-rat/",
     "reading_time": "7 min read"
+  },
+  {
+    "title": "Proxy service. Ch.1: Why Most Proxy Protocols Fail Against Modern DPI",
+    "date": "2026-03-30",
+    "category": "projects",
+    "subcategory": "vless-vpn",
+    "tags": [
+      "proxy",
+      "dpi",
+      "tls",
+      "network-security"
+    ],
+    "excerpt": "How DPI fingerprints VPN traffic at the protocol level, and why TLS 1.3 impersonation is the only transport-level approach that survives modern inspection.",
+    "url": "/posts/projects/vless-vpn/proxy-service-ch1-why-most-proxy-protocols-fail-against-modern-dpi/",
+    "reading_time": "5 min read"
   },
   {
     "title": "SOC Lab — Ch.2: Sysmon, Suricata & Wazuh Integration",
