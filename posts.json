@@ -1,5 +1,20 @@
 [
   {
+    "title": "Ftarg — Ch.3: The Management Layer — Bot, Database, Automation",
+    "date": "2026-04-08",
+    "category": "projects",
+    "subcategory": "",
+    "tags": [
+      "python",
+      "telegram-bot",
+      "automation",
+      "devops"
+    ],
+    "excerpt": "Telegram bot, encrypted storage, Marzban API integration, and the automation that keeps the whole thing running.",
+    "url": "/posts/projects/ftarg-ch3-the-management-layer-bot-database-automation/",
+    "reading_time": "2 min read"
+  },
+  {
     "title": "Ftarg — Ch.2: Architecture — Marzban and XRay",
     "date": "2026-04-05",
     "category": "projects",
