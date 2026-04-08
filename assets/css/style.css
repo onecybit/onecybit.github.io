@@ -1,18 +1,18 @@
 /* ── CSS CUSTOM PROPERTIES ── */
 
 :root {
-  --bg:      #030603;
-  --bg2:     #060d06;
-  --bg3:     #0a120a;
-  --neon:    #00ff9f;
+  --bg:      #050a05;
+  --bg2:     #0a110a;
+  --bg3:     #0e160e;
+  --neon:    #00e68a;
   --neon2:   #00ffe0;
   --red:     #ff0033;
   --amber:   #ffb300;
-  --border:  #0f2010;
-  --border-dim: rgba(15, 32, 16, 0.6); /* --border at 60% opacity */
-  --text:    #c2e8d0;
+  --border:  #142818;
+  --border-dim: rgba(20, 40, 24, 0.6);
+  --text:    #b8dcc6;
   --text2:   #6aaa84;
-  --white:   #f8fff9;
+  --white:   #f0faf2;
   --mono:    'Share Tech Mono', monospace;
   --cond:    'Barlow Condensed', sans-serif;
 }
@@ -47,7 +47,7 @@ html {
   scroll-behavior: smooth;
   /* Firefox */
   scrollbar-width: thin;
-  scrollbar-color: rgba(0, 255, 159, 0.4) var(--bg2);
+  scrollbar-color: rgba(0, 230, 138, 0.4) var(--bg2);
 }
 
 /* Chromium/WebKit scrollbar */
@@ -60,12 +60,12 @@ html {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(0, 255, 159, 0.4);
+  background: rgba(0, 230, 138, 0.4);
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(0, 255, 159, 0.7);
+  background: rgba(0, 230, 138, 0.7);
 }
 
 body {
@@ -133,14 +133,7 @@ pre {
 /* ── BACKGROUND LAYERS ── */
 
 .grid-bg {
-  position: fixed;
-  inset: 0;
-  background-image:
-    linear-gradient(rgba(0, 255, 159, 0.04) 1px, transparent 1px),
-    linear-gradient(to right, rgba(0, 255, 159, 0.04) 1px, transparent 1px);
-  background-size: 44px 44px;
-  pointer-events: none;
-  z-index: 0;
+  display: none; /* removed: competes with scanlines, adds visual noise */
 }
 
 .scanlines {
@@ -169,8 +162,7 @@ pre {
   z-index: 9002;
 }
 
-html.light-mode .grid-bg   { opacity: 0.3; }
-html.light-mode .scanlines { opacity: 0.02; }
+html.light-mode .scanlines { opacity: 0.04; } /* slightly visible in light mode */
 html.light-mode .site-header { background: rgba(240, 244, 240, 0.95); }
 
 
@@ -192,7 +184,7 @@ html.light-mode .site-header { background: rgba(240, 244, 240, 0.95); }
   position: sticky;
   top: 0;
   z-index: 100;
-  background: rgba(3, 6, 3, 0.92);
+  background: rgba(5, 10, 5, 0.92);
   backdrop-filter: blur(4px);
   border-bottom: 1px solid var(--border);
 }
@@ -277,8 +269,9 @@ html.light-mode .site-header { background: rgba(240, 244, 240, 0.95); }
 
 .nav-clock {
   font-family: var(--mono);
-  font-size: 1rem;
+  font-size: 0.82rem;
   color: var(--text2);
+  opacity: 0.6;
   letter-spacing: 0.1em;
   flex-shrink: 0;
   min-width: 5.5rem;
@@ -407,10 +400,8 @@ html.light-mode .site-header { background: rgba(240, 244, 240, 0.95); }
 
 .hero-stats {
   display: flex;
-  gap: 2.5rem;
-  padding: 1.5rem 0;
-  border-top: 1px solid var(--border-dim);
-  border-bottom: 1px solid var(--border-dim);
+  gap: 3rem;
+  padding: 0.5rem 0;
 }
 
 .hero-stat {
@@ -421,7 +412,7 @@ html.light-mode .site-header { background: rgba(240, 244, 240, 0.95); }
 
 .hero-stat-num {
   font-family: var(--cond);
-  font-size: 3rem;
+  font-size: 2.5rem;
   font-weight: 700;
   color: var(--neon);
   line-height: 1;
@@ -439,7 +430,7 @@ html.light-mode .site-header { background: rgba(240, 244, 240, 0.95); }
 
 .hero-search {
   display: flex;
-  border: 1px solid rgba(0, 255, 159, 0.5);
+  border: 1px solid rgba(0, 230, 138, 0.4);
   background: var(--bg2);
   max-width: 420px;
   transition: border-color 0.2s;
@@ -569,7 +560,7 @@ html.light-mode .site-header { background: rgba(240, 244, 240, 0.95); }
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
-  transition: border-color 0.2s, transform 0.2s;
+  transition: border-color 0.2s, box-shadow 0.2s;
   position: relative;
   overflow: hidden;
 }
@@ -588,14 +579,12 @@ html.light-mode .site-header { background: rgba(240, 244, 240, 0.95); }
 
 .post-item:hover {
   border-color: var(--neon);
-  transform: translateY(-2px);
+  box-shadow: 0 0 20px rgba(0, 230, 138, 0.06);
 }
 
 .post-item:hover::before {
   transform: scaleX(1);
 }
-
-/* .feat-card — featured card variant, used on category pages */
 
 /* ── POST FULL PAGE ── */
 
@@ -704,8 +693,8 @@ html.light-mode .site-header { background: rgba(240, 244, 240, 0.95); }
 /* ── POST BODY ── */
 
 .post-body {
-  line-height: 1.8;
-  font-size: 0.92rem;
+  line-height: 1.75;
+  font-size: 1rem;
   color: var(--text);
 }
 
@@ -831,7 +820,7 @@ html.light-mode .site-header { background: rgba(240, 244, 240, 0.95); }
   font-family: var(--mono);
   font-size: 0.82rem;
   line-height: 1.6;
-  color: var(--white);
+  color: var(--neon2);
   background: none;
   border: none;
   padding: 0;
@@ -981,6 +970,8 @@ html.light-mode .site-header { background: rgba(240, 244, 240, 0.95); }
   color: var(--text2);
   letter-spacing: 0.12em;
   margin-bottom: 2rem;
+  padding-left: 0.75rem;
+  border-left: 2px solid var(--neon);
 }
 
 .view-all {
@@ -1242,7 +1233,7 @@ html.light-mode .site-header { background: rgba(240, 244, 240, 0.95); }
 
 .search-form {
   display: flex;
-  border: 1px solid rgba(0, 255, 159, 0.42);
+  border: 1px solid rgba(0, 230, 138, 0.35);
   background: var(--bg2);
   max-width: 600px;
   transition: border-color 0.2s;
@@ -1684,7 +1675,7 @@ mark {
     right: 0;
     flex-direction: column;
     gap: 0;
-    background: rgba(3, 6, 3, 0.97);
+    background: rgba(5, 10, 5, 0.97);
     border-bottom: 1px solid var(--border);
     backdrop-filter: blur(4px);
     z-index: 99;
@@ -1771,7 +1762,7 @@ mark {
   }
 
   .nav-clock {
-    font-size: 0.95rem;
+    font-size: 0.82rem;
   }
 
   .theme-toggle {
