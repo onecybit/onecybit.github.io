@@ -3,7 +3,7 @@
     "title": "Ftarg — Ch.3: The Management Layer — Bot, Database, Automation",
     "date": "2026-04-08",
     "category": "projects",
-    "subcategory": "",
+    "subcategory": "vless-vpn",
     "tags": [
       "python",
       "telegram-bot",
@@ -11,7 +11,7 @@
       "devops"
     ],
     "excerpt": "Telegram bot, encrypted storage, Marzban API integration, and the automation that keeps the whole thing running.",
-    "url": "/posts/projects/ftarg-ch3-the-management-layer-bot-database-automation/",
+    "url": "/posts/projects/vless-vpn/ftarg-ch3-the-management-layer-bot-database-automation/",
     "reading_time": "2 min read"
   },
   {
