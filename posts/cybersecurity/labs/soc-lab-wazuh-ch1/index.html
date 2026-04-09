@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Building a home SOC lab with Wazuh SIEM, a Windows 10 endpoint, and Kali Linux as attacker. Covers internal networking, static IPs, and agent registration.">
 
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-UBl4nLwKa5omrxuOUtH1s2RUUw9imT+HAxiRkiPAyTo='; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-UBl4nLwKa5omrxuOUtH1s2RUUw9imT+HAxiRkiPAyTo=' 'sha256-tPqkbt4ef+MNL3m5ZYl3N2iuh38+p5F+QuOpBiXqN2g=' https://www.googletagmanager.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
 
@@ -21,14 +21,22 @@
   <meta name="twitter:title"       content="SOC Lab — Ch.1: Setup &amp; SIEM Deployment — onecybit">
   <meta name="twitter:description" content="Building a home SOC lab with Wazuh SIEM, a Windows 10 endpoint, and Kali Linux as attacker. Covers internal networking, static IPs, and agent registration.">
 
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"SOC Lab — Ch.1: Setup &amp; SIEM Deployment","datePublished":"2025-06-26","description":"Building a home SOC lab with Wazuh SIEM, a Windows 10 endpoint, and Kali Linux as attacker. Covers internal networking, static IPs, and agent registration.","url":"https://onecybit.github.io/posts/cybersecurity/labs/soc-lab-wazuh-ch1/","author":{"@type":"Person","name":"onecybit"}}</script>
+
   <title>SOC Lab — Ch.1: Setup &amp; SIEM Deployment — onecybit</title>
 
+  <link rel="canonical" href="https://onecybit.github.io/posts/cybersecurity/labs/soc-lab-wazuh-ch1/">
+  <link rel="alternate" type="application/rss+xml" title="onecybit" href="https://onecybit.github.io/feed.xml">
   <link rel="icon" type="image/x-icon" href="/assets/img/favicons/favicon.ico">
   <link rel="stylesheet" href="/assets/css/style.css">
   <link
     rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@100;300;700;900&family=Share+Tech+Mono&display=swap"
   >
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-L2TK63YC14"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-L2TK63YC14');</script>
 </head>
 
 <body>
@@ -256,7 +264,7 @@ Choose your action:
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <span class="footer-copy">© 2025 onecybit</span>
+      <span class="footer-copy">© 2026 onecybit</span>
       <span class="footer-status">// status: <span class="status-ok">operational</span></span>
     </div>
   </footer>

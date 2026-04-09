@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="The actual stack behind the proxy service — Marzban, XRay, Docker with host networking, and solving the asymmetric routing problem with XRay&#x27;s native WireGuard outbound.">
 
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-UBl4nLwKa5omrxuOUtH1s2RUUw9imT+HAxiRkiPAyTo='; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-UBl4nLwKa5omrxuOUtH1s2RUUw9imT+HAxiRkiPAyTo=' 'sha256-tPqkbt4ef+MNL3m5ZYl3N2iuh38+p5F+QuOpBiXqN2g=' https://www.googletagmanager.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
 
@@ -21,14 +21,22 @@
   <meta name="twitter:title"       content="Ftarg — Ch.2: Architecture — Marzban and XRay — onecybit">
   <meta name="twitter:description" content="The actual stack behind the proxy service — Marzban, XRay, Docker with host networking, and solving the asymmetric routing problem with XRay&#x27;s native WireGuard outbound.">
 
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Ftarg — Ch.2: Architecture — Marzban and XRay","datePublished":"2026-04-05","description":"The actual stack behind the proxy service — Marzban, XRay, Docker with host networking, and solving the asymmetric routing problem with XRay&#x27;s native WireGuard outbound.","url":"https://onecybit.github.io/posts/projects/vless-vpn/ftarg-ch2-architecture-marzban-and-xray/","author":{"@type":"Person","name":"onecybit"}}</script>
+
   <title>Ftarg — Ch.2: Architecture — Marzban and XRay — onecybit</title>
 
+  <link rel="canonical" href="https://onecybit.github.io/posts/projects/vless-vpn/ftarg-ch2-architecture-marzban-and-xray/">
+  <link rel="alternate" type="application/rss+xml" title="onecybit" href="https://onecybit.github.io/feed.xml">
   <link rel="icon" type="image/x-icon" href="/assets/img/favicons/favicon.ico">
   <link rel="stylesheet" href="/assets/css/style.css">
   <link
     rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@100;300;700;900&family=Share+Tech+Mono&display=swap"
   >
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-L2TK63YC14"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-L2TK63YC14');</script>
 </head>
 
 <body>
@@ -103,8 +111,7 @@
         
 
         <div class="post-body">
-          <h1>Ftarg — Ch.2: Architecture — Marzban and XRay</h1>
-<h1>Ftarg — Ch.2: Architecture — Marzban, XRay, and the Routing Problem</h1>
+          <h1>Ftarg — Ch.2: Architecture — Marzban, XRay, and the Routing Problem</h1>
 <p>Previous chapter covered why most protocols get caught by DPI and how REALITY avoids that. This one is about the actual stack — what's running and why.</p>
 <hr>
 <h2 id="marzban">Marzban</h2>
@@ -203,7 +210,7 @@ Client --[443]--&gt; Server (direct, normal routing)
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <span class="footer-copy">© 2025 onecybit</span>
+      <span class="footer-copy">© 2026 onecybit</span>
       <span class="footer-status">// status: <span class="status-ok">operational</span></span>
     </div>
   </footer>

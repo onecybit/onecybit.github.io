@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="Telegram bot, encrypted storage, Marzban API integration, and the automation that keeps the whole thing running.">
 
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-UBl4nLwKa5omrxuOUtH1s2RUUw9imT+HAxiRkiPAyTo='; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data:; connect-src 'self'; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-UBl4nLwKa5omrxuOUtH1s2RUUw9imT+HAxiRkiPAyTo=' 'sha256-tPqkbt4ef+MNL3m5ZYl3N2iuh38+p5F+QuOpBiXqN2g=' https://www.googletagmanager.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
 
@@ -21,14 +21,22 @@
   <meta name="twitter:title"       content="Ftarg — Ch.3: The Management Layer — Bot, Database, Automation — onecybit">
   <meta name="twitter:description" content="Telegram bot, encrypted storage, Marzban API integration, and the automation that keeps the whole thing running.">
 
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Ftarg — Ch.3: The Management Layer — Bot, Database, Automation","datePublished":"2026-04-08","description":"Telegram bot, encrypted storage, Marzban API integration, and the automation that keeps the whole thing running.","url":"https://onecybit.github.io/posts/projects/vless-vpn/ftarg-ch3-the-management-layer-bot-database-automation/","author":{"@type":"Person","name":"onecybit"}}</script>
+
   <title>Ftarg — Ch.3: The Management Layer — Bot, Database, Automation — onecybit</title>
 
+  <link rel="canonical" href="https://onecybit.github.io/posts/projects/vless-vpn/ftarg-ch3-the-management-layer-bot-database-automation/">
+  <link rel="alternate" type="application/rss+xml" title="onecybit" href="https://onecybit.github.io/feed.xml">
   <link rel="icon" type="image/x-icon" href="/assets/img/favicons/favicon.ico">
   <link rel="stylesheet" href="/assets/css/style.css">
   <link
     rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@100;300;700;900&family=Share+Tech+Mono&display=swap"
   >
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-L2TK63YC14"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-L2TK63YC14');</script>
 </head>
 
 <body>
@@ -89,7 +97,7 @@
 
           <div class="post-full-meta">
             <time class="post-date" datetime="2026-04-08">2026-04-08</time>
-            <span class="cat-badge cat-badge--project">projects</span>
+            <span class="cat-badge cat-badge--project">vless-vpn</span>
             <span class="reading-time">2 min read</span>
           </div>
 
@@ -103,8 +111,7 @@
         
 
         <div class="post-body">
-          <h1>Ftarg — Ch.3: The Management Layer — Bot, Database, Automation</h1>
-<p>Protocol is solid (Ch.1). Stack is running (Ch.2). Now the part that sits on top — user management and automation.</p>
+          <p>Protocol is solid (Ch.1). Stack is running (Ch.2). Now the part that sits on top — user management and automation.</p>
 <p>Built a Telegram bot from scratch to handle everything user-facing. Handles the full lifecycle: request, approval, link delivery, cleanup.</p>
 <hr>
 <h2 id="why-a-custom-bot">Why a custom bot</h2>
@@ -177,7 +184,7 @@ Rejected:
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <span class="footer-copy">© 2025 onecybit</span>
+      <span class="footer-copy">© 2026 onecybit</span>
       <span class="footer-status">// status: <span class="status-ok">operational</span></span>
     </div>
   </footer>
