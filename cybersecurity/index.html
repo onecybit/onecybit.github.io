@@ -78,42 +78,42 @@
 
   <main>
 
-    <section class="cyber-tiles-section section" aria-label="Cybersecurity categories">
-      <div class="container cyber-tiles-inner">
-        <h1 class="cyber-tiles-heading">// cybersecurity</h1>
-
-        <div class="cyber-tiles" id="js-cyber-tiles">
-          <button class="cyber-tile" data-filter="ctf" type="button">
-            <span class="cyber-tile-title">Writeups CTF</span>
-            <span class="cyber-tile-count" data-subcat="ctf">&mdash;</span>
-            <span class="cyber-tile-label">posts</span>
-          </button>
-          <button class="cyber-tile" data-filter="labs" type="button">
-            <span class="cyber-tile-title">Labs</span>
-            <span class="cyber-tile-count" data-subcat="labs">&mdash;</span>
-            <span class="cyber-tile-label">posts</span>
-          </button>
-          <button class="cyber-tile" data-filter="malware" type="button">
-            <span class="cyber-tile-title">Malware Analysis</span>
-            <span class="cyber-tile-count" data-subcat="malware">&mdash;</span>
-            <span class="cyber-tile-label">posts</span>
-          </button>
-          <button class="cyber-tile" data-filter="cheatsheets" type="button">
-            <span class="cyber-tile-title">Cheatsheets</span>
-            <span class="cyber-tile-count" data-subcat="cheatsheets">&mdash;</span>
-            <span class="cyber-tile-label">posts</span>
-          </button>
-        </div>
-
-        <p class="scroll-indicator" aria-hidden="true">scroll for articles ↓</p>
-      </div>
-    </section>
-
-    <section class="cyber-articles-section section" id="js-articles-section" aria-label="Articles">
+    <section class="section" aria-label="Cybersecurity articles">
       <div class="container">
-        <h2 class="section-title" id="js-articles-heading">// all articles</h2>
-        <div id="js-articles-grid">
-          <p class="loading-state">// loading...</p>
+        <h1 class="cyber-page-heading">// cybersecurity</h1>
+
+        <div class="cyber-layout">
+          <aside class="cyber-sidebar" aria-label="Category filter">
+            <nav class="cyber-nav" id="js-cyber-nav">
+              <button class="cyber-nav-btn cyber-nav-btn--active" data-filter="all" type="button">
+                <span class="cyber-nav-label">all</span>
+                <span class="cyber-nav-count" data-subcat="all">&mdash;</span>
+              </button>
+              <button class="cyber-nav-btn" data-filter="ctf" type="button">
+                <span class="cyber-nav-label">ctf</span>
+                <span class="cyber-nav-count" data-subcat="ctf">&mdash;</span>
+              </button>
+              <button class="cyber-nav-btn" data-filter="labs" type="button">
+                <span class="cyber-nav-label">labs</span>
+                <span class="cyber-nav-count" data-subcat="labs">&mdash;</span>
+              </button>
+              <button class="cyber-nav-btn" data-filter="malware" type="button">
+                <span class="cyber-nav-label">malware</span>
+                <span class="cyber-nav-count" data-subcat="malware">&mdash;</span>
+              </button>
+              <button class="cyber-nav-btn" data-filter="cheatsheets" type="button">
+                <span class="cyber-nav-label">cheats</span>
+                <span class="cyber-nav-count" data-subcat="cheatsheets">&mdash;</span>
+              </button>
+            </nav>
+          </aside>
+
+          <div class="cyber-articles">
+            <h2 class="section-title" id="js-articles-heading">// all articles</h2>
+            <div id="js-articles-grid">
+              <p class="loading-state">// loading...</p>
+            </div>
+          </div>
         </div>
       </div>
     </section>

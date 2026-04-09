@@ -1056,93 +1056,69 @@ html.light-mode .site-header { background: rgba(240, 244, 240, 0.95); }
   padding: 2rem 0;
 }
 
-/* ── CYBERSECURITY TILES ── */
+/* ── CYBERSECURITY SIDEBAR LAYOUT ── */
 
-.cyber-tiles-section {
-  min-height: calc(100vh - 56px);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 4rem 0;
-  border-bottom: 1px solid var(--border);
-}
-
-.cyber-tiles-inner {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 3rem;
-  text-align: center;
-}
-
-.cyber-tiles-heading {
+.cyber-page-heading {
   font-family: var(--mono);
-  font-size: clamp(2rem, 5vw, 3.5rem);
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
   color: var(--neon);
   letter-spacing: 0.06em;
   font-weight: 700;
+  margin-bottom: 2rem;
 }
 
-.cyber-tiles {
+.cyber-layout {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 1rem;
-  width: 100%;
-  max-width: 700px;
+  grid-template-columns: 180px 1fr;
+  gap: 2rem;
 }
 
-.cyber-tile {
+.cyber-sidebar {
+  position: sticky;
+  top: 80px; /* below sticky header */
+  align-self: start;
+}
+
+.cyber-nav {
   display: flex;
   flex-direction: column;
+  gap: 0.25rem;
+}
+
+.cyber-nav-btn {
+  display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 0.5rem;
-  padding: 1.5rem 1rem;
-  background: var(--bg2);
-  border: 1px solid var(--neon);
-  color: var(--neon);
+  width: 100%;
+  padding: 0.5rem 0.75rem;
   font-family: var(--mono);
-  transition: background 0.2s, color 0.2s;
-}
-
-.cyber-tile:hover {
-  background: var(--neon);
-  color: var(--bg);
-}
-
-.cyber-tile--active {
-  background: var(--neon);
-  color: var(--bg);
-}
-
-.cyber-tile-title {
-  font-size: 0.72rem;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  font-weight: 700;
-}
-
-.cyber-tile-count {
-  font-family: var(--cond);
-  font-size: 1.75rem;
-  font-weight: 700;
-  line-height: 1;
-}
-
-.cyber-tile-label {
-  font-size: 0.58rem;
-  letter-spacing: 0.08em;
-  opacity: 0.7;
-}
-
-.scroll-indicator {
-  font-size: 0.68rem;
+  font-size: 0.78rem;
   color: var(--text2);
-  letter-spacing: 0.1em;
-  animation: scroll-bounce 2s ease-in-out infinite;
+  letter-spacing: 0.06em;
+  text-align: left;
+  border-left: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
 }
 
-.cyber-articles-section {
-  border-top: 1px solid var(--border);
+.cyber-nav-btn:hover {
+  color: var(--neon);
+}
+
+.cyber-nav-btn--active {
+  color: var(--neon);
+  border-left-color: var(--neon);
+}
+
+.cyber-nav-count {
+  font-size: 0.65rem;
+  color: var(--text2);
+  opacity: 0.6;
+}
+
+.cyber-nav-btn--active .cyber-nav-count {
+  color: var(--neon);
+  opacity: 0.8;
 }
 
 /* ── TAG CLOUD ── */
@@ -1622,12 +1598,6 @@ mark {
   95%           { opacity: 0.4; transform: scale(1.2); }
 }
 
-@keyframes scroll-bounce {
-  0%, 100% { transform: translateY(0); opacity: 0.6; }
-  50%      { transform: translateY(6px); opacity: 1; }
-}
-
-
 /* ── MEDIA QUERIES ── */
 
 @media (max-width: 900px) {
@@ -1661,9 +1631,45 @@ mark {
     display: flex;
   }
 
-  .cyber-tiles {
-    grid-template-columns: 1fr 1fr;
-    max-width: 400px;
+  /* Cybersecurity sidebar → horizontal pill row on mobile */
+  .cyber-layout {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+
+  .cyber-sidebar {
+    position: sticky;
+    top: 68px; /* below mobile header */
+    z-index: 10;
+    background: var(--bg);
+    padding: 0.5rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .cyber-nav {
+    flex-direction: row;
+    gap: 0.4rem;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none; /* Firefox */
+  }
+
+  .cyber-nav::-webkit-scrollbar {
+    display: none;
+  }
+
+  .cyber-nav-btn {
+    flex-shrink: 0;
+    padding: 0.35rem 0.75rem;
+    border: 1px solid var(--border);
+    border-left: 1px solid var(--border);
+    font-size: 0.72rem;
+    white-space: nowrap;
+  }
+
+  .cyber-nav-btn--active {
+    border-color: var(--neon);
+    border-left-color: var(--neon);
   }
 
   /* Full-width dropdown — anchored to the sticky site-header */

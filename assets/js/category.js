@@ -1,14 +1,14 @@
-// category.js — cybersecurity tiles page + generic category listings
-// Cybersecurity page: tile click → filter → render articles from posts.json
+// category.js — cybersecurity sidebar nav + generic category listings
+// Cybersecurity page: sidebar click → filter → render articles from posts.json
 // Generic pages (projects, etc.): flat listing filtered by data-category
 
 const CAT = {
 
-    TILES: [
-        { filter: 'ctf',         label: 'Writeups CTF' },
-        { filter: 'labs',        label: 'Labs' },
-        { filter: 'malware',     label: 'Malware Analysis' },
-        { filter: 'cheatsheets', label: 'Cheatsheets' },
+    FILTERS: [
+        { filter: 'ctf',         label: 'ctf' },
+        { filter: 'labs',        label: 'labs' },
+        { filter: 'malware',     label: 'malware' },
+        { filter: 'cheatsheets', label: 'cheatsheets' },
     ],
 
     BADGE_MAP: {
@@ -20,14 +20,14 @@ const CAT = {
 
     posts: [],
     activeFilter: null,
-    tilesEl: null,
+    navEl: null,
     articlesGrid: null,
     articlesHeading: null,
 
     init() {
-        const tilesEl = document.getElementById('js-cyber-tiles');
-        if (tilesEl) {
-            CAT.initCyber(tilesEl);
+        const navEl = document.getElementById('js-cyber-nav');
+        if (navEl) {
+            CAT.initCyber(navEl);
             return;
         }
 
@@ -37,10 +37,10 @@ const CAT = {
         }
     },
 
-    // ── Cybersecurity tiles page ─────────────────────────────────────────────
+    // ── Cybersecurity sidebar page ───────────────────────────────────────────
 
-    initCyber(tilesEl) {
-        CAT.tilesEl = tilesEl;
+    initCyber(navEl) {
+        CAT.navEl = navEl;
         CAT.articlesGrid = document.getElementById('js-articles-grid');
         CAT.articlesHeading = document.getElementById('js-articles-heading');
 
@@ -48,12 +48,12 @@ const CAT = {
         const f = params.get('filter');
         if (f && typeof f === 'string') {
             const safe = f.trim().slice(0, 30);
-            if (CAT.TILES.some(function match(t) { return t.filter === safe; })) {
+            if (CAT.FILTERS.some(function match(t) { return t.filter === safe; })) {
                 CAT.activeFilter = safe;
             }
         }
 
-        CAT.bindTiles();
+        CAT.bindNav();
 
         fetch('/posts.json')
             .then(function parseJson(r) { return r.json(); })
@@ -65,51 +65,47 @@ const CAT = {
                     return b.date.localeCompare(a.date);
                 });
                 CAT.fillCounts();
-                CAT.updateTileStates();
+                CAT.updateNavStates();
                 CAT.renderArticles();
             })
             .catch(function handleError() { CAT.renderCyberError(); });
     },
 
-    bindTiles() {
-        const tiles = CAT.tilesEl.querySelectorAll('.cyber-tile');
-        tiles.forEach(function bind(tile) {
-            tile.addEventListener('click', function handleTileClick() {
-                const f = tile.dataset.filter;
-                CAT.activeFilter = (CAT.activeFilter === f) ? null : f;
-                CAT.updateTileStates();
+    bindNav() {
+        const btns = CAT.navEl.querySelectorAll('.cyber-nav-btn');
+        btns.forEach(function bind(btn) {
+            btn.addEventListener('click', function handleNavClick() {
+                const f = btn.dataset.filter;
+                CAT.activeFilter = (f === 'all') ? null : f;
+                CAT.updateNavStates();
                 CAT.renderArticles();
                 CAT.updateUrl();
-                // Delay scroll so filter renders before viewport moves
-                setTimeout(function scrollToArticles() {
-                    const section = document.getElementById('js-articles-section');
-                    if (section) {
-                        section.scrollIntoView({ behavior: 'smooth', block: 'start' });
-                    }
-                }, 100);
             });
         });
     },
 
     fillCounts() {
-        CAT.TILES.forEach(function countTile(t) {
+        CAT.FILTERS.forEach(function countFilter(t) {
             const n = CAT.posts.filter(function match(p) {
                 return p.subcategory === t.filter;
             }).length;
-            const el = CAT.tilesEl.querySelector('[data-subcat="' + t.filter + '"]');
-            if (el) {
-                el.textContent = String(n).padStart(2, '0');
-            }
+            const el = CAT.navEl.querySelector('[data-subcat="' + t.filter + '"]');
+            if (el) { el.textContent = n; }
         });
+        const allEl = CAT.navEl.querySelector('[data-subcat="all"]');
+        if (allEl) { allEl.textContent = CAT.posts.length; }
     },
 
-    updateTileStates() {
-        const tiles = CAT.tilesEl.querySelectorAll('.cyber-tile');
-        tiles.forEach(function update(tile) {
-            if (tile.dataset.filter === CAT.activeFilter) {
-                tile.classList.add('cyber-tile--active');
+    updateNavStates() {
+        const btns = CAT.navEl.querySelectorAll('.cyber-nav-btn');
+        btns.forEach(function update(btn) {
+            const f = btn.dataset.filter;
+            const isActive = (f === 'all' && !CAT.activeFilter) ||
+                             (f === CAT.activeFilter);
+            if (isActive) {
+                btn.classList.add('cyber-nav-btn--active');
             } else {
-                tile.classList.remove('cyber-tile--active');
+                btn.classList.remove('cyber-nav-btn--active');
             }
         });
     },
@@ -130,11 +126,11 @@ const CAT = {
             : CAT.posts;
 
         if (CAT.articlesHeading) {
-            const tile = CAT.activeFilter
-                ? CAT.TILES.find(function find(t) { return t.filter === CAT.activeFilter; })
+            const entry = CAT.activeFilter
+                ? CAT.FILTERS.find(function find(t) { return t.filter === CAT.activeFilter; })
                 : null;
-            CAT.articlesHeading.textContent = tile
-                ? '// ' + tile.label.toLowerCase()
+            CAT.articlesHeading.textContent = entry
+                ? '// ' + entry.label
                 : '// all articles';
         }
 
