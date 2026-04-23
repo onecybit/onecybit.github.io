@@ -919,6 +919,15 @@ html.light-mode .site-header { background: rgba(240, 244, 240, 0.95); }
 .cat-badge--cheatsheet { color: var(--neon); }
 .cat-badge--project    { color: var(--neon2); }
 
+.news-badge { color: var(--red); }
+
+.news-external {
+  font-size: 0.62rem;
+  color: var(--text2);
+  letter-spacing: 0.08em;
+  margin-top: auto;
+}
+
 .post-title {
   font-family: var(--cond);
   font-size: 1.2rem;

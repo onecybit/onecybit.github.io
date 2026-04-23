@@ -4,29 +4,34 @@
   <meta charset="UTF-8">
   <script>if(localStorage.getItem('ocb-theme')==='light')document.documentElement.classList.add('light-mode');</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Cybersecurity — CTF writeups, lab walkthroughs, malware analysis, and cheatsheets from onecybit.">
+  <meta name="description" content="Live cybersecurity news aggregated from trusted sources — The Hacker News, BleepingComputer, Krebs on Security, Dark Reading.">
 
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-UBl4nLwKa5omrxuOUtH1s2RUUw9imT+HAxiRkiPAyTo=' 'sha256-tPqkbt4ef+MNL3m5ZYl3N2iuh38+p5F+QuOpBiXqN2g=' https://www.googletagmanager.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
+  <!-- Content Security Policy
+       NOTE: connect-src includes api.rss2json.com for live RSS feed fetching. -->
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-UBl4nLwKa5omrxuOUtH1s2RUUw9imT+HAxiRkiPAyTo=' 'sha256-tPqkbt4ef+MNL3m5ZYl3N2iuh38+p5F+QuOpBiXqN2g=' https://www.googletagmanager.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://www.google-analytics.com; connect-src 'self' https://api.rss2json.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
+
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
 
   <!-- Open Graph -->
   <meta property="og:type"        content="website">
   <meta property="og:site_name"   content="onecybit">
-  <meta property="og:title"       content="cybersecurity — onecybit">
-  <meta property="og:description" content="Cybersecurity — CTF writeups, lab walkthroughs, malware analysis, and cheatsheets from onecybit.">
-  <meta property="og:url"         content="https://onecybit.github.io/cybersecurity/">
+  <meta property="og:title"       content="news — onecybit">
+  <meta property="og:description" content="Live cybersecurity news aggregated from trusted sources — The Hacker News, BleepingComputer, Krebs on Security, Dark Reading.">
+  <meta property="og:url"         content="https://onecybit.github.io/news/">
   <meta property="og:image"       content="https://onecybit.github.io/assets/img/OneCyBit_logo_compressed.jpg">
   <meta name="twitter:card"        content="summary">
-  <meta name="twitter:title"       content="cybersecurity — onecybit">
-  <meta name="twitter:description" content="Cybersecurity — CTF writeups, lab walkthroughs, malware analysis, and cheatsheets from onecybit.">
+  <meta name="twitter:title"       content="news — onecybit">
+  <meta name="twitter:description" content="Live cybersecurity news aggregated from trusted sources.">
 
-  <title>cybersecurity — onecybit</title>
+  <title>news — onecybit</title>
 
-  <link rel="canonical" href="https://onecybit.github.io/cybersecurity/">
+  <link rel="canonical" href="https://onecybit.github.io/news/">
   <link rel="alternate" type="application/rss+xml" title="onecybit" href="https://onecybit.github.io/feed.xml">
   <link rel="icon" type="image/x-icon" href="/assets/img/favicons/favicon.ico">
   <link rel="stylesheet" href="/assets/css/style.css">
+
+  <!-- Google Fonts — see index.html for SRI TODO note -->
   <link
     rel="stylesheet"
     href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@100;300;700;900&family=Share+Tech+Mono&display=swap"
@@ -55,7 +60,7 @@
 
       <ul class="nav-links" id="js-nav-links" role="list">
         <li><a href="/"               class="nav-link">home</a></li>
-        <li><a href="/cybersecurity/" class="nav-link active">cybersecurity</a></li>
+        <li><a href="/cybersecurity/" class="nav-link">cybersecurity</a></li>
         <li><a href="/projects/"      class="nav-link">projects</a></li>
         <li><a href="/news/"          class="nav-link">news</a></li>
         <li><a href="/notes/"         class="nav-link">notes</a></li>
@@ -82,52 +87,50 @@
   </header>
 
   <main>
-
-    <section class="section" aria-label="Cybersecurity articles">
+    <section class="section" aria-label="Cybersecurity news">
       <div class="container">
-        <h1 class="cyber-page-heading">// cybersecurity</h1>
 
-        <div class="cyber-layout">
-          <aside class="cyber-sidebar" aria-label="Category filter">
-            <nav class="cyber-nav" id="js-cyber-nav">
-              <button class="cyber-nav-btn cyber-nav-btn--active" data-filter="all" type="button">
-                <span class="cyber-nav-label">all</span>
-                <span class="cyber-nav-count" data-subcat="all">&mdash;</span>
-              </button>
-              <button class="cyber-nav-btn" data-filter="ctf" type="button">
-                <span class="cyber-nav-label">ctf</span>
-                <span class="cyber-nav-count" data-subcat="ctf">&mdash;</span>
-              </button>
-              <button class="cyber-nav-btn" data-filter="labs" type="button">
-                <span class="cyber-nav-label">labs</span>
-                <span class="cyber-nav-count" data-subcat="labs">&mdash;</span>
-              </button>
-              <button class="cyber-nav-btn" data-filter="malware" type="button">
-                <span class="cyber-nav-label">malware</span>
-                <span class="cyber-nav-count" data-subcat="malware">&mdash;</span>
-              </button>
-              <button class="cyber-nav-btn" data-filter="cheatsheets" type="button">
-                <span class="cyber-nav-label">cheats</span>
-                <span class="cyber-nav-count" data-subcat="cheatsheets">&mdash;</span>
-              </button>
-            </nav>
-          </aside>
-
-          <div class="cyber-articles">
-            <h2 class="section-title" id="js-articles-heading">// all articles</h2>
-            <div id="js-articles-grid">
-              <p class="loading-state">// loading...</p>
-            </div>
-          </div>
+        <div class="cat-hero">
+          <p class="cat-hero-label">live feed</p>
+          <h1 class="cat-hero-title cat-hero-title--red">// news</h1>
+          <p class="cat-hero-desc">Live cybersecurity headlines from trusted sources, updated on every page load.</p>
         </div>
+
+        <!-- ── Source filter ── -->
+        <section aria-label="Filter by source">
+          <h2 class="section-title">// sources</h2>
+
+          <div id="js-news-sources" class="tag-cloud" aria-label="News sources">
+          </div>
+
+          <div id="js-news-filter-bar" class="tag-filter-bar" hidden>
+            <span class="tag-filter-label">showing:</span>
+            <span class="tag-filter-active" id="js-news-active"></span>
+            <button
+              class="clear-filter-btn"
+              id="js-news-clear"
+              type="button"
+              aria-label="Clear source filter"
+            >clear ×</button>
+          </div>
+        </section>
+
+        <!-- ── News grid ── -->
+        <div
+          id="js-news-grid"
+          aria-label="News articles"
+          aria-live="polite"
+        >
+          <p class="loading-state">// loading feeds...</p>
+        </div>
+
       </div>
     </section>
-
   </main>
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <span class="footer-copy">© 2026 onecybit</span>
+      <span class="footer-copy">&copy; 2026 onecybit</span>
       <span class="footer-status">// status: <span class="status-ok">operational</span></span>
     </div>
   </footer>
@@ -135,7 +138,7 @@
   <button class="back-to-top" id="js-back-top" aria-label="Back to top" hidden>↑</button>
 
   <script src="/assets/js/main.js" defer></script>
-  <script src="/assets/js/category.js" defer></script>
+  <script src="/assets/js/news.js" defer></script>
 
 </body>
 </html>
