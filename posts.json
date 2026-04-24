@@ -1,5 +1,39 @@
 [
   {
+    "title": "HackTheBox — Facts",
+    "date": "2026-04-24",
+    "category": "cybersecurity",
+    "subcategory": "ctf",
+    "tags": [
+      "htb",
+      "ctf",
+      "cms",
+      "linux"
+    ],
+    "excerpt": "HackTheBox Facts machine recon — nginx, MinIO, and Camaleon CMS on Ubuntu. Full writeup restricted while machine is active.",
+    "url": "/posts/cybersecurity/ctf/facts/",
+    "reading_time": "2 min read",
+    "season": "10"
+  },
+  {
+    "title": "HackTheBox — Expressway",
+    "date": "2026-04-24",
+    "category": "cybersecurity",
+    "subcategory": "ctf",
+    "tags": [
+      "htb",
+      "ctf",
+      "ike",
+      "vpn",
+      "sudo",
+      "cve"
+    ],
+    "excerpt": "HackTheBox Expressway writeup — IKE aggressive mode PSK leak, credential reuse to SSH, and CVE-2025-32462 sudo host policy bypass to root.",
+    "url": "/posts/cybersecurity/ctf/expressway/",
+    "reading_time": "4 min read",
+    "season": "10"
+  },
+  {
     "title": "Ftarg — Ch.3: The Management Layer — Bot, Database, Automation",
     "date": "2026-04-08",
     "category": "projects",

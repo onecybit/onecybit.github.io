@@ -274,6 +274,13 @@ const CAT = {
         meta.appendChild(time);
         meta.appendChild(badge);
 
+        if (post.season) {
+            const seasonBadge = document.createElement('span');
+            seasonBadge.className = 'season-badge';
+            seasonBadge.textContent = 'season ' + post.season;
+            meta.appendChild(seasonBadge);
+        }
+
         const h3 = document.createElement('h3');
         h3.className = 'post-title';
 

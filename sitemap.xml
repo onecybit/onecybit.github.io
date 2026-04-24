@@ -37,6 +37,18 @@
     <priority>0.7</priority>
   </url>
   <url>
+    <loc>https://onecybit.github.io/posts/cybersecurity/ctf/facts/</loc>
+    <lastmod>2026-04-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://onecybit.github.io/posts/cybersecurity/ctf/expressway/</loc>
+    <lastmod>2026-04-24</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
     <loc>https://onecybit.github.io/posts/projects/vless-vpn/ftarg-ch3-the-management-layer-bot-database-automation/</loc>
     <lastmod>2026-04-08</lastmod>
     <changefreq>monthly</changefreq>

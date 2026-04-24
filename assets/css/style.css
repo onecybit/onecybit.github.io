@@ -919,6 +919,27 @@ html.light-mode .site-header { background: rgba(240, 244, 240, 0.95); }
 .cat-badge--cheatsheet { color: var(--neon); }
 .cat-badge--project    { color: var(--neon2); }
 
+.season-badge {
+  font-size: 0.5rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 0.1rem 0.4rem;
+  border: 1px solid var(--amber);
+  color: var(--amber);
+  margin-left: 0.4rem;
+}
+
+.post-restricted-notice {
+  margin-top: 2rem;
+  padding: 1rem 1.2rem;
+  border: 1px solid var(--amber);
+  background: rgba(255, 179, 0, 0.06);
+  color: var(--amber);
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  line-height: 1.5;
+}
+
 .news-badge { color: var(--red); }
 
 .news-external {
