@@ -18,16 +18,12 @@ const OCB_RELATED = {
         });
     },
 
-    // ── Tag reader ─────────────────────────────────────────────────────────────
-
     readCurrentTags() {
         const tagEls = document.querySelectorAll('.post-full-tags .post-tag');
         return Array.from(tagEls).map(function(el) {
             return el.textContent.trim();
         });
     },
-
-    // ── Fetch posts.json ───────────────────────────────────────────────────────
 
     fetchPosts(callback) {
         fetch('/posts.json')
@@ -40,8 +36,6 @@ const OCB_RELATED = {
                 // posts.json unavailable — section stays hidden
             });
     },
-
-    // ── Filter + sort ──────────────────────────────────────────────────────────
 
     filterAndSort(posts, currentTags, currentUrl) {
         return posts
@@ -64,8 +58,6 @@ const OCB_RELATED = {
             })
             .slice(0, 3);
     },
-
-    // ── Render ─────────────────────────────────────────────────────────────────
 
     render(posts, grid) {
         posts.forEach(function(post) {

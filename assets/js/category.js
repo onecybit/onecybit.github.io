@@ -1,7 +1,3 @@
-// category.js — cybersecurity sidebar nav + generic category listings
-// Cybersecurity page: sidebar click → filter → render articles from posts.json
-// Generic pages (projects, etc.): flat listing filtered by data-category
-
 const CAT = {
 
     FILTERS: [
@@ -36,8 +32,6 @@ const CAT = {
             CAT.initGeneric(container);
         }
     },
-
-    // ── Cybersecurity sidebar page ───────────────────────────────────────────
 
     initCyber(navEl) {
         CAT.navEl = navEl;
@@ -162,8 +156,6 @@ const CAT = {
         }
     },
 
-    // ── Generic category page (projects, etc.) ──────────────────────────────
-
     PROJECT_NAMES: {
         'vless-vpn': 'vless-vpn server',
     },
@@ -192,7 +184,6 @@ const CAT = {
             return;
         }
 
-        // Group by subcategory if on projects page
         if (filterCat === 'projects') {
             CAT.renderGrouped(filtered, container);
             return;
@@ -217,7 +208,6 @@ const CAT = {
             groups[key].push(p);
         });
 
-        // Sort posts within each group by date descending
         order.forEach(function sortGroup(key) {
             groups[key].sort(function byDate(a, b) {
                 return a.date.localeCompare(b.date);
@@ -252,8 +242,6 @@ const CAT = {
         p.textContent = 'Failed to load posts.';
         container.appendChild(p);
     },
-
-    // ── Shared ──────────────────────────────────────────────────────────────
 
     buildCard(post) {
         const article = document.createElement('article');

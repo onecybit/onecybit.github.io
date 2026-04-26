@@ -2,12 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <script>if(localStorage.getItem('ocb-theme')==='light')document.documentElement.classList.add('light-mode');</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="onecybit — security research, CTF writeups, and tooling. Offensive and defensive security, lab notes, and cheatsheets.">
 
-  <!-- connect-src 'self' — required for search.js to fetch posts.json -->
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-UBl4nLwKa5omrxuOUtH1s2RUUw9imT+HAxiRkiPAyTo=' 'sha256-tPqkbt4ef+MNL3m5ZYl3N2iuh38+p5F+QuOpBiXqN2g=' https://www.googletagmanager.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-tPqkbt4ef+MNL3m5ZYl3N2iuh38+p5F+QuOpBiXqN2g=' https://www.googletagmanager.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
 
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
@@ -30,19 +28,6 @@
   <link rel="icon" type="image/x-icon" href="/assets/img/favicons/favicon.ico">
   <link rel="stylesheet" href="assets/css/style.css">
 
-  <!-- Google Fonts
-       TODO: Add integrity="sha384-<HASH>" and crossorigin="anonymous" per
-       CLAUDE.md SRI requirement. Google Fonts returns UA-dependent CSS, so
-       the hash must be computed for your target browser:
-         curl -s -H "User-Agent: <browser-ua>" "<url>" \
-           | openssl dgst -sha384 -binary | openssl base64 -A
-       Without SRI the fonts load fine; with a wrong hash they silently fall
-       back to the system fonts defined in --mono and --cond. -->
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@100;300;700;900&family=Share+Tech+Mono&display=swap"
-  >
-
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-L2TK63YC14"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-L2TK63YC14');</script>
@@ -53,25 +38,20 @@
   <div class="scroll-progress" aria-hidden="true"></div>
 
   <!-- ── SHARED: update all pages if this changes ── -->
-  <div class="grid-bg"   aria-hidden="true"></div>
-  <div class="scanlines" aria-hidden="true"></div>
-  <div class="noise"     aria-hidden="true"></div>
-  <!-- ── END SHARED ── -->
-
   <header class="site-header">
     <nav class="nav container" role="navigation" aria-label="Main navigation">
       <a href="/" class="nav-logo" aria-label="onecybit — home">
-        <span class="nav-logo-text" data-glitch="onecybit">onecybit</span>
+        <span class="nav-logo-text">onecybit<span class="nav-logo-dot">.</span></span>
       </a>
 
       <ul class="nav-links" id="js-nav-links" role="list">
-        <li><a href="/"               class="nav-link">home</a></li>
-        <li><a href="/cybersecurity/" class="nav-link">cybersecurity</a></li>
-        <li><a href="/projects/"      class="nav-link">projects</a></li>
-        <li><a href="/news/"          class="nav-link">news</a></li>
-        <li><a href="/notes/"         class="nav-link">notes</a></li>
-        <li><a href="/tags/"          class="nav-link">tags</a></li>
-        <li><a href="/about.html"     class="nav-link">about</a></li>
+        <li><a href="/"               class="nav-link">Home</a></li>
+        <li><a href="/cybersecurity/" class="nav-link">Cybersecurity</a></li>
+        <li><a href="/projects/"      class="nav-link">Projects</a></li>
+        <li><a href="/news/"          class="nav-link">News</a></li>
+        <li><a href="/notes/"         class="nav-link">Notes</a></li>
+        <li><a href="/tags/"          class="nav-link">Tags</a></li>
+        <li><a href="/about.html"     class="nav-link">About</a></li>
       </ul>
 
       <button class="nav-hamburger" id="js-nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="js-nav-links">
@@ -79,88 +59,44 @@
         <span class="nav-hamburger-bar" aria-hidden="true"></span>
         <span class="nav-hamburger-bar" aria-hidden="true"></span>
       </button>
-
-      <button class="theme-toggle" id="js-theme-toggle" aria-label="Toggle theme">night</button>
-
-      <time
-        class="nav-clock"
-        id="js-clock"
-        datetime=""
-        aria-live="polite"
-        aria-label="Current time"
-      ></time>
     </nav>
   </header>
+  <!-- ── END SHARED ── -->
 
   <main>
 
-    <section class="hero section" aria-label="Introduction">
-      <div class="container hero-inner">
+    <section class="hero" aria-label="Introduction">
+      <div class="container">
+        <div class="hero-inner">
 
-        <div class="hero-content">
-          <div class="hero-handle" aria-label="Handle: onecybit">
-            <span class="hero-prompt" aria-hidden="true">&gt;</span>
-            <span class="hero-name" data-glitch="onecybit">onecybit</span>
-            <span class="hero-cursor" aria-hidden="true">_</span>
+          <div class="hero-label">
+            <span class="pulse" aria-hidden="true"></span>
+            Security researcher &amp; developer
           </div>
 
-          <p class="hero-tagline">security enthusiast</p>
+          <h1 class="hero-title">Security blog.</h1>
 
-          <ul class="hero-stats" aria-label="Site statistics">
-            <li class="hero-stat">
-              <span class="hero-stat-num" id="js-stat-posts">--</span>
-              <span class="hero-stat-label">posts</span>
-            </li>
-            <li class="hero-stat">
-              <span class="hero-stat-num" id="js-stat-tags">--</span>
-              <span class="hero-stat-label">tags</span>
-            </li>
-            <li class="hero-stat">
-              <span class="hero-stat-num" id="js-stat-categories">--</span>
-              <span class="hero-stat-label">categories</span>
-            </li>
-          </ul>
+          <p class="hero-desc">
+            CTF writeups, lab walkthroughs, cheatsheets, and open-source projects.
+            Digging into systems deeply enough to see what others miss.
+          </p>
 
         </div>
-
-        <!-- Radar SVG — decorative, aria-hidden -->
-        <div class="hero-radar" aria-hidden="true">
-          <svg
-            class="radar-svg"
-            viewBox="0 0 200 200"
-            xmlns="http://www.w3.org/2000/svg"
-            role="presentation"
-          >
-            <circle cx="100" cy="100" r="92" class="radar-ring"/>
-            <circle cx="100" cy="100" r="62" class="radar-ring"/>
-            <circle cx="100" cy="100" r="32" class="radar-ring"/>
-            <line x1="100" y1="8"   x2="100" y2="192" class="radar-line"/>
-            <line x1="8"   y1="100" x2="192" y2="100" class="radar-line"/>
-
-            <!-- Sweep arm — rotates via CSS radar-spin keyframe -->
-            <g class="radar-arm">
-              <line x1="100" y1="100" x2="100" y2="8" class="radar-beam"/>
-            </g>
-
-            <!-- Blips — blink in on radar-blip--* delay offsets -->
-            <circle cx="142" cy="60"  r="2.5" class="radar-blip radar-blip--1"/>
-            <circle cx="70"  cy="132" r="2"   class="radar-blip radar-blip--2"/>
-            <circle cx="156" cy="112" r="2.5" class="radar-blip radar-blip--3"/>
-          </svg>
-        </div>
-
       </div>
     </section>
 
     <section class="section" id="recent-posts" aria-label="Recent posts">
       <div class="container">
-        <h2 class="section-title">// recent posts</h2>
 
-        <div id="js-recent-grid">
-          <p class="loading-state">// loading...</p>
+        <div class="section-header">
+          <h2 class="section-title">Recent posts</h2>
+          <a href="/cybersecurity/" class="view-all">View all &rarr;</a>
         </div>
 
-        <a href="/cybersecurity/" class="view-all">view all posts →</a>
+        <div id="js-recent-grid">
+          <p class="loading-state">Loading...</p>
+        </div>
+
       </div>
     </section>
 
@@ -168,8 +104,12 @@
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <span class="footer-copy">© 2026 onecybit</span>
-      <span class="footer-status">// status: <span class="status-ok">operational</span></span>
+      <span class="footer-copy">&copy; 2026 onecybit</span>
+      <div class="footer-links">
+        <a href="https://github.com/onecybit" class="footer-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="/feed.xml" class="footer-link">RSS</a>
+        <a href="/about.html" class="footer-link">About</a>
+      </div>
     </div>
   </footer>
 

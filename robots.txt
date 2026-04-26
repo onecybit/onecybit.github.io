@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://onecybit.github.io/sitemap.xml

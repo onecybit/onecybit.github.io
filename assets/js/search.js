@@ -1,7 +1,3 @@
-// search.js — keyword search across posts
-// Reads ?q= on page load, filters posts by title / excerpt / tags.
-// Debounced input updates results and URL parameter live.
-
 const SEARCH = {
 
     MAX_QUERY:   100,
@@ -166,7 +162,6 @@ const SEARCH = {
         return ul;
     },
 
-    // Wraps matched substrings in <mark> via DOM nodes — no innerHTML
     highlight(parent, text, q) {
         if (!q) {
             parent.appendChild(document.createTextNode(text));

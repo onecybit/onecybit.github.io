@@ -2,11 +2,10 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <script>if(localStorage.getItem('ocb-theme')==='light')document.documentElement.classList.add('light-mode');</script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="HackTheBox Facts machine recon — nginx, MinIO, and Camaleon CMS on Ubuntu. Full writeup restricted while machine is active.">
 
-  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-UBl4nLwKa5omrxuOUtH1s2RUUw9imT+HAxiRkiPAyTo=' 'sha256-tPqkbt4ef+MNL3m5ZYl3N2iuh38+p5F+QuOpBiXqN2g=' https://www.googletagmanager.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-tPqkbt4ef+MNL3m5ZYl3N2iuh38+p5F+QuOpBiXqN2g=' https://www.googletagmanager.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
   <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
   <meta http-equiv="Pragma" content="no-cache">
 
@@ -29,11 +28,6 @@
   <link rel="alternate" type="application/rss+xml" title="onecybit" href="https://onecybit.github.io/feed.xml">
   <link rel="icon" type="image/x-icon" href="/assets/img/favicons/favicon.ico">
   <link rel="stylesheet" href="/assets/css/style.css">
-  <link
-    rel="stylesheet"
-    href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@100;300;700;900&family=Share+Tech+Mono&display=swap"
-  >
-
   <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-L2TK63YC14"></script>
   <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-L2TK63YC14');</script>
@@ -44,25 +38,20 @@
   <div class="scroll-progress" aria-hidden="true"></div>
 
   <!-- ── SHARED: update all pages if this changes ── -->
-  <div class="grid-bg"   aria-hidden="true"></div>
-  <div class="scanlines" aria-hidden="true"></div>
-  <div class="noise"     aria-hidden="true"></div>
-  <!-- ── END SHARED ── -->
-
   <header class="site-header">
     <nav class="nav container" role="navigation" aria-label="Main navigation">
       <a href="/" class="nav-logo" aria-label="onecybit — home">
-        <span class="nav-logo-text" data-glitch="onecybit">onecybit</span>
+        <span class="nav-logo-text">onecybit<span class="nav-logo-dot">.</span></span>
       </a>
 
       <ul class="nav-links" id="js-nav-links" role="list">
-        <li><a href="/"               class="nav-link">home</a></li>
-        <li><a href="/cybersecurity/" class="nav-link">cybersecurity</a></li>
-        <li><a href="/projects/"      class="nav-link">projects</a></li>
-        <li><a href="/news/"          class="nav-link">news</a></li>
-        <li><a href="/notes/"         class="nav-link">notes</a></li>
-        <li><a href="/tags/"          class="nav-link">tags</a></li>
-        <li><a href="/about.html"     class="nav-link">about</a></li>
+        <li><a href="/"               class="nav-link">Home</a></li>
+        <li><a href="/cybersecurity/" class="nav-link">Cybersecurity</a></li>
+        <li><a href="/projects/"      class="nav-link">Projects</a></li>
+        <li><a href="/news/"          class="nav-link">News</a></li>
+        <li><a href="/notes/"         class="nav-link">Notes</a></li>
+        <li><a href="/tags/"          class="nav-link">Tags</a></li>
+        <li><a href="/about.html"     class="nav-link">About</a></li>
       </ul>
 
       <button class="nav-hamburger" id="js-nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="js-nav-links">
@@ -71,15 +60,6 @@
         <span class="nav-hamburger-bar" aria-hidden="true"></span>
       </button>
 
-      <button class="theme-toggle" id="js-theme-toggle" aria-label="Toggle theme">night</button>
-
-      <time
-        class="nav-clock"
-        id="js-clock"
-        datetime=""
-        aria-live="polite"
-        aria-label="Current time"
-      ></time>
     </nav>
   </header>
 
@@ -153,7 +133,11 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <span class="footer-copy">&copy; 2026 onecybit</span>
-      <span class="footer-status">// status: <span class="status-ok">operational</span></span>
+      <div class="footer-links">
+        <a href="https://github.com/onecybit" class="footer-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+        <a href="/feed.xml" class="footer-link">RSS</a>
+        <a href="/about.html" class="footer-link">About</a>
+      </div>
     </div>
   </footer>
 

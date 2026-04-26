@@ -1,6 +1,3 @@
-// news.js — live cybersecurity news aggregation for news/index.html
-// Fetches RSS feeds via rss2json.com proxy, renders cards, supports ?source= filter.
-
 const NEWS = {
 
     FEEDS: {
@@ -100,7 +97,6 @@ const NEWS = {
                 NEWS.articles = NEWS.articles.concat(arr);
             });
 
-            // Sort newest-first by date
             NEWS.articles.sort(function byDate(a, b) {
                 return new Date(b.date) - new Date(a.date);
             });
@@ -111,12 +107,7 @@ const NEWS = {
     },
 
     sanitizeText(str) {
-        // Strip HTML tags
-        let text = str.replace(/<[^>]*>/g, '');
-        // Strip dangerous chars
-        text = text.replace(/[<>"'&]/g, '');
-        // Trim and cap length
-        text = text.trim();
+        let text = str.replace(/<[^>]*>/g, '').replace(/[<>"'&]/g, '').trim();
         if (text.length > 500) { text = text.substring(0, 500) + '...'; }
         return text;
     },
@@ -216,7 +207,6 @@ const NEWS = {
         const card     = document.createElement('article');
         card.className = 'post-item';
 
-        // Meta row: date + source badge
         const meta     = document.createElement('div');
         meta.className = 'post-meta';
 
@@ -233,7 +223,6 @@ const NEWS = {
         meta.appendChild(time);
         meta.appendChild(badge);
 
-        // Title
         const h3     = document.createElement('h3');
         h3.className = 'post-title';
         if (article.link) {
@@ -247,12 +236,10 @@ const NEWS = {
             h3.textContent = article.title;
         }
 
-        // Excerpt
         const excerpt       = document.createElement('p');
         excerpt.className = 'post-excerpt';
         excerpt.textContent = article.excerpt;
 
-        // External link indicator
         const ext       = document.createElement('span');
         ext.className = 'news-external';
         ext.textContent = article.sourceLabel + ' ↗';

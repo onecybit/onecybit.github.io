@@ -1,6 +1,3 @@
-// home.js — dynamic recent posts & stats on the homepage
-// Fetches /posts.json and renders top 3 posts + stat counters.
-
 const HOME = {
 
     BADGE_MAP: {

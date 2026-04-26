@@ -1,7 +1,3 @@
-// tags.js — tag cloud and post filtering for tags/index.html
-// Reads ?tag= on page load and applies filter.
-// Event delegation on the cloud container handles tag button clicks.
-
 const TAGS = {
 
     BADGE_MAP: {
@@ -73,7 +69,6 @@ const TAGS = {
         return btn;
     },
 
-    // Event delegation — single listener on the cloud container
     handleTagClick(e) {
         const btn = e.target.closest('.tag-btn');
         if (!btn) return;
@@ -149,7 +144,7 @@ const TAGS = {
         h3.className = 'post-title';
         const a      = document.createElement('a');
         a.href       = post.url;
-        a.textContent = post.title;   // textContent — XSS safe
+        a.textContent = post.title;
         h3.appendChild(a);
 
         article.appendChild(TAGS.buildMeta(post));
