@@ -160,6 +160,15 @@ const CAT = {
         'vless-vpn': 'vless-vpn server',
     },
 
+    subcatUrl(category, subcategory) {
+        if (subcategory) { return '/' + category + '/' + subcategory + '/'; }
+        return '/' + category + '/';
+    },
+
+    tagUrl(tag) {
+        return '/tags/' + tag + '/';
+    },
+
     initGeneric(container) {
         fetch('/posts.json')
             .then(function parseJson(r) { return r.json(); })
@@ -221,7 +230,10 @@ const CAT = {
             const heading = document.createElement('h2');
             heading.className = 'project-group-title';
             const label = CAT.PROJECT_NAMES[key] || key.replace(/-/g, ' ');
-            heading.textContent = '// ' + label;
+            const headingLink = document.createElement('a');
+            headingLink.href = CAT.subcatUrl('projects', key === '_ungrouped' ? '' : key);
+            headingLink.textContent = '// ' + label;
+            heading.appendChild(headingLink);
             section.appendChild(heading);
 
             const grid = document.createElement('div');
@@ -246,6 +258,8 @@ const CAT = {
     buildCard(post) {
         const article = document.createElement('article');
         article.className = 'post-item';
+        article.dataset.category    = post.category    || '';
+        article.dataset.subcategory = post.subcategory || '';
 
         const meta = document.createElement('div');
         meta.className = 'post-meta';
@@ -255,8 +269,9 @@ const CAT = {
         time.setAttribute('datetime', post.date);
         time.textContent = post.date;
 
-        const badge = document.createElement('span');
+        const badge = document.createElement('a');
         badge.className = 'cat-badge ' + (CAT.BADGE_MAP[post.subcategory] || 'cat-badge--project');
+        badge.href = CAT.subcatUrl(post.category, post.subcategory);
         badge.textContent = post.subcategory || post.category;
 
         meta.appendChild(time);
@@ -287,9 +302,12 @@ const CAT = {
         tagList.setAttribute('aria-label', 'Tags');
 
         (post.tags || []).forEach(function addTag(tag) {
-            const li = document.createElement('li');
-            li.className = 'post-tag';
-            li.textContent = tag;
+            const li      = document.createElement('li');
+            const tagLink = document.createElement('a');
+            tagLink.className = 'post-tag';
+            tagLink.href      = CAT.tagUrl(tag);
+            tagLink.textContent = tag;
+            li.appendChild(tagLink);
             tagList.appendChild(li);
         });
 

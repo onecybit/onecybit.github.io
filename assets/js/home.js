@@ -7,6 +7,15 @@ const HOME = {
         cheatsheets: 'cat-badge--cheatsheet',
     },
 
+    subcatUrl(category, subcategory) {
+        if (subcategory) { return '/' + category + '/' + subcategory + '/'; }
+        return '/' + category + '/';
+    },
+
+    tagUrl(tag) {
+        return '/tags/' + tag + '/';
+    },
+
     init() {
         fetch('/posts.json')
             .then(function parseJson(r) { return r.json(); })
@@ -64,6 +73,8 @@ const HOME = {
     buildCard(post) {
         const article = document.createElement('article');
         article.className = 'post-item';
+        article.dataset.category    = post.category    || '';
+        article.dataset.subcategory = post.subcategory || '';
 
         const meta = document.createElement('div');
         meta.className = 'post-meta';
@@ -73,12 +84,20 @@ const HOME = {
         time.setAttribute('datetime', post.date);
         time.textContent = post.date;
 
-        const badge = document.createElement('span');
+        const badge = document.createElement('a');
         badge.className = 'cat-badge ' + (HOME.BADGE_MAP[post.subcategory] || 'cat-badge--project');
+        badge.href = HOME.subcatUrl(post.category, post.subcategory);
         badge.textContent = post.subcategory || post.category;
 
         meta.appendChild(time);
         meta.appendChild(badge);
+
+        if (post.season) {
+            const seasonBadge = document.createElement('span');
+            seasonBadge.className = 'season-badge';
+            seasonBadge.textContent = 'season ' + post.season;
+            meta.appendChild(seasonBadge);
+        }
 
         const h3 = document.createElement('h3');
         h3.className = 'post-title';
@@ -97,9 +116,12 @@ const HOME = {
         tagList.setAttribute('aria-label', 'Tags');
 
         (post.tags || []).forEach(function addTag(tag) {
-            const li = document.createElement('li');
-            li.className = 'post-tag';
-            li.textContent = tag;
+            const li      = document.createElement('li');
+            const tagLink = document.createElement('a');
+            tagLink.className = 'post-tag';
+            tagLink.href      = HOME.tagUrl(tag);
+            tagLink.textContent = tag;
+            li.appendChild(tagLink);
             tagList.appendChild(li);
         });
 

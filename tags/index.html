@@ -6,8 +6,8 @@
   <meta name="description" content="Browse all tags or search posts by keyword — onecybit security research, CTF writeups, and developer notes.">
 
   <!-- Content Security Policy
-       NOTE: connect-src is 'self' — required for search.js and tags.js to fetch
-       posts.json. form-action is 'none' — search input is JS-controlled, no form
+       NOTE: connect-src is 'self' — required for search.js to fetch posts.json.
+       form-action is 'none' — search input is JS-controlled, no form
        submission occurs. -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-tPqkbt4ef+MNL3m5ZYl3N2iuh38+p5F+QuOpBiXqN2g=' https://www.googletagmanager.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
 
@@ -109,25 +109,10 @@
           <h2 class="section-title">// all tags</h2>
 
           <div id="js-tag-cloud" class="tag-cloud" aria-label="Post tags">
-            <p class="loading-state">loading tags...</p>
+            <!-- ── build:tag_cloud ── -->
+<a class="tag-btn" href="/tags/automation/"><span class="tag-btn-name">#automation</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/cms/"><span class="tag-btn-name">#cms</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/ctf/"><span class="tag-btn-name">#ctf</span><span class="tag-btn-count">(2)</span></a><a class="tag-btn" href="/tags/cve/"><span class="tag-btn-name">#cve</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/devops/"><span class="tag-btn-name">#devops</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/docker/"><span class="tag-btn-name">#docker</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/dpi/"><span class="tag-btn-name">#dpi</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/htb/"><span class="tag-btn-name">#htb</span><span class="tag-btn-count">(2)</span></a><a class="tag-btn" href="/tags/ike/"><span class="tag-btn-name">#ike</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/infrastructure/"><span class="tag-btn-name">#infrastructure</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/javascript/"><span class="tag-btn-name">#javascript</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/linux/"><span class="tag-btn-name">#linux</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/malware/"><span class="tag-btn-name">#malware</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/network-security/"><span class="tag-btn-name">#network-security</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/nmap/"><span class="tag-btn-name">#nmap</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/npm/"><span class="tag-btn-name">#npm</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/pentest/"><span class="tag-btn-name">#pentest</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/proxy/"><span class="tag-btn-name">#proxy</span><span class="tag-btn-count">(2)</span></a><a class="tag-btn" href="/tags/python/"><span class="tag-btn-name">#python</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/rat/"><span class="tag-btn-name">#rat</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/recon/"><span class="tag-btn-name">#recon</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/soc/"><span class="tag-btn-name">#soc</span><span class="tag-btn-count">(2)</span></a><a class="tag-btn" href="/tags/sudo/"><span class="tag-btn-name">#sudo</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/supply-chain/"><span class="tag-btn-name">#supply-chain</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/suricata/"><span class="tag-btn-name">#suricata</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/telegram-bot/"><span class="tag-btn-name">#telegram-bot</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/threat-detection/"><span class="tag-btn-name">#threat-detection</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/tls/"><span class="tag-btn-name">#tls</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/vpn/"><span class="tag-btn-name">#vpn</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/wazuh/"><span class="tag-btn-name">#wazuh</span><span class="tag-btn-count">(2)</span></a><a class="tag-btn" href="/tags/wireguard/"><span class="tag-btn-name">#wireguard</span><span class="tag-btn-count">(1)</span></a><a class="tag-btn" href="/tags/xray/"><span class="tag-btn-name">#xray</span><span class="tag-btn-count">(1)</span></a>
+<!-- ── /build ── -->
           </div>
-
-          <div id="js-tag-filter-bar" class="tag-filter-bar" hidden>
-            <span class="tag-filter-label">showing:</span>
-            <span class="tag-filter-active" id="js-tag-active"></span>
-            <button
-              class="clear-filter-btn"
-              id="js-tag-clear"
-              type="button"
-              aria-label="Clear tag filter"
-            >clear ×</button>
-          </div>
-
-          <div
-            id="js-tag-posts"
-            aria-label="Posts for selected tag"
-            aria-live="polite"
-          ></div>
         </section>
 
       </div>
@@ -137,11 +122,14 @@
   <footer class="site-footer">
     <div class="container footer-inner">
       <span class="footer-copy">&copy; 2026 onecybit</span>
-      <div class="footer-links">
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/cybersecurity/" class="footer-link">Cybersecurity</a>
+        <a href="/projects/"      class="footer-link">Projects</a>
+        <a href="/tags/"          class="footer-link">Tags</a>
+        <a href="/about.html"     class="footer-link">About</a>
+        <a href="/feed.xml"       class="footer-link">RSS</a>
         <a href="https://github.com/onecybit" class="footer-link" target="_blank" rel="noopener noreferrer">GitHub</a>
-        <a href="/feed.xml" class="footer-link">RSS</a>
-        <a href="/about.html" class="footer-link">About</a>
-      </div>
+      </nav>
     </div>
   </footer>
 
@@ -149,7 +137,6 @@
 
   <script src="/assets/js/main.js" defer></script>
   <script src="/assets/js/search.js" defer></script>
-  <script src="/assets/js/tags.js" defer></script>
 
 </body>
 </html>

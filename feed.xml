@@ -4,19 +4,19 @@
   <title>onecybit</title>
   <link>https://onecybit.github.io</link>
   <description>security research, CTF writeups, and tooling</description>
-  <lastBuildDate>Thu, 24 Apr 2026 00:00:00 +0000</lastBuildDate>
+  <lastBuildDate>Thu, 30 Apr 2026 21:58:07 +0000</lastBuildDate>
   <item>
     <title>HackTheBox — Facts</title>
     <link>https://onecybit.github.io/posts/cybersecurity/ctf/facts/</link>
     <guid>https://onecybit.github.io/posts/cybersecurity/ctf/facts/</guid>
-    <pubDate>Thu, 24 Apr 2026 00:00:00 +0000</pubDate>
+    <pubDate>Fri, 24 Apr 2026 00:00:00 +0000</pubDate>
     <description>HackTheBox Facts machine recon — nginx, MinIO, and Camaleon CMS on Ubuntu. Full writeup restricted while machine is active.</description>
   </item>
   <item>
     <title>HackTheBox — Expressway</title>
     <link>https://onecybit.github.io/posts/cybersecurity/ctf/expressway/</link>
     <guid>https://onecybit.github.io/posts/cybersecurity/ctf/expressway/</guid>
-    <pubDate>Thu, 24 Apr 2026 00:00:00 +0000</pubDate>
+    <pubDate>Fri, 24 Apr 2026 00:00:00 +0000</pubDate>
     <description>HackTheBox Expressway writeup — IKE aggressive mode PSK leak, credential reuse to SSH, and CVE-2025-32462 sudo host policy bypass to root.</description>
   </item>
   <item>
