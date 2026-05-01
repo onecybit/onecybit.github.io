@@ -4,7 +4,14 @@
   <title>onecybit</title>
   <link>https://onecybit.github.io</link>
   <description>security research, CTF writeups, and tooling</description>
-  <lastBuildDate>Thu, 30 Apr 2026 21:58:07 +0000</lastBuildDate>
+  <lastBuildDate>Fri, 01 May 2026 12:27:54 +0000</lastBuildDate>
+  <item>
+    <title>Kali Linux Hardening</title>
+    <link>https://onecybit.github.io/posts/cybersecurity/cheatsheets/kali-hardening-script/</link>
+    <guid>https://onecybit.github.io/posts/cybersecurity/cheatsheets/kali-hardening-script/</guid>
+    <pubDate>Fri, 01 May 2026 00:00:00 +0000</pubDate>
+    <description>An annotated MIT-licensed Bash script that hardens a fresh Kali install — firewall, fail2ban, rkhunter, ClamAV, and a Lynis audit.</description>
+  </item>
   <item>
     <title>HackTheBox — Facts</title>
     <link>https://onecybit.github.io/posts/cybersecurity/ctf/facts/</link>

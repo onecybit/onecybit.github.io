@@ -1,5 +1,23 @@
 [
   {
+    "title": "Kali Linux Hardening",
+    "date": "2026-05-01",
+    "category": "cybersecurity",
+    "subcategory": "cheatsheets",
+    "tags": [
+      "kali",
+      "linux",
+      "hardening",
+      "ufw",
+      "fail2ban",
+      "clamav",
+      "lynis"
+    ],
+    "excerpt": "An annotated MIT-licensed Bash script that hardens a fresh Kali install — firewall, fail2ban, rkhunter, ClamAV, and a Lynis audit.",
+    "url": "/posts/cybersecurity/cheatsheets/kali-hardening-script/",
+    "reading_time": "5 min read"
+  },
+  {
     "title": "HackTheBox — Facts",
     "date": "2026-04-24",
     "category": "cybersecurity",

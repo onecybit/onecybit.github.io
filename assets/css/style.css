@@ -414,6 +414,34 @@ code, pre { font-family: var(--mono); }
 
 .post-body a:hover { border-color: var(--neon); }
 
+.post-body a.download-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 1rem 0;
+  padding: 0.55rem 1rem;
+  font-family: var(--mono);
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--neon);
+  background: var(--bg3);
+  border: 1px solid var(--neon);
+  border-radius: 3px;
+  transition: background 0.2s, color 0.2s, box-shadow 0.2s;
+}
+
+.post-body a.download-btn::before {
+  content: "↓";
+  font-weight: bold;
+}
+
+.post-body a.download-btn:hover {
+  color: var(--bg);
+  background: var(--neon);
+  box-shadow: 0 0 12px rgba(0, 255, 159, 0.35);
+}
+
 .post-body ul,
 .post-body ol {
   margin: 0 0 1.25rem 1.5rem;
