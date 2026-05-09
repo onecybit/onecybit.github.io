@@ -1,5 +1,24 @@
 [
   {
+    "title": "WingData",
+    "date": "2026-05-09",
+    "category": "cybersecurity",
+    "subcategory": "ctf",
+    "tags": [
+      "htb",
+      "wingdata",
+      "linux",
+      "medium",
+      "ftp",
+      "rce",
+      "hash-cracking",
+      "tarfile"
+    ],
+    "excerpt": "HackTheBox WingData (Linux, Medium) — Wing FTP CVE-2025-47812 unauthenticated RCE, static-salt SHA-256 cracking, and a Python tarfile PATH_MAX symlink bypass for root.",
+    "url": "/posts/cybersecurity/ctf/wingdata-writeup/",
+    "reading_time": "6 min read"
+  },
+  {
     "title": "Kali Linux Hardening",
     "date": "2026-05-01",
     "category": "cybersecurity",

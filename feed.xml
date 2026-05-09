@@ -4,7 +4,14 @@
   <title>onecybit</title>
   <link>https://onecybit.github.io</link>
   <description>security research, CTF writeups, and tooling</description>
-  <lastBuildDate>Fri, 01 May 2026 12:27:54 +0000</lastBuildDate>
+  <lastBuildDate>Sat, 09 May 2026 15:37:28 +0000</lastBuildDate>
+  <item>
+    <title>WingData</title>
+    <link>https://onecybit.github.io/posts/cybersecurity/ctf/wingdata-writeup/</link>
+    <guid>https://onecybit.github.io/posts/cybersecurity/ctf/wingdata-writeup/</guid>
+    <pubDate>Sat, 09 May 2026 00:00:00 +0000</pubDate>
+    <description>HackTheBox WingData (Linux, Medium) — Wing FTP CVE-2025-47812 unauthenticated RCE, static-salt SHA-256 cracking, and a Python tarfile PATH_MAX symlink bypass for root.</description>
+  </item>
   <item>
     <title>Kali Linux Hardening</title>
     <link>https://onecybit.github.io/posts/cybersecurity/cheatsheets/kali-hardening-script/</link>

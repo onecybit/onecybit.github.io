@@ -556,6 +556,112 @@ code, pre { font-family: var(--mono); }
 .copy-btn.is-copied { color: var(--neon); border-color: var(--neon); }
 
 
+/* ── PROTECTED POST GATE ── */
+
+.gate {
+  border: 1px solid var(--border);
+  border-left: 2px solid var(--red);
+  background: var(--bg2);
+  padding: 2.5rem 1.75rem;
+  margin: 2rem 0;
+  text-align: center;
+  font-family: var(--mono);
+}
+
+.gate-icon {
+  color: var(--red);
+  font-size: 0.75rem;
+  letter-spacing: 0.25em;
+  margin-bottom: 1rem;
+  opacity: 0.85;
+  text-transform: uppercase;
+}
+
+.gate-title {
+  font-family: var(--cond);
+  color: var(--neon);
+  font-size: 1.5rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  margin: 0 0 1rem;
+}
+
+.gate-desc {
+  color: var(--text2);
+  font-size: 0.92rem;
+  line-height: 1.6;
+  max-width: 38rem;
+  margin: 0 auto 1.5rem;
+}
+
+.gate-desc strong { color: var(--text); font-weight: 600; }
+
+.gate-form {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  align-items: center;
+  max-width: 32rem;
+  margin: 0 auto;
+}
+
+.gate-label {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  border: 0;
+}
+
+.gate-input {
+  flex: 1 1 16rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-family: var(--mono);
+  font-size: 0.9rem;
+  padding: 0.65rem 0.85rem;
+  outline: none;
+  transition: border-color 0.15s;
+}
+
+.gate-input:focus { border-color: var(--neon); }
+
+.gate-submit {
+  background: transparent;
+  border: 1px solid var(--neon);
+  color: var(--neon);
+  font-family: var(--mono);
+  font-size: 0.85rem;
+  letter-spacing: 0.08em;
+  padding: 0.65rem 1.4rem;
+  cursor: pointer;
+  text-transform: lowercase;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.gate-submit:hover,
+.gate-submit:focus-visible {
+  background: var(--neon);
+  color: var(--bg);
+}
+
+.gate-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+
+.gate-msg {
+  margin: 1.25rem 0 0;
+  min-height: 1.2em;
+  font-size: 0.85rem;
+  color: var(--text2);
+}
+
+.gate-msg--error   { color: var(--red); }
+.gate-msg--ok      { color: var(--neon); }
+.gate-msg--working { color: var(--amber); }
+
+
 /* ── POST NAVIGATION ── */
 
 .post-nav {
