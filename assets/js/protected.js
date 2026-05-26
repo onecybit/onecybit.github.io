@@ -83,24 +83,33 @@ const OCB_GATE = {
         return out;
     },
 
-    async verifyMac(key, nonce, ciphertext, expectedMac) {
+    macInput(kdfIters, salt, nonce, ciphertext) {
+        const out  = new Uint8Array(8 + salt.length + nonce.length + ciphertext.length);
+        const view = new DataView(out.buffer, 0, 8);
+        view.setBigUint64(0, BigInt(kdfIters), false);
+        out.set(salt,       8);
+        out.set(nonce,      8 + salt.length);
+        out.set(ciphertext, 8 + salt.length + nonce.length);
+        return out;
+    },
+
+    async verifyMac(key, macData, expectedMac) {
         const hmacKey = await crypto.subtle.importKey(
             'raw', key, { name: 'HMAC', hash: 'SHA-256' }, false, ['verify']
         );
-        const data = new Uint8Array(nonce.length + ciphertext.length);
-        data.set(nonce, 0);
-        data.set(ciphertext, nonce.length);
-        return crypto.subtle.verify('HMAC', hmacKey, expectedMac, data);
+        return crypto.subtle.verify('HMAC', hmacKey, expectedMac, macData);
     },
 
     async decrypt(password) {
-        const blob  = this.blob;
-        const salt  = this.b64decode(blob.salt);
-        const nonce = this.b64decode(blob.nonce);
-        const ct    = this.b64decode(blob.ciphertext);
-        const mac   = this.b64decode(blob.mac);
-        const key   = await this.deriveKey(password, salt, blob.kdf_iters);
-        const ok    = await this.verifyMac(key, nonce, ct, mac);
+        const blob    = this.blob;
+        const salt    = this.b64decode(blob.salt);
+        const nonce   = this.b64decode(blob.nonce);
+        const ct      = this.b64decode(blob.ciphertext);
+        const mac     = this.b64decode(blob.mac);
+        const iters   = blob.kdf_iters;
+        const key     = await this.deriveKey(password, salt, iters);
+        const macData = this.macInput(iters, salt, nonce, ct);
+        const ok      = await this.verifyMac(key, macData, mac);
         if (!ok) throw new Error('bad-password');
         const pt = await this.streamXor(key, nonce, ct);
         return new TextDecoder().decode(pt);
@@ -131,12 +140,7 @@ const OCB_GATE = {
                 OCB.initCopyButtons();
             }
         } catch (err) {
-            this.setMessage(
-                err.message === 'bad-password'
-                    ? 'wrong password — access denied'
-                    : 'decryption failed: ' + err.message,
-                'error'
-            );
+            this.setMessage('access denied — wrong password', 'error');
             submitBtn.disabled = false;
         }
     },

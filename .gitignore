@@ -20,18 +20,22 @@ __pycache__/
 .env
 *.env
 .anthropic*
-# Claude Code local settings — don't expose session history
-.claude/
-.mcp.json
 
 # AI tooling — not for public repo
-CLAUDE.md
 .claude/
 .mcp.json
-tests/
-build.py
-_templates/
+CLAUDE.md
+
+# Source files — keep local only
 _posts/
+_drafts/
+_templates/
+build.py
+ocb.py
+tests/
+
+# Encrypted post caches — never commit ciphertext blobs
+*.enc.json
 
 # Dotfiles — never track these
 .bash*
@@ -40,19 +44,7 @@ _posts/
 .zprofile
 .gitconfig
 .ripgreprc
-
-# Claude and editor tooling
-.claude/
-.mcp.json
-.idea/
-.vscode/
-
-# Source files — keep local only
-_posts/
-_templates/
-build.py
-tests/
-CLAUDE.md
+.gitmodules
 
 # Git internals — should never appear but guard anyway
 HEAD
@@ -60,12 +52,3 @@ config
 hooks/
 objects/
 refs/
-hooks
-objects
-refs
-.idea
-.vscode
-.gitmodules
-_drafts/
-ocb.py
-_drafts/
