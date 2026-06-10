@@ -9,13 +9,6 @@ const SEARCH = {
     resultsEl: null,
     countEl:   null,
 
-    BADGE_MAP: {
-        ctf:         'cat-badge--writeup',
-        labs:        'cat-badge--writeup',
-        malware:     'cat-badge--writeup',
-        cheatsheets: 'cat-badge--cheatsheet',
-    },
-
     init() {
         SEARCH.inputEl   = document.getElementById('js-search-input');
         SEARCH.resultsEl = document.getElementById('js-search-results');
@@ -106,60 +99,9 @@ const SEARCH = {
     },
 
     buildCard(post, q) {
-        const article     = document.createElement('article');
-        article.className = 'post-item';
-
-        const h3     = document.createElement('h3');
-        h3.className = 'post-title';
-        const a      = document.createElement('a');
-        a.href       = post.url;
-        SEARCH.highlight(a, post.title, q);
-        h3.appendChild(a);
-
-        article.appendChild(SEARCH.buildMeta(post));
-        article.appendChild(h3);
-        article.appendChild(SEARCH.buildExcerpt(post));
-        article.appendChild(SEARCH.buildTagList(post));
-        return article;
-    },
-
-    buildMeta(post) {
-        const meta     = document.createElement('div');
-        meta.className = 'post-meta';
-
-        const time = document.createElement('time');
-        time.className = 'post-date';
-        time.setAttribute('datetime', post.date);
-        time.textContent = post.date;
-
-        const badge     = document.createElement('span');
-        const cls       = SEARCH.BADGE_MAP[post.subcategory] || 'cat-badge--project';
-        badge.className = 'cat-badge ' + cls;
-        badge.textContent = post.subcategory || post.category;
-
-        meta.appendChild(time);
-        meta.appendChild(badge);
-        return meta;
-    },
-
-    buildExcerpt(post) {
-        const p       = document.createElement('p');
-        p.className   = 'post-excerpt';
-        p.textContent = post.excerpt;
-        return p;
-    },
-
-    buildTagList(post) {
-        const ul     = document.createElement('ul');
-        ul.className = 'post-tags';
-        ul.setAttribute('aria-label', 'Tags');
-        (post.tags || []).forEach(function addTag(t) {
-            const li       = document.createElement('li');
-            li.className   = 'post-tag';
-            li.textContent = t;
-            ul.appendChild(li);
+        return OCB_CARDS.buildCard(post, function fillTitle(anchor, p) {
+            SEARCH.highlight(anchor, p.title, q);
         });
-        return ul;
     },
 
     highlight(parent, text, q) {
@@ -193,7 +135,7 @@ const SEARCH = {
         } else {
             url.searchParams.delete('q');
         }
-        history.pushState({}, '', url.toString());
+        history.replaceState({}, '', url.toString());
     },
 
     renderClear() {

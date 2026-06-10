@@ -7,13 +7,6 @@ const CAT = {
         { filter: 'cheatsheets', label: 'cheatsheets' },
     ],
 
-    BADGE_MAP: {
-        ctf:         'cat-badge--writeup',
-        labs:        'cat-badge--writeup',
-        malware:     'cat-badge--writeup',
-        cheatsheets: 'cat-badge--cheatsheet',
-    },
-
     posts: [],
     activeFilter: null,
     navEl: null,
@@ -24,12 +17,6 @@ const CAT = {
         const navEl = document.getElementById('js-cyber-nav');
         if (navEl) {
             CAT.initCyber(navEl);
-            return;
-        }
-
-        const container = document.getElementById('js-posts-container');
-        if (container) {
-            CAT.initGeneric(container);
         }
     },
 
@@ -68,7 +55,10 @@ const CAT = {
     bindNav() {
         const btns = CAT.navEl.querySelectorAll('.cyber-nav-btn');
         btns.forEach(function bind(btn) {
-            btn.addEventListener('click', function handleNavClick() {
+            btn.addEventListener('click', function handleNavClick(e) {
+                // Real links so crawlers reach the subcategory hubs;
+                // with JS we intercept and filter in place instead.
+                e.preventDefault();
                 const f = btn.dataset.filter;
                 CAT.activeFilter = (f === 'all') ? null : f;
                 CAT.updateNavStates();
@@ -141,7 +131,7 @@ const CAT = {
         const grid = document.createElement('div');
         grid.className = 'posts-grid';
         filtered.forEach(function addCard(post) {
-            grid.appendChild(CAT.buildCard(post));
+            grid.appendChild(OCB_CARDS.buildCard(post));
         });
         CAT.articlesGrid.appendChild(grid);
     },
@@ -154,175 +144,6 @@ const CAT = {
             p.textContent = 'Failed to load posts.';
             CAT.articlesGrid.appendChild(p);
         }
-    },
-
-    PROJECT_NAMES: {
-        'vless-vpn': 'vless-vpn server',
-    },
-
-    subcatUrl(category, subcategory) {
-        if (subcategory) { return '/' + category + '/' + subcategory + '/'; }
-        return '/' + category + '/';
-    },
-
-    tagUrl(tag) {
-        return '/tags/' + tag + '/';
-    },
-
-    initGeneric(container) {
-        fetch('/posts.json')
-            .then(function parseJson(r) { return r.json(); })
-            .then(function handleData(posts) { CAT.renderGeneric(posts, container); })
-            .catch(function handleError() { CAT.renderGenericError(container); });
-    },
-
-    renderGeneric(posts, container) {
-        const filterCat    = container.dataset.category    || '';
-        const filterSubcat = container.dataset.subcategory || '';
-
-        const filtered = posts.filter(function matchPost(p) {
-            const catOk    = !filterCat    || p.category    === filterCat;
-            const subcatOk = !filterSubcat || p.subcategory === filterSubcat;
-            return catOk && subcatOk;
-        });
-
-        container.replaceChildren();
-
-        if (!filtered.length) {
-            CAT.renderEmpty(container);
-            return;
-        }
-
-        if (filterCat === 'projects') {
-            CAT.renderGrouped(filtered, container);
-            return;
-        }
-
-        const grid = document.createElement('div');
-        grid.className = 'posts-grid';
-        filtered.forEach(function addCard(p) { grid.appendChild(CAT.buildCard(p)); });
-        container.appendChild(grid);
-    },
-
-    renderGrouped(posts, container) {
-        const groups = {};
-        const order = [];
-
-        posts.forEach(function groupPost(p) {
-            const key = p.subcategory || '_ungrouped';
-            if (!groups[key]) {
-                groups[key] = [];
-                order.push(key);
-            }
-            groups[key].push(p);
-        });
-
-        order.forEach(function sortGroup(key) {
-            groups[key].sort(function byDate(a, b) {
-                return a.date.localeCompare(b.date);
-            });
-        });
-
-        order.forEach(function renderGroup(key) {
-            const section = document.createElement('div');
-            section.className = 'project-group';
-
-            const heading = document.createElement('h2');
-            heading.className = 'project-group-title';
-            const label = CAT.PROJECT_NAMES[key] || key.replace(/-/g, ' ');
-            const headingLink = document.createElement('a');
-            headingLink.href = CAT.subcatUrl('projects', key === '_ungrouped' ? '' : key);
-            headingLink.textContent = '// ' + label;
-            heading.appendChild(headingLink);
-            section.appendChild(heading);
-
-            const grid = document.createElement('div');
-            grid.className = 'posts-grid';
-            groups[key].forEach(function addCard(p) {
-                grid.appendChild(CAT.buildCard(p));
-            });
-            section.appendChild(grid);
-
-            container.appendChild(section);
-        });
-    },
-
-    renderGenericError(container) {
-        container.replaceChildren();
-        const p = document.createElement('p');
-        p.className = 'empty-state';
-        p.textContent = 'Failed to load posts.';
-        container.appendChild(p);
-    },
-
-    buildCard(post) {
-        const article = document.createElement('article');
-        article.className = 'post-item';
-        article.dataset.category    = post.category    || '';
-        article.dataset.subcategory = post.subcategory || '';
-
-        const meta = document.createElement('div');
-        meta.className = 'post-meta';
-
-        const time = document.createElement('time');
-        time.className = 'post-date';
-        time.setAttribute('datetime', post.date);
-        time.textContent = post.date;
-
-        const badge = document.createElement('a');
-        badge.className = 'cat-badge ' + (CAT.BADGE_MAP[post.subcategory] || 'cat-badge--project');
-        badge.href = CAT.subcatUrl(post.category, post.subcategory);
-        badge.textContent = post.subcategory || post.category;
-
-        meta.appendChild(time);
-        meta.appendChild(badge);
-
-        if (post.season) {
-            const seasonBadge = document.createElement('span');
-            seasonBadge.className = 'season-badge';
-            seasonBadge.textContent = 'season ' + post.season;
-            meta.appendChild(seasonBadge);
-        }
-
-        const h3 = document.createElement('h3');
-        h3.className = 'post-title';
-
-        const a = document.createElement('a');
-        a.href = post.url;
-        a.textContent = post.title;
-
-        h3.appendChild(a);
-
-        const excerpt = document.createElement('p');
-        excerpt.className = 'post-excerpt';
-        excerpt.textContent = post.excerpt;
-
-        const tagList = document.createElement('ul');
-        tagList.className = 'post-tags';
-        tagList.setAttribute('aria-label', 'Tags');
-
-        (post.tags || []).forEach(function addTag(tag) {
-            const li      = document.createElement('li');
-            const tagLink = document.createElement('a');
-            tagLink.className = 'post-tag';
-            tagLink.href      = CAT.tagUrl(tag);
-            tagLink.textContent = tag;
-            li.appendChild(tagLink);
-            tagList.appendChild(li);
-        });
-
-        article.appendChild(meta);
-        article.appendChild(h3);
-        article.appendChild(excerpt);
-        article.appendChild(tagList);
-        return article;
-    },
-
-    renderEmpty(container) {
-        const p = document.createElement('p');
-        p.className = 'empty-state';
-        p.textContent = 'No posts yet. Check back soon.';
-        container.appendChild(p);
     },
 
 };
