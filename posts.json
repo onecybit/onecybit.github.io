@@ -1,5 +1,24 @@
 [
   {
+    "title": "Reactor",
+    "date": "2026-09-14",
+    "category": "cybersecurity",
+    "subcategory": "ctf",
+    "tags": [
+      "htb",
+      "reactor",
+      "linux",
+      "easy",
+      "nextjs",
+      "rce",
+      "hash-cracking",
+      "node-inspector"
+    ],
+    "excerpt": "HackTheBox Reactor (Linux, Easy) — unauthenticated RCE via React2Shell (CVE-2025-55182) on Next.js, MD5 hash cracking for password reuse, and privilege escalation through an exposed Node.js debugger port.",
+    "url": "/posts/cybersecurity/ctf/reactor/",
+    "reading_time": "3 min read"
+  },
+  {
     "title": "WingData",
     "date": "2026-05-09",
     "category": "cybersecurity",

