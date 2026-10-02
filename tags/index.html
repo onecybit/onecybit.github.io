@@ -6,7 +6,7 @@
   <meta name="description" content="Browse all tags or search posts by keyword — onecybit security research, CTF writeups, and developer notes.">
 
   <!-- Content Security Policy
-       NOTE: connect-src is 'self' — required for search.js to fetch posts.json.
+       NOTE: connect-src is 'self' — required for palette.js to fetch posts.json.
        form-action is 'none' — search input is JS-controlled, no form
        submission occurs. -->
   <meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self' 'sha256-tPqkbt4ef+MNL3m5ZYl3N2iuh38+p5F+QuOpBiXqN2g=' https://www.googletagmanager.com; style-src 'self' https://fonts.googleapis.com; font-src https://fonts.gstatic.com; img-src 'self' data: https://www.google-analytics.com; connect-src 'self' https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com; frame-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none';">
@@ -39,6 +39,8 @@
 
 <body>
 
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
   <div class="scroll-progress" aria-hidden="true"></div>
 
   <!-- ── SHARED: update all pages if this changes ── -->
@@ -58,6 +60,12 @@
         <li><a href="/about.html"     class="nav-link">About</a></li>
       </ul>
 
+      <button class="nav-search js-palette-open" aria-label="Search posts">
+        <span class="nav-search-icon" aria-hidden="true">⌕</span>
+        <span class="nav-search-text">search</span>
+        <kbd class="nav-search-kbd" aria-hidden="true">/</kbd>
+      </button>
+
       <button class="nav-hamburger" id="js-nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="js-nav-links">
         <span class="nav-hamburger-bar" aria-hidden="true"></span>
         <span class="nav-hamburger-bar" aria-hidden="true"></span>
@@ -67,42 +75,24 @@
     </nav>
   </header>
 
-  <main>
+  <main id="main-content">
     <section class="section" aria-label="Tags and search">
       <div class="container">
 
         <div class="cat-hero">
           <h1 class="cat-hero-title cat-hero-title--white">// tags</h1>
-          <p class="cat-hero-desc">Browse posts by tag, or search by title, keyword, or excerpt.</p>
+          <p class="cat-hero-desc">Browse posts by tag, or search everything by title, keyword, or post content.</p>
         </div>
 
         <!-- ── Search ── -->
-        <div class="search-bar" role="search" aria-label="Search posts">
+        <div class="search-bar">
           <h2 class="section-title">// search</h2>
-          <div class="search-form">
-            <input
-              type="search"
-              id="js-search-input"
-              class="search-input"
-              placeholder="search by title, tag, or keyword..."
-              autocomplete="off"
-              maxlength="100"
-              aria-label="Search posts"
-            >
-          </div>
-          <p
-            class="search-count"
-            id="js-search-count"
-            aria-live="polite"
-            aria-atomic="true"
-          ></p>
+          <button class="search-open js-palette-open">
+            <span class="search-open-icon" aria-hidden="true">⌕</span>
+            <span class="search-open-text">search by title, tag, or keyword...</span>
+            <kbd class="search-open-kbd" aria-hidden="true">/</kbd>
+          </button>
         </div>
-
-        <div
-          id="js-search-results"
-          aria-label="Search results"
-          aria-live="polite"
-        ></div>
 
         <!-- ── Tag cloud ── -->
         <section aria-label="Browse by tag">
@@ -136,8 +126,7 @@
   <button class="back-to-top" id="js-back-top" aria-label="Back to top" hidden>↑</button>
 
   <script src="/assets/js/main.js" defer></script>
-  <script src="/assets/js/cards.js" defer></script>
-  <script src="/assets/js/search.js" defer></script>
+  <script src="/assets/js/palette.js" defer></script>
 
 </body>
 </html>

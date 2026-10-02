@@ -10,8 +10,16 @@ const OCB = {
         this.initNav();
         this.initHamburger();
         this.initScrollAnimations();
+        this.initTocSpy();
         this.initBackToTop();
         this.initCopyButtons();
+    },
+
+    /* True when the OS asks for reduced motion. Checked at call time rather
+       than cached so a mid-session preference change is respected. */
+    prefersReducedMotion() {
+        return window.matchMedia
+            && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     },
 
     initScrollProgress() {
@@ -111,6 +119,11 @@ const OCB = {
         const targets = document.querySelectorAll('.fade-up-target');
         if (!targets.length) return;
 
+        if (OCB.prefersReducedMotion()) {
+            targets.forEach(function reveal(el) { el.classList.add('is-visible'); });
+            return;
+        }
+
         const observer = new IntersectionObserver(handleEntries, {
             threshold:  0.1,
             rootMargin: '0px 0px -40px 0px',
@@ -126,6 +139,44 @@ const OCB = {
         }
 
         targets.forEach(function(el) { observer.observe(el); });
+    },
+
+    /* Maps each TOC anchor to the heading id it points at. */
+    tocLinksById(toc) {
+        const links = {};
+        toc.querySelectorAll('.toc-list a[href^="#"]').forEach(function map(a) {
+            links[decodeURIComponent(a.getAttribute('href').slice(1))] = a;
+        });
+        return links;
+    },
+
+    /* Highlights the TOC entry for the heading currently being read. */
+    initTocSpy() {
+        const toc = document.getElementById('js-toc');
+        if (!toc) return;
+
+        const links    = OCB.tocLinksById(toc);
+        const headings = document.querySelectorAll('.post-body h2[id], .post-body h3[id]');
+        if (!headings.length) return;
+
+        let current = null;
+        function setActive(id) {
+            if (id === current) return;
+            if (current && links[current]) { links[current].classList.remove('is-active'); }
+            if (links[id]) { links[id].classList.add('is-active'); }
+            current = id;
+        }
+
+        function handleEntries(entries) {
+            entries.forEach(function pick(entry) {
+                if (entry.isIntersecting) { setActive(entry.target.id); }
+            });
+        }
+
+        const observer = new IntersectionObserver(handleEntries, {
+            rootMargin: '-80px 0px -70% 0px',
+        });
+        headings.forEach(function watch(h) { observer.observe(h); });
     },
 
     initCopyButtons() {
@@ -193,7 +244,10 @@ const OCB = {
         if (!btn) return;
 
         function toggleBtn() { btn.hidden = window.scrollY < 400; }
-        function scrollUp()  { window.scrollTo({ top: 0, behavior: 'smooth' }); }
+        function scrollUp()  {
+            const mode = OCB.prefersReducedMotion() ? 'auto' : 'smooth';
+            window.scrollTo({ top: 0, behavior: mode });
+        }
 
         window.addEventListener('scroll', toggleBtn, { passive: true });
         btn.addEventListener('click', scrollUp);

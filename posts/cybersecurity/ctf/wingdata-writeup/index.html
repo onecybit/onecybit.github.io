@@ -16,7 +16,7 @@
   <meta property="og:description" content="HackTheBox WingData (Linux, Medium) — Wing FTP CVE-2025-47812 unauthenticated RCE, static-salt SHA-256 cracking, and a Python tarfile PATH_MAX symlink bypass for root.">
   <meta property="og:url"         content="https://onecybit.github.io/posts/cybersecurity/ctf/wingdata-writeup/">
   <meta property="og:image"       content="https://onecybit.github.io/assets/img/OneCyBit_logo_compressed.jpg">
-  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:card"        content="summary">
   <meta name="twitter:title"       content="WingData — onecybit">
   <meta name="twitter:description" content="HackTheBox WingData (Linux, Medium) — Wing FTP CVE-2025-47812 unauthenticated RCE, static-salt SHA-256 cracking, and a Python tarfile PATH_MAX symlink bypass for root.">
 
@@ -35,6 +35,8 @@
 </head>
 
 <body>
+
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
   <div class="scroll-progress" aria-hidden="true"></div>
 
@@ -55,6 +57,12 @@
         <li><a href="/about.html"     class="nav-link">About</a></li>
       </ul>
 
+      <button class="nav-search js-palette-open" aria-label="Search posts">
+        <span class="nav-search-icon" aria-hidden="true">⌕</span>
+        <span class="nav-search-text">search</span>
+        <kbd class="nav-search-kbd" aria-hidden="true">/</kbd>
+      </button>
+
       <button class="nav-hamburger" id="js-nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="js-nav-links">
         <span class="nav-hamburger-bar" aria-hidden="true"></span>
         <span class="nav-hamburger-bar" aria-hidden="true"></span>
@@ -64,7 +72,7 @@
     </nav>
   </header>
 
-  <main>
+  <main id="main-content">
     <article class="section" aria-label="WingData">
       <div class="container post-full">
 
@@ -90,7 +98,7 @@
           </ul>
         </header>
 
-        
+        <nav class="toc" id="js-toc" aria-label="Table of contents"><p class="toc-title">// contents</p><ul class="toc-list"><li><a href="#summary">Summary</a></li><li><a href="#reconnaissance">Reconnaissance</a></li><li class="toc-h3"><a href="#port-scan">Port Scan</a></li><li class="toc-h3"><a href="#virtual-host-discovery">Virtual Host Discovery</a></li><li class="toc-h3"><a href="#service-identification">Service Identification</a></li><li><a href="#foothold-cve-2025-47812-wing-ftp-unauthenticated-rce">Foothold — CVE-2025-47812 (Wing FTP Unauthenticated RCE)</a></li><li class="toc-h3"><a href="#how-it-works">How It Works</a></li><li class="toc-h3"><a href="#exploitation">Exploitation</a></li><li class="toc-h3"><a href="#reverse-shell">Reverse Shell</a></li><li><a href="#lateral-movement-wingftp-wacky">Lateral Movement — wingftp → wacky</a></li><li class="toc-h3"><a href="#credential-discovery">Credential Discovery</a></li><li class="toc-h3"><a href="#hash-extraction">Hash Extraction</a></li><li class="toc-h3"><a href="#finding-the-salt">Finding the Salt</a></li><li class="toc-h3"><a href="#cracking">Cracking</a></li><li class="toc-h3"><a href="#ssh-access">SSH Access</a></li><li><a href="#user-flag">User Flag</a></li><li><a href="#privilege-escalation-cve-2025-4138-tarfile-path-max-bypass">Privilege Escalation — CVE-2025-4138 (tarfile PATH_MAX Bypass)</a></li><li class="toc-h3"><a href="#sudo-permissions">Sudo Permissions</a></li><li class="toc-h3"><a href="#analysing-the-script">Analysing the Script</a></li><li class="toc-h3"><a href="#python-version-check">Python Version Check</a></li><li class="toc-h3"><a href="#exploitation">Exploitation</a></li><li><a href="#root-flag">Root Flag</a></li><li><a href="#credentials-collected">Credentials Collected</a></li><li><a href="#attack-chain">Attack Chain</a></li><li><a href="#references">References</a></li></ul></nav>
 
         <div class="post-body">
           <blockquote><p><strong>OS</strong>: Linux | <strong>Difficulty</strong>: Medium | <strong>IP</strong>: 10.129.244.106 <strong>Started</strong>: 2026-05-09 | <strong>Rooted</strong>: 2026-05-09 | <strong>Status</strong>: Completed</p></blockquote>
@@ -323,6 +331,7 @@ SSH as root → root flag
   <button class="back-to-top" id="js-back-top" aria-label="Back to top" hidden>↑</button>
 
   <script src="/assets/js/main.js" defer></script>
+  <script src="/assets/js/palette.js" defer></script>
   <script src="/assets/js/protected.js" defer></script>
 
 </body>

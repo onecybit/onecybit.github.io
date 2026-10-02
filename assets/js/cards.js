@@ -1,4 +1,4 @@
-/* Shared post-card DOM builder, used by category.js and search.js.
+/* Shared post-card DOM builder, used by category.js.
    Mirrors render_post_card() in build.py — update both if the card
    markup changes. */
 

@@ -16,7 +16,7 @@
   <meta property="og:description" content="The actual stack behind the proxy service — Marzban, XRay, Docker with host networking, and solving the asymmetric routing problem with XRay&#x27;s native WireGuard outbound.">
   <meta property="og:url"         content="https://onecybit.github.io/posts/projects/vless-vpn/ftarg-ch2-architecture-marzban-and-xray/">
   <meta property="og:image"       content="https://onecybit.github.io/assets/img/OneCyBit_logo_compressed.jpg">
-  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:card"        content="summary">
   <meta name="twitter:title"       content="Ftarg — Ch.2: Architecture — Marzban and XRay — onecybit">
   <meta name="twitter:description" content="The actual stack behind the proxy service — Marzban, XRay, Docker with host networking, and solving the asymmetric routing problem with XRay&#x27;s native WireGuard outbound.">
 
@@ -35,6 +35,8 @@
 </head>
 
 <body>
+
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
   <div class="scroll-progress" aria-hidden="true"></div>
 
@@ -55,6 +57,12 @@
         <li><a href="/about.html"     class="nav-link">About</a></li>
       </ul>
 
+      <button class="nav-search js-palette-open" aria-label="Search posts">
+        <span class="nav-search-icon" aria-hidden="true">⌕</span>
+        <span class="nav-search-text">search</span>
+        <kbd class="nav-search-kbd" aria-hidden="true">/</kbd>
+      </button>
+
       <button class="nav-hamburger" id="js-nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="js-nav-links">
         <span class="nav-hamburger-bar" aria-hidden="true"></span>
         <span class="nav-hamburger-bar" aria-hidden="true"></span>
@@ -64,7 +72,7 @@
     </nav>
   </header>
 
-  <main>
+  <main id="main-content">
     <article class="section" aria-label="Ftarg — Ch.2: Architecture — Marzban and XRay">
       <div class="container post-full">
 
@@ -90,7 +98,7 @@
           </ul>
         </header>
 
-        
+        <nav class="toc" id="js-toc" aria-label="Table of contents"><p class="toc-title">// contents</p><ul class="toc-list"><li><a href="#marzban">Marzban</a></li><li><a href="#docker-setup">Docker setup</a></li><li><a href="#the-routing-problem">The routing problem</a></li><li class="toc-h3"><a href="#what-i-needed">What I needed</a></li><li class="toc-h3"><a href="#what-i-tried-first">What I tried first</a></li><li class="toc-h3"><a href="#why-system-level-vpn-breaks-inbound">Why system-level VPN breaks inbound</a></li><li class="toc-h3"><a href="#the-fix-xray-native-wireguard-outbound">The fix: XRay native WireGuard outbound</a></li><li><a href="#current-stack">Current stack</a></li></ul></nav>
 
         <div class="post-body">
           <h1>Ftarg — Ch.2: Architecture — Marzban, XRay, and the Routing Problem</h1>
@@ -202,6 +210,7 @@ Client --[443]--&gt; Server (direct, normal routing)
   <button class="back-to-top" id="js-back-top" aria-label="Back to top" hidden>↑</button>
 
   <script src="/assets/js/main.js" defer></script>
+  <script src="/assets/js/palette.js" defer></script>
   <script src="/assets/js/protected.js" defer></script>
 
 </body>

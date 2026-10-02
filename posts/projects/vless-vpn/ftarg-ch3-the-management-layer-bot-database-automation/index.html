@@ -16,7 +16,7 @@
   <meta property="og:description" content="Telegram bot, encrypted storage, Marzban API integration, and the automation that keeps the whole thing running.">
   <meta property="og:url"         content="https://onecybit.github.io/posts/projects/vless-vpn/ftarg-ch3-the-management-layer-bot-database-automation/">
   <meta property="og:image"       content="https://onecybit.github.io/assets/img/OneCyBit_logo_compressed.jpg">
-  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:card"        content="summary">
   <meta name="twitter:title"       content="Ftarg — Ch.3: The Management Layer — Bot, Database, Automation — onecybit">
   <meta name="twitter:description" content="Telegram bot, encrypted storage, Marzban API integration, and the automation that keeps the whole thing running.">
 
@@ -35,6 +35,8 @@
 </head>
 
 <body>
+
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
   <div class="scroll-progress" aria-hidden="true"></div>
 
@@ -55,6 +57,12 @@
         <li><a href="/about.html"     class="nav-link">About</a></li>
       </ul>
 
+      <button class="nav-search js-palette-open" aria-label="Search posts">
+        <span class="nav-search-icon" aria-hidden="true">⌕</span>
+        <span class="nav-search-text">search</span>
+        <kbd class="nav-search-kbd" aria-hidden="true">/</kbd>
+      </button>
+
       <button class="nav-hamburger" id="js-nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="js-nav-links">
         <span class="nav-hamburger-bar" aria-hidden="true"></span>
         <span class="nav-hamburger-bar" aria-hidden="true"></span>
@@ -64,7 +72,7 @@
     </nav>
   </header>
 
-  <main>
+  <main id="main-content">
     <article class="section" aria-label="Ftarg — Ch.3: The Management Layer — Bot, Database, Automation">
       <div class="container post-full">
 
@@ -90,7 +98,7 @@
           </ul>
         </header>
 
-        
+        <nav class="toc" id="js-toc" aria-label="Table of contents"><p class="toc-title">// contents</p><ul class="toc-list"><li><a href="#why-a-custom-bot">Why a custom bot</a></li><li><a href="#user-flow">User flow</a></li><li><a href="#what-the-bot-does">What the bot does</a></li><li><a href="#the-whole-stack">The whole stack</a></li></ul></nav>
 
         <div class="post-body">
           <p>Protocol is solid (Ch.1). Stack is running (Ch.2). Now the part that sits on top — user management and automation.</p>
@@ -176,6 +184,7 @@ Rejected:
   <button class="back-to-top" id="js-back-top" aria-label="Back to top" hidden>↑</button>
 
   <script src="/assets/js/main.js" defer></script>
+  <script src="/assets/js/palette.js" defer></script>
   <script src="/assets/js/protected.js" defer></script>
 
 </body>

@@ -16,7 +16,7 @@
   <meta property="og:description" content="HackTheBox Reactor (Linux, Easy) — unauthenticated RCE via React2Shell (CVE-2025-55182) on Next.js, MD5 hash cracking for password reuse, and privilege escalation through an exposed Node.js debugger port.">
   <meta property="og:url"         content="https://onecybit.github.io/posts/cybersecurity/ctf/reactor/">
   <meta property="og:image"       content="https://onecybit.github.io/assets/img/OneCyBit_logo_compressed.jpg">
-  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:card"        content="summary">
   <meta name="twitter:title"       content="Reactor — onecybit">
   <meta name="twitter:description" content="HackTheBox Reactor (Linux, Easy) — unauthenticated RCE via React2Shell (CVE-2025-55182) on Next.js, MD5 hash cracking for password reuse, and privilege escalation through an exposed Node.js debugger port.">
 
@@ -35,6 +35,8 @@
 </head>
 
 <body>
+
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
   <div class="scroll-progress" aria-hidden="true"></div>
 
@@ -55,6 +57,12 @@
         <li><a href="/about.html"     class="nav-link">About</a></li>
       </ul>
 
+      <button class="nav-search js-palette-open" aria-label="Search posts">
+        <span class="nav-search-icon" aria-hidden="true">⌕</span>
+        <span class="nav-search-text">search</span>
+        <kbd class="nav-search-kbd" aria-hidden="true">/</kbd>
+      </button>
+
       <button class="nav-hamburger" id="js-nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="js-nav-links">
         <span class="nav-hamburger-bar" aria-hidden="true"></span>
         <span class="nav-hamburger-bar" aria-hidden="true"></span>
@@ -64,7 +72,7 @@
     </nav>
   </header>
 
-  <main>
+  <main id="main-content">
     <article class="section" aria-label="Reactor">
       <div class="container post-full">
 
@@ -90,7 +98,7 @@
           </ul>
         </header>
 
-        
+        <nav class="toc" id="js-toc" aria-label="Table of contents"><p class="toc-title">// contents</p><ul class="toc-list"><li><a href="#summary">Summary</a></li><li><a href="#recon">Recon</a></li><li><a href="#foothold-react2shell-cve-2025-55182">Foothold: React2Shell (CVE-2025-55182)</a></li><li><a href="#getting-to-engineer">Getting to engineer</a></li><li><a href="#user-flag">User flag</a></li><li><a href="#root-exposed-node-debugger">Root: exposed Node debugger</a></li><li><a href="#root-flag">Root flag</a></li><li><a href="#credentials">Credentials</a></li><li><a href="#attack-chain">Attack chain</a></li><li><a href="#references">References</a></li></ul></nav>
 
         <div class="post-body">
           <blockquote><p><strong>OS</strong>: Linux | <strong>Difficulty</strong>: Easy | <strong>IP</strong>: 10.129.95.38 <strong>Started</strong>: 2026-09-14 | <strong>Rooted</strong>: 2026-09-14 | <strong>Status</strong>: Completed</p></blockquote>
@@ -231,6 +239,7 @@ bash -p → root flag
   <button class="back-to-top" id="js-back-top" aria-label="Back to top" hidden>↑</button>
 
   <script src="/assets/js/main.js" defer></script>
+  <script src="/assets/js/palette.js" defer></script>
   <script src="/assets/js/protected.js" defer></script>
 
 </body>

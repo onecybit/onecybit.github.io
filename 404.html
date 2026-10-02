@@ -34,9 +34,11 @@
 
 <body>
 
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
   <div class="scroll-progress" aria-hidden="true"></div>
 
-  <main class="error-page">
+  <main id="main-content" class="error-page">
     <div class="error-content">
       <p class="error-label">signal lost</p>
       <p class="error-code" data-glitch="404" aria-label="Error 404">404</p>
@@ -45,7 +47,10 @@
         The requested resource doesn't exist or has been moved.
         Check the URL or navigate back to base.
       </p>
-      <a href="/" class="error-home">→ return home</a>
+      <div class="error-actions">
+        <a href="/" class="error-home">→ return home</a>
+        <button class="error-search js-palette-open">⌕ search posts</button>
+      </div>
     </div>
   </main>
 
@@ -63,6 +68,7 @@
   <button class="back-to-top" id="js-back-top" aria-label="Back to top" hidden>↑</button>
 
   <script src="/assets/js/main.js" defer></script>
+  <script src="/assets/js/palette.js" defer></script>
 
 </body>
 </html>

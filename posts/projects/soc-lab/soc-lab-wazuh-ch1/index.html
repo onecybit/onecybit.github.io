@@ -16,7 +16,7 @@
   <meta property="og:description" content="Building a home SOC lab with Wazuh SIEM, a Windows 10 endpoint, and Kali Linux as attacker. Covers internal networking, static IPs, and agent registration.">
   <meta property="og:url"         content="https://onecybit.github.io/posts/projects/soc-lab/soc-lab-wazuh-ch1/">
   <meta property="og:image"       content="https://onecybit.github.io/assets/img/OneCyBit_logo_compressed.jpg">
-  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:card"        content="summary">
   <meta name="twitter:title"       content="SOC Lab — Ch.1: Setup &amp; SIEM Deployment — onecybit">
   <meta name="twitter:description" content="Building a home SOC lab with Wazuh SIEM, a Windows 10 endpoint, and Kali Linux as attacker. Covers internal networking, static IPs, and agent registration.">
 
@@ -35,6 +35,8 @@
 </head>
 
 <body>
+
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
   <div class="scroll-progress" aria-hidden="true"></div>
 
@@ -55,6 +57,12 @@
         <li><a href="/about.html"     class="nav-link">About</a></li>
       </ul>
 
+      <button class="nav-search js-palette-open" aria-label="Search posts">
+        <span class="nav-search-icon" aria-hidden="true">⌕</span>
+        <span class="nav-search-text">search</span>
+        <kbd class="nav-search-kbd" aria-hidden="true">/</kbd>
+      </button>
+
       <button class="nav-hamburger" id="js-nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="js-nav-links">
         <span class="nav-hamburger-bar" aria-hidden="true"></span>
         <span class="nav-hamburger-bar" aria-hidden="true"></span>
@@ -64,7 +72,7 @@
     </nav>
   </header>
 
-  <main>
+  <main id="main-content">
     <article class="section" aria-label="SOC Lab — Ch.1: Setup &amp; SIEM Deployment">
       <div class="container post-full">
 
@@ -90,7 +98,7 @@
           </ul>
         </header>
 
-        
+        <nav class="toc" id="js-toc" aria-label="Table of contents"><p class="toc-title">// contents</p><ul class="toc-list"><li><a href="#project-overview">🗂️ Project Overview</a></li><li><a href="#phase-1-lab-setup">Phase 1: Lab Setup</a></li><li class="toc-h3"><a href="#step-1">Step 1</a></li><li class="toc-h3"><a href="#step-2-download-os-isos">Step 2: Download OS ISOs</a></li><li class="toc-h3"><a href="#step-3-internal-network-setup">Step 3: Internal Network Setup</a></li></ul></nav>
 
         <div class="post-body">
           <h2 id="project-overview">🗂️ Project Overview</h2>
@@ -256,6 +264,7 @@ Choose your action:
   <button class="back-to-top" id="js-back-top" aria-label="Back to top" hidden>↑</button>
 
   <script src="/assets/js/main.js" defer></script>
+  <script src="/assets/js/palette.js" defer></script>
   <script src="/assets/js/protected.js" defer></script>
 
 </body>

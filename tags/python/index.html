@@ -32,6 +32,8 @@
 
 <body>
 
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
   <div class="scroll-progress" aria-hidden="true"></div>
 
   <header class="site-header">
@@ -50,6 +52,12 @@
         <li><a href="/about.html"     class="nav-link">About</a></li>
       </ul>
 
+      <button class="nav-search js-palette-open" aria-label="Search posts">
+        <span class="nav-search-icon" aria-hidden="true">⌕</span>
+        <span class="nav-search-text">search</span>
+        <kbd class="nav-search-kbd" aria-hidden="true">/</kbd>
+      </button>
+
       <button class="nav-hamburger" id="js-nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="js-nav-links">
         <span class="nav-hamburger-bar" aria-hidden="true"></span>
         <span class="nav-hamburger-bar" aria-hidden="true"></span>
@@ -58,7 +66,7 @@
     </nav>
   </header>
 
-  <main>
+  <main id="main-content">
 <section class="section"><div class="container"><nav class="post-breadcrumb" aria-label="Breadcrumb"><a href="/">home</a><span class="post-breadcrumb-sep" aria-hidden="true">/</span><a href="/tags/">tags</a><span class="post-breadcrumb-sep" aria-hidden="true">/</span><span>#python</span></nav><div class="cat-hero"><h1 class="cat-hero-title cat-hero-title--white">// #python</h1><p class="cat-hero-desc">1 post tagged <code>#python</code>.</p></div><div class="posts-grid"><article class="post-item" data-category="projects" data-subcategory="vless-vpn"><div class="post-meta"><time class="post-date" datetime="2026-04-08">2026-04-08</time><a class="cat-badge cat-badge--project" href="/projects/vless-vpn/">vless-vpn</a></div><h3 class="post-title"><a href="/posts/projects/vless-vpn/ftarg-ch3-the-management-layer-bot-database-automation/">Ftarg — Ch.3: The Management Layer — Bot, Database, Automation</a></h3><p class="post-excerpt">Telegram bot, encrypted storage, Marzban API integration, and the automation that keeps the whole thing running.</p><ul class="post-tags" aria-label="Tags"><li><a class="post-tag" href="/tags/python/">python</a></li><li><a class="post-tag" href="/tags/telegram-bot/">telegram-bot</a></li><li><a class="post-tag" href="/tags/automation/">automation</a></li><li><a class="post-tag" href="/tags/devops/">devops</a></li></ul></article></div></div></section>
   </main>
 
@@ -79,5 +87,6 @@
   <button class="back-to-top" id="js-back-top" aria-label="Back to top" hidden>↑</button>
 
   <script src="/assets/js/main.js" defer></script>
+  <script src="/assets/js/palette.js" defer></script>
 </body>
 </html>

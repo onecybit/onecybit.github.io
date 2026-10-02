@@ -35,6 +35,8 @@
 
 <body>
 
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
   <div class="scroll-progress" aria-hidden="true"></div>
 
   <!-- ── SHARED: update all pages if this changes ── -->
@@ -54,6 +56,12 @@
         <li><a href="/about.html"     class="nav-link">About</a></li>
       </ul>
 
+      <button class="nav-search js-palette-open" aria-label="Search posts">
+        <span class="nav-search-icon" aria-hidden="true">⌕</span>
+        <span class="nav-search-text">search</span>
+        <kbd class="nav-search-kbd" aria-hidden="true">/</kbd>
+      </button>
+
       <button class="nav-hamburger" id="js-nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="js-nav-links">
         <span class="nav-hamburger-bar" aria-hidden="true"></span>
         <span class="nav-hamburger-bar" aria-hidden="true"></span>
@@ -63,7 +71,7 @@
     </nav>
   </header>
 
-  <main>
+  <main id="main-content">
     <article class="section" aria-label="HackTheBox — Expressway">
       <div class="container post-full">
 
@@ -188,6 +196,7 @@ ike@expressway:~$ cat user.txt</code></pre></div>
   <button class="back-to-top" id="js-back-top" aria-label="Back to top" hidden>&uarr;</button>
 
   <script src="/assets/js/main.js" defer></script>
+  <script src="/assets/js/palette.js" defer></script>
   <script src="/assets/js/related.js" defer></script>
 
 </body>

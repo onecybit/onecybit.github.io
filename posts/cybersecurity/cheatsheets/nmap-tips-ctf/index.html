@@ -16,7 +16,7 @@
   <meta property="og:description" content="Practical Nmap command reference for CTF and pentesting. SYN scanning, firewall evasion, NSE scripting, output formats, and scan delta comparison.">
   <meta property="og:url"         content="https://onecybit.github.io/posts/cybersecurity/cheatsheets/nmap-tips-ctf/">
   <meta property="og:image"       content="https://onecybit.github.io/assets/img/OneCyBit_logo_compressed.jpg">
-  <meta name="twitter:card"        content="summary_large_image">
+  <meta name="twitter:card"        content="summary">
   <meta name="twitter:title"       content="Nmap: Tips &amp; Techniques for CTF — onecybit">
   <meta name="twitter:description" content="Practical Nmap command reference for CTF and pentesting. SYN scanning, firewall evasion, NSE scripting, output formats, and scan delta comparison.">
 
@@ -35,6 +35,8 @@
 </head>
 
 <body>
+
+  <a class="skip-link" href="#main-content">Skip to content</a>
 
   <div class="scroll-progress" aria-hidden="true"></div>
 
@@ -55,6 +57,12 @@
         <li><a href="/about.html"     class="nav-link">About</a></li>
       </ul>
 
+      <button class="nav-search js-palette-open" aria-label="Search posts">
+        <span class="nav-search-icon" aria-hidden="true">⌕</span>
+        <span class="nav-search-text">search</span>
+        <kbd class="nav-search-kbd" aria-hidden="true">/</kbd>
+      </button>
+
       <button class="nav-hamburger" id="js-nav-hamburger" aria-label="Open navigation menu" aria-expanded="false" aria-controls="js-nav-links">
         <span class="nav-hamburger-bar" aria-hidden="true"></span>
         <span class="nav-hamburger-bar" aria-hidden="true"></span>
@@ -64,7 +72,7 @@
     </nav>
   </header>
 
-  <main>
+  <main id="main-content">
     <article class="section" aria-label="Nmap: Tips &amp; Techniques for CTF">
       <div class="container post-full">
 
@@ -90,7 +98,7 @@
           </ul>
         </header>
 
-        
+        <nav class="toc" id="js-toc" aria-label="Table of contents"><p class="toc-title">// contents</p><ul class="toc-list"><li><a href="#syn-scan-with-performance-and-detection-control">SYN Scan with Performance and Detection Control</a></li><li><a href="#firewall-evasion-and-spoofing">Firewall Evasion and Spoofing</a></li><li><a href="#full-port-discovery-enumeration">Full Port Discovery + Enumeration</a></li><li><a href="#nse-examples-service-analysis">NSE Examples: Service Analysis</a></li><li><a href="#credential-brute-forcing">Credential Brute Forcing</a></li><li><a href="#host-discovery-with-minimal-fingerprint">Host Discovery with Minimal Fingerprint</a></li><li><a href="#stack-fingerprint-obfuscation">Stack Fingerprint Obfuscation</a></li><li><a href="#scan-delta-comparison">Scan Delta Comparison</a></li><li><a href="#udp-scan-enumeration">UDP Scan + Enumeration</a></li><li><a href="#output-and-parsing">Output and Parsing</a></li><li><a href="#mac-address-spoofing">MAC Address Spoofing</a></li><li><a href="#tcp-fragmentation-and-ids-evasion">TCP Fragmentation and IDS Evasion</a></li></ul></nav>
 
         <div class="post-body">
           <h2 id="syn-scan-with-performance-and-detection-control">SYN Scan with Performance and Detection Control</h2>
@@ -219,6 +227,7 @@ nmap -sS --spoof-mac Apple &lt;target&gt;
   <button class="back-to-top" id="js-back-top" aria-label="Back to top" hidden>↑</button>
 
   <script src="/assets/js/main.js" defer></script>
+  <script src="/assets/js/palette.js" defer></script>
   <script src="/assets/js/protected.js" defer></script>
 
 </body>
