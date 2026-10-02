@@ -11,6 +11,7 @@ const OCB = {
         this.initHamburger();
         this.initScrollAnimations();
         this.initTocSpy();
+        this.initHeadingAnchors();
         this.initBackToTop();
         this.initCopyButtons();
     },
@@ -177,6 +178,32 @@ const OCB = {
             rootMargin: '-80px 0px -70% 0px',
         });
         headings.forEach(function watch(h) { observer.observe(h); });
+    },
+
+    /* The '#' beside each heading is a real link, so it already works with
+       JS off. This only adds the convenience of copying the absolute URL. */
+    initHeadingAnchors() {
+        const links = document.querySelectorAll('.post-body .heading-anchor');
+        if (!links.length) return;
+
+        links.forEach(function bind(link) {
+            link.addEventListener('click', handleAnchorClick);
+        });
+
+        function handleAnchorClick() {
+            const hash = this.getAttribute('href') || '';
+            const url  = window.location.origin + window.location.pathname + hash;
+            const link = this;
+            if (!navigator.clipboard || !navigator.clipboard.writeText) return;
+            navigator.clipboard.writeText(url)
+                .then(function ok() { flash(link); })
+                .catch(function ignore() { /* clipboard blocked — link still works */ });
+        }
+
+        function flash(link) {
+            link.classList.add('is-copied');
+            setTimeout(function clear() { link.classList.remove('is-copied'); }, 1200);
+        }
     },
 
     initCopyButtons() {

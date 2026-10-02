@@ -104,12 +104,12 @@
           <p>Protocol is solid (Ch.1). Stack is running (Ch.2). Now the part that sits on top — user management and automation.</p>
 <p>Built a Telegram bot from scratch to handle everything user-facing. Handles the full lifecycle: request, approval, link delivery, cleanup.</p>
 <hr>
-<h2 id="why-a-custom-bot">Why a custom bot</h2>
+<h2 id="why-a-custom-bot">Why a custom bot<a class="heading-anchor" href="#why-a-custom-bot" aria-label="Permalink to this section">#</a></h2>
 <p>Marzban has its own Telegram bot, but it's admin-only. No user-facing flow.</p>
 <p>I needed: user sends a request → admin approves or rejects → user gets their link. Plus encrypted storage, auto-cleanup, preset rejection reasons. None of that exists in Marzban's bot.</p>
 <p>So now there are two bots. Marzban's for panel management. Custom one for users.</p>
 <hr>
-<h2 id="user-flow">User flow</h2>
+<h2 id="user-flow">User flow<a class="heading-anchor" href="#user-flow" aria-label="Permalink to this section">#</a></h2>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code>User: /start
   └── bot explains the service
  
@@ -133,10 +133,10 @@ Rejected:
 </code></pre></div>
 <p>User side: <code>/status</code>, <code>/mylink</code>, <code>/guide</code>. Admin side: <code>/stats</code>, <code>/health</code>, <code>/check</code>, <code>/relink</code>, <code>/delete</code>, <code>/sync</code>, <code>/purge</code>, <code>/logs</code>.</p>
 <hr>
-<h2 id="what-the-bot-does">What the bot does</h2>
+<h2 id="what-the-bot-does">What the bot does<a class="heading-anchor" href="#what-the-bot-does" aria-label="Permalink to this section">#</a></h2>
 <ul><li><strong>Encrypted storage.</strong> Request data lives in an encrypted file. Fernet (AES-256-GCM).</li><li><strong>Marzban API integration.</strong> Bot talks to Marzban via REST — creates users, fetches links, syncs state.</li><li><strong>Retry logic.</strong> Every API call wrapped with retries and exponential backoff. Docker hiccups happen, users never notice.</li><li><strong>Auto-cleanup.</strong> Stale requests cleared on a schedule. Bot DB stays in sync with Marzban panel.</li><li><strong>Auto-delete messages.</strong> Old bot replies get removed on the next interaction. Chat stays clean.</li><li><strong>Monitoring + backup.</strong> Health check and DB backup run on cron. Single-node scope — nothing fancy.</li></ul>
 <hr>
-<h2 id="the-whole-stack">The whole stack</h2>
+<h2 id="the-whole-stack">The whole stack<a class="heading-anchor" href="#the-whole-stack" aria-label="Permalink to this section">#</a></h2>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code>+------------------------------------------------------------------+
 |                                                                  |
 |   Ch.1 — PROTOCOL                                                |

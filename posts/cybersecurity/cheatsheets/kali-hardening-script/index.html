@@ -108,11 +108,11 @@
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">chmod +x automate_cybersecurity_kali.sh
 sudo ./automate_cybersecurity_kali.sh
 </code></pre></div>
-<h2 id="what-it-installs">What it installs</h2>
+<h2 id="what-it-installs">What it installs<a class="heading-anchor" href="#what-it-installs" aria-label="Permalink to this section">#</a></h2>
 <table><thead><tr><th>Tool</th><th>Purpose</th></tr></thead><tbody><tr><td>ufw</td><td>Friendly front-end for nftables/iptables. Enforces a default-deny inbound policy.</td></tr><tr><td>fail2ban</td><td>Watches service logs (e.g. SSH) and dynamically bans IPs that fail authentication repeatedly.</td></tr><tr><td>rkhunter</td><td>Rootkit Hunter. Scans for known rootkit signatures, suspicious permissions, hidden files, and altered system binaries.</td></tr><tr><td>chkrootkit</td><td>Independent second-opinion rootkit scanner. Different signature set and detection heuristics.</td></tr><tr><td>clamav</td><td>Open-source antivirus engine. Bundled with <code>freshclam</code> (signature updater) and <code>clamscan</code> (on-demand scanner).</td></tr><tr><td>lynis</td><td>Host-hardening auditor. Produces a prioritised report with a numeric "hardening index".</td></tr></tbody></table>
-<h2 id="what-it-changes">What it changes</h2>
+<h2 id="what-it-changes">What it changes<a class="heading-anchor" href="#what-it-changes" aria-label="Permalink to this section">#</a></h2>
 <ul><li>UFW set to deny inbound by default, allow outbound, permit OpenSSH.</li><li><code>fail2ban</code> enabled on boot.</li><li>Updates and runs <code>rkhunter</code>, <code>clamscan</code> against <code>/home</code>, and <code>lynis audit system --quick</code>.</li><li>Logs land in the usual places: <code>/var/log/rkhunter.log</code>, <code>/var/log/lynis.log</code>, <code>/var/log/lynis-report.dat</code>.</li></ul>
-<h2 id="the-script">The script</h2>
+<h2 id="the-script">The script<a class="heading-anchor" href="#the-script" aria-label="Permalink to this section">#</a></h2>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">#!/usr/bin/env bash
 #
 # automate_cybersecurity_kali.sh — Defensive setup script for Kali Linux
@@ -237,9 +237,9 @@ main() {
 
 main &quot;$@&quot;
 </code></pre></div>
-<h2 id="notes">Notes</h2>
+<h2 id="notes">Notes<a class="heading-anchor" href="#notes" aria-label="Permalink to this section">#</a></h2>
 <ul><li>Drop the <code>ufw allow OpenSSH</code> line if the host is purely local — it is there so remote operators do not lock themselves out.</li><li>Tune <code>/etc/fail2ban/jail.local</code> for different ban thresholds, or to add jails for other services.</li><li>Read the Lynis report — it ranks suggestions; address <code>[!]</code> warnings before tweaking lower-priority hints.</li></ul>
-<h2 id="license">License</h2>
+<h2 id="license">License<a class="heading-anchor" href="#license" aria-label="Permalink to this section">#</a></h2>
 <p>MIT — original copyright Gerard King 2024, preserved in the downloaded script header. The license permits modification and redistribution; the only requirement is keeping the copyright notice and license text in copies.</p>
         </div>
 

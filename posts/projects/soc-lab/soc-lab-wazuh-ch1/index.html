@@ -101,13 +101,13 @@
         <nav class="toc" id="js-toc" aria-label="Table of contents"><p class="toc-title">// contents</p><ul class="toc-list"><li><a href="#project-overview">🗂️ Project Overview</a></li><li><a href="#phase-1-lab-setup">Phase 1: Lab Setup</a></li><li class="toc-h3"><a href="#step-1">Step 1</a></li><li class="toc-h3"><a href="#step-2-download-os-isos">Step 2: Download OS ISOs</a></li><li class="toc-h3"><a href="#step-3-internal-network-setup">Step 3: Internal Network Setup</a></li></ul></nav>
 
         <div class="post-body">
-          <h2 id="project-overview">🗂️ Project Overview</h2>
+          <h2 id="project-overview">🗂️ Project Overview<a class="heading-anchor" href="#project-overview" aria-label="Permalink to this section">#</a></h2>
 <table><thead><tr><th>Component</th><th>Goal</th></tr></thead><tbody><tr><td>Endpoint VMs</td><td>Generate and send logs</td><td></td></tr><tr><td>SIEM Server</td><td>Collect, analyze, and alert on logs</td></tr><tr><td>IDS/IPS</td><td>Monitor network traffics</td></tr><tr><td>Visualization</td><td>Use dashboards to analyze activity</td></tr><tr><td>Attacker Box</td><td>Launch simulated attacks for testing</td></tr></tbody></table>
 <hr>
-<h2 id="phase-1-lab-setup">Phase 1: Lab Setup</h2>
-<h3 id="step-1">Step 1</h3>
+<h2 id="phase-1-lab-setup">Phase 1: Lab Setup<a class="heading-anchor" href="#phase-1-lab-setup" aria-label="Permalink to this section">#</a></h2>
+<h3 id="step-1">Step 1<a class="heading-anchor" href="#step-1" aria-label="Permalink to this section">#</a></h3>
 <p>1) Install Virtualization Software    Download VirtualBox or VMware Workstation 2) Enable Intel VT-x / AMD-V in BIOS for virtualization</p>
-<h3 id="step-2-download-os-isos">Step 2: Download OS ISOs</h3>
+<h3 id="step-2-download-os-isos">Step 2: Download OS ISOs<a class="heading-anchor" href="#step-2-download-os-isos" aria-label="Permalink to this section">#</a></h3>
 <h4>Ubuntu Server 22.04 (SIEM server)</h4>
 <p><a href="https://ubuntu.com/download/server/thank-you?version=22.04.5&amp;architecture=amd64&amp;lts=true" target="_blank" rel="noopener noreferrer">https://ubuntu.com/download/server#architectures</a></p>
 <p>It's recommended to have around 45G space, to run server and Wazuh (with logs).</p>
@@ -119,7 +119,7 @@ sudo apt full-upgrade -y
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">curl -sO https://packages.wazuh.com/4.12/wazuh-install.sh &amp;&amp; sudo bash ./wazuh-install.sh -a
 </code></pre></div>
 <p>After succssefull installation, we will get our creds to dashboard login.</p>
-<p><img src="/assets/img/soc_lab/succssefull_install_wazuh.png" alt="Wazuh_install" loading="lazy"></p>
+<p><img src="/assets/img/soc_lab/succssefull_install_wazuh.png" alt="Wazuh_install" loading="lazy" width="773" height="743"></p>
 <h4>Kali linux</h4>
 <ul><li>Kali Linux (offensive machine) <a href="https://www.kali.org/get-kali/#kali-platforms" target="_blank" rel="noopener noreferrer">https://www.kali.org/get-kali/#kali-platforms</a></li></ul>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">sudo apt update        # Fetches the list of available updates
@@ -128,7 +128,7 @@ sudo apt full-upgrade  # Installs updates; may also remove some packages,
 <h4>Windows 10 (endpt)</h4>
 <ul><li>Windows 10 (target endpoint)</li></ul>
 <p>Installing Wazuh Agent on Windows https://documentation.wazuh.com/current/installation-guide/wazuh-agent/wazuh-agent-package-windows.html</p>
-<h3 id="step-3-internal-network-setup">Step 3: Internal Network Setup</h3>
+<h3 id="step-3-internal-network-setup">Step 3: Internal Network Setup<a class="heading-anchor" href="#step-3-internal-network-setup" aria-label="Permalink to this section">#</a></h3>
 <p>Set all VMs to "Host-only" or "Internal Network" Assign static IPs or use DHCP with fixed leases</p>
 <p>Create an "Internal Network"</p>
 <p>I'll do it using virt-manager GUI, because i have QEMU/KVM VirtManager.</p>
@@ -138,7 +138,7 @@ sudo apt full-upgrade  # Installs updates; may also remove some packages,
 <p>Next, attach VM to the Internal Network: Using virt-manager: 1) Open your VM → Details 2) Go to NIC (Network Interface)</p>
 <p>Select:</p>
 <ul><li>Network source: internal-net</li><li>Device model: virtio (recommended) (don't work for WIN10, choose another one)</li></ul>
-<p><img src="/assets/img/soc_lab/internal-net_qemu_kvm.png" alt="Internal-net" loading="lazy"></p>
+<p><img src="/assets/img/soc_lab/internal-net_qemu_kvm.png" alt="Internal-net" loading="lazy" width="803" height="632"></p>
 <h4>Assign Static IP in Ubuntu Server (Guest VM)</h4>
 <p>Edit the Netplan config:</p>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">sudo nano /etc/netplan/50-cloud-init.yaml
@@ -154,7 +154,7 @@ sudo apt full-upgrade  # Installs updates; may also remove some packages,
       nameservers:
         addresses: [8.8.8.8, 1.1.1.1]
 </code></pre></div>
-<p><img src="/assets/img/soc_lab/nano_netplan_config.png" alt="netplan" loading="lazy"></p>
+<p><img src="/assets/img/soc_lab/nano_netplan_config.png" alt="netplan" loading="lazy" width="980" height="800"></p>
 <p>Apply:</p>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">sudo netplan apply
 </code></pre></div>
@@ -169,7 +169,7 @@ ping 192.168.100.1
 <ul><li>Scroll and select Internet Protocol Version 4 (TCP/IPv4).</li><li>Click Properties.</li><li>Select:</li><li>Use the following IP address:</li></ul>
 <p>Fill in the fields:</p>
 <p>Field	Value IP address	192.168.100.20 Subnet mask	255.255.255.0 Default gateway	192.168.100.1 Preferred DNS	8.8.8.8 Alternate DNS	1.1.1.1</p>
-<p>Click OK, then Close. <img src="/assets/img/soc_lab/setting_win.png" alt="Win_network" loading="lazy"></p>
+<p>Click OK, then Close. <img src="/assets/img/soc_lab/setting_win.png" alt="Win_network" loading="lazy" width="853" height="932"></p>
 <p>Confirm Static IP Is Active Open Command Prompt:</p>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">ipconfig
 </code></pre></div>
@@ -181,7 +181,7 @@ Default Gateway . . . . . . . . . : 192.168.100.1
 <p>Test connectivity:</p>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">ping 192.168.100.10   # (Wazuh server)
 </code></pre></div>
-<p><img src="/assets/img/soc_lab/win_10networking_verification.png" alt="Win_verfication" loading="lazy"></p>
+<p><img src="/assets/img/soc_lab/win_10networking_verification.png" alt="Win_verfication" loading="lazy" width="660" height="523"></p>
 <h4>Wazuh agent</h4>
 <p>We need to register this agent to Wazuh server (soc server)</p>
 <p>Open Terminal on your Wazuh server (SOC-Server):</p>
@@ -198,15 +198,15 @@ Choose your action:
 </code></pre></div>
 <p>➕ Add Agent Press A and hit Enter</p>
 <p>Fill in: Agent name → Win10-Endpt Agent IP → 192.168.100.20 (or leave blank if not used) Press Enter to finish</p>
-<p><img src="/assets/img/soc_lab/wazuh_agent.png" alt="Wazuh_agent" loading="lazy"></p>
+<p><img src="/assets/img/soc_lab/wazuh_agent.png" alt="Wazuh_agent" loading="lazy" width="402" height="359"></p>
 <h4>Kali set up </h4>
-<p>Add new connection <img src="/assets/img/soc_lab/kali_con.png" alt="Kali_network" loading="lazy"> Check with ping command.</p>
+<p>Add new connection <img src="/assets/img/soc_lab/kali_con.png" alt="Kali_network" loading="lazy" width="698" height="545"> Check with ping command.</p>
 <hr>
 <p>Okay, all set.</p>
 <h4>Wazuh dashboard</h4>
-<p>On your's host machine open https://192.168.100.10/ And we should see one active agent connected - win10 endpoint <img src="/assets/img/soc_lab/Wazuh_dashboard.png" alt="Wazuh_dash" loading="lazy"></p>
+<p>On your's host machine open https://192.168.100.10/ And we should see one active agent connected - win10 endpoint <img src="/assets/img/soc_lab/Wazuh_dashboard.png" alt="Wazuh_dash" loading="lazy" width="1915" height="954"></p>
 <p>Now, we'll try to perform nmap scan on Win10.</p>
-<p><img src="/assets/img/soc_lab/scan_perform.png" alt="Scan_perform" loading="lazy"></p>
+<p><img src="/assets/img/soc_lab/scan_perform.png" alt="Scan_perform" loading="lazy" width="641" height="384"></p>
 <p>Lab graph:</p>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-markdown">                        +-----------------------------+
                         |      Internal Network       |

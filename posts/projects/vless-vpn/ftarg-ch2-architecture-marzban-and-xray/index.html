@@ -104,27 +104,27 @@
           <h1>Ftarg — Ch.2: Architecture — Marzban, XRay, and the Routing Problem</h1>
 <p>Previous chapter covered why most protocols get caught by DPI and how REALITY avoids that. This one is about the actual stack — what's running and why.</p>
 <hr>
-<h2 id="marzban">Marzban</h2>
+<h2 id="marzban">Marzban<a class="heading-anchor" href="#marzban" aria-label="Permalink to this section">#</a></h2>
 <p>Marzban is an open-source management panel for XRay. Handles user creation, subscription links, traffic tracking, expiry. Has a built-in Telegram admin bot.</p>
 <p>Why Marzban over 3x-ui or others:</p>
 <ul><li>Cleaner API</li><li>Docker-native</li><li>Better multi-node support in its architecture</li><li>You configure XRay directly</li></ul>
 <p>It's not the proxy. It's the control panel. XRay does the actual work.</p>
 <hr>
-<h2 id="docker-setup">Docker setup</h2>
+<h2 id="docker-setup">Docker setup<a class="heading-anchor" href="#docker-setup" aria-label="Permalink to this section">#</a></h2>
 <p>Marzban runs in Docker with host network mode. Improtant part is the REALITY needs direct access to port 443 for the TLS handshake. Docker's default bridge networking adds a NAT layer in between — the handshake gets mangled, connections behave unpredictably or just drop.</p>
 <p>Host network mode = container uses the host's network stack directly. No NAT, no bridge. Port 443 works as expected.</p>
 <p>Single compose file, XRay config mounted as a volume.</p>
 <hr>
-<h2 id="the-routing-problem">The routing problem</h2>
+<h2 id="the-routing-problem">The routing problem<a class="heading-anchor" href="#the-routing-problem" aria-label="Permalink to this section">#</a></h2>
 <p>This was the biggest headache of the whole build.</p>
-<h3 id="what-i-needed">What I needed</h3>
+<h3 id="what-i-needed">What I needed<a class="heading-anchor" href="#what-i-needed" aria-label="Permalink to this section">#</a></h3>
 <p>The proxy server accepts connections on port 443 (VLESS+REALITY). Traffic comes in, gets decrypted, needs to go out to the internet. Simple.</p>
 <p>But I didn't want outbound traffic going from my server's real IP. Reasons: privacy, IP reputation, separation between the proxy identity and the underlying host. So I needed an outbound tunnel.</p>
-<h3 id="what-i-tried-first">What I tried first</h3>
+<h3 id="what-i-tried-first">What I tried first<a class="heading-anchor" href="#what-i-tried-first" aria-label="Permalink to this section">#</a></h3>
 <p>ProtonVPN. WireGuard-based, seemed solid. Set it up as a system-level VPN on the host. <code>wg-quick up</code>, routing table updated, traffic going through the tunnel. Looked good.</p>
 <p>Then port 443 stopped accepting connections.</p>
 <p>I spent a while trying to make it work — policy routing, ip rules, different configs. Couldn't get inbound and outbound to coexist. At that point I moved on and started looking at other approaches.</p>
-<h3 id="why-system-level-vpn-breaks-inbound">Why system-level VPN breaks inbound</h3>
+<h3 id="why-system-level-vpn-breaks-inbound">Why system-level VPN breaks inbound<a class="heading-anchor" href="#why-system-level-vpn-breaks-inbound" aria-label="Permalink to this section">#</a></h3>
 <p>Later I understood the actual problem. When you bring up a system-level VPN, it takes over the default route. Every packet leaving the host goes through the tunnel — including responses to incoming connections.</p>
 <p>So, what happens:</p>
 <ol><li>Client sends SYN to your real IP on port 443</li><li>Your server accepts, sends SYN-ACK</li><li>But SYN-ACK goes out through the VPN tunnel</li><li>Client gets a response from a completely different IP</li><li>Connection dropped</li></ol>
@@ -139,7 +139,7 @@ Client &lt;-- [SYN-ACK from wrong IP] &lt;-----------------+
          connection rejected
 </code></pre></div>
 <p>This is a fundamental conflict. A server that needs to accept inbound connections on a specific port AND route outbound through a tunnel — system-level VPN can't do both cleanly.</p>
-<h3 id="the-fix-xray-native-wireguard-outbound">The fix: XRay native WireGuard outbound</h3>
+<h3 id="the-fix-xray-native-wireguard-outbound">The fix: XRay native WireGuard outbound<a class="heading-anchor" href="#the-fix-xray-native-wireguard-outbound" aria-label="Permalink to this section">#</a></h3>
 <p>Turns out XRay has built-in support for WireGuard as an outbound protocol. Instead of tunneling all system traffic, only the proxied traffic goes through it.</p>
 <p>I switched to Cloudflare WARP — free WireGuard-based tunnel. But instead of running it as a system VPN, configured it as an outbound inside XRay.</p>
 <p>System networking stays completely untouched. Port 443 inbound works normally. XRay handles the tunnel internally for proxy traffic only.</p>
@@ -156,7 +156,7 @@ Client --[443]--&gt; Server (direct, normal routing)
 <p>Clean separation. Inbound = direct. Outbound = tunneled. No routing conflicts.</p>
 <p>The solution isn't obvious unless you know XRay can do WireGuard natively. Application-level routing instead of system-level routing — that's the key.</p>
 <hr>
-<h2 id="current-stack">Current stack</h2>
+<h2 id="current-stack">Current stack<a class="heading-anchor" href="#current-stack" aria-label="Permalink to this section">#</a></h2>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code>+------------------------------------------+
 |              Host (Fedora)               |
 |                                          |

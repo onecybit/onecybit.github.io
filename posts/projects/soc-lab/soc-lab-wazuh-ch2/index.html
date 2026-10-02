@@ -102,7 +102,7 @@
 
         <div class="post-body">
           <p>We're going to set up Wazuh to properly monitor security events on our Windows endpoint. While we perform penetration testing on the Windows machine using Kali Linux, Wazuh will collect and forward the relevant logs.</p>
-<h3 id="enable-windows-event-log-monitoring">Enable Windows Event Log Monitoring</h3>
+<h3 id="enable-windows-event-log-monitoring">Enable Windows Event Log Monitoring<a class="heading-anchor" href="#enable-windows-event-log-monitoring" aria-label="Permalink to this section">#</a></h3>
 <p>By default, the Wazuh agent collects logs from key sources. You can customize this on the Windows machine in:</p>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-cmd">C:\Program Files (x86)\ossec-agent\ossec.conf
 </code></pre></div>
@@ -131,7 +131,7 @@
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-powershell">net stop wazuh
 net start wazuh
 </code></pre></div>
-<h3 id="installing-sysmon">Installing Sysmon </h3>
+<h3 id="installing-sysmon">Installing Sysmon <a class="heading-anchor" href="#installing-sysmon" aria-label="Permalink to this section">#</a></h3>
 <p>Sysmon = detailed logging for process creation, registry, network connections.</p>
 <p>Steps:</p>
 <ul><li><a href="https://learn.microsoft.com/en-us/sysinternals/downloads/sysmon" target="_blank" rel="noopener noreferrer">Download sysmon</a></li></ul>
@@ -144,11 +144,11 @@ This configuration expects software to be installed system-wide and NOT in the C
 Various pieces of software install themselves in User directories, which are subject to extra monitoring. 
 Where possible, you should install the system-wide version of these pieces of software, like Chrome. See the configuration file for more instructions.
 </code></pre></div>
-<p><img src="/assets/img/soc_lab/sysmon_localization.png" alt="sysmon_loc" loading="lazy"></p>
+<p><img src="/assets/img/soc_lab/sysmon_localization.png" alt="sysmon_loc" loading="lazy" width="501" height="551"></p>
 <p>Install:</p>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-cmd">sysmon.exe -accepteula -i sysmonconfig.xml
 </code></pre></div>
-<p><img src="/assets/img/soc_lab/sysmon_config.png" alt="sysmon_config" loading="lazy"></p>
+<p><img src="/assets/img/soc_lab/sysmon_config.png" alt="sysmon_config" loading="lazy" width="959" height="437"></p>
 <p>In Wazuh agent config, add:</p>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-xml">&lt;localfile&gt;
   &lt;location&gt;Microsoft-Windows-Sysmon/Operational&lt;/location&gt;
@@ -156,7 +156,7 @@ Where possible, you should install the system-wide version of these pieces of so
 &lt;/localfile&gt;
 </code></pre></div>
 <p>Restart Wazuh agent.</p>
-<h3 id="installing-suricata">Installing Suricata</h3>
+<h3 id="installing-suricata">Installing Suricata<a class="heading-anchor" href="#installing-suricata" aria-label="Permalink to this section">#</a></h3>
 <p>To monitor Windows endpoint traffic from your Ubuntu Wazuh server, we'll install and integrate a Network IDS like Suricata on the Ubuntu server, and use port mirroring (SPAN) or a tapped interface to observe Windows traffic.</p>
 <p>Installing Suricata (recommended over Snort for Wazuh integration), and integrating it with Wazuh.</p>
 <ul><li>Fully open-source and modern IDS/IPS/NSM engine</li><li>JSON output is easily parsed by Wazuh</li><li>Multi-threaded (better performance)</li><li>Native Wazuh module support</li></ul>
@@ -205,11 +205,11 @@ sudo suricata-update
 <p>. Test suricata</p>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">   sudo suricata -T -c /etc/suricata/suricata.yaml -v
    </code></pre></div>
-<p><img src="/assets/img/soc_lab/suricata_test.png" alt="on_loc" loading="lazy"></p>
+<p><img src="/assets/img/soc_lab/suricata_test.png" alt="on_loc" loading="lazy" width="941" height="210"></p>
 <p>Once you've changed the config:</p>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">sudo systemctl restart suricata
 </code></pre></div>
-<h3 id="enable-wazuh-integration">Enable Wazuh integration</h3>
+<h3 id="enable-wazuh-integration">Enable Wazuh integration<a class="heading-anchor" href="#enable-wazuh-integration" aria-label="Permalink to this section">#</a></h3>
 <p>Wazuh comes with a Suricata decoder and rules.</p>
 <p>Edit Wazuh config:</p>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">sudo nano /var/ossec/etc/ossec.conf
@@ -235,9 +235,9 @@ sudo suricata-update
 <p> - msg: Message shown  - sid: Unique rule ID  - rev: Revision</p>
 <p>After alerts are generated:</p>
 <ul><li>Wazuh reads /var/log/suricata/eve.json</li><li>Alerts will appear in the Wazuh dashboard</li><li>Filter by: rule.name: "RDP Connection Attempt Detected" or data.alert.signature_id: 1000001</li></ul>
-<p><img src="/assets/img/soc_lab/threat_hunting_d_w.png" alt="on_loc" loading="lazy"></p>
+<p><img src="/assets/img/soc_lab/threat_hunting_d_w.png" alt="on_loc" loading="lazy" width="1920" height="970"></p>
 <hr>
-<h3 id="summary">Summary</h3>
+<h3 id="summary">Summary<a class="heading-anchor" href="#summary" aria-label="Permalink to this section">#</a></h3>
 <ol><li>Wazuh</li></ol>
 <p>Central SIEM-like platform for logs &amp; alerting -Installed on Ubuntu Collects logs from: -Windows Agent</p>
 <ul><li>Suricata IDS (eve.json)</li><li>Sysmon (via Windows agent)</li></ul>
@@ -250,7 +250,7 @@ sudo suricata-update
 <ul><li>Nmap scans</li><li>Exploits</li><li>Malware traffic (C2, etc.)</li></ul>
 <p>Writes to eve.json → Wazuh parses alerts</p>
 <hr>
-<h3 id="what-we-can-monitor">What we can monitor</h3>
+<h3 id="what-we-can-monitor">What we can monitor<a class="heading-anchor" href="#what-we-can-monitor" aria-label="Permalink to this section">#</a></h3>
 <table><thead><tr><th>Threat Category</th><th>Detection Source</th><th>Example</th></tr></thead><tbody><tr><td>Brute-force</td><td>Sysmon + Wazuh rules</td><td>4625 login failures</td></tr><tr><td>Malware dropper</td><td>Sysmon (proc/file create)</td><td>powershell.exe downloading files</td></tr><tr><td>Reconnaissance</td><td>Suricata</td><td>Nmap, port scans</td></tr><tr><td>Lateral movement</td><td>Suricata + Sysmon</td><td>SMB, PsExec, RDP</td></tr><tr><td>Data exfiltration</td><td>Suricata</td><td>Large DNS, HTTP uploads</td></tr><tr><td>Persistence</td><td>Sysmon</td><td>Registry Run keys, scheduled tasks</td></tr><tr><td>Tampering</td><td>Sysmon + Wazuh</td><td>Security log cleared (1102)</td></tr></tbody></table>
 <hr>
         </div>

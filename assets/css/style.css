@@ -509,6 +509,26 @@ code, pre { font-family: var(--mono); }
 .post-body h3[id],
 .post-body h4[id] { scroll-margin-top: 88px; }
 
+/* '#' permalink revealed on heading hover or keyboard focus. Hidden with
+   opacity rather than display so it stays focusable and reachable by Tab. */
+.post-body .heading-anchor {
+  margin-left: 0.4rem;
+  font-family: var(--mono);
+  font-size: 0.8em;
+  font-weight: 400;
+  color: var(--text2);
+  border-bottom: none;
+  opacity: 0;
+  transition: opacity 0.2s, color 0.2s;
+}
+
+.post-body h2:hover .heading-anchor,
+.post-body h3:hover .heading-anchor,
+.post-body .heading-anchor:focus-visible { opacity: 1; }
+
+.post-body .heading-anchor:hover     { color: var(--neon); border-bottom: none; }
+.post-body .heading-anchor.is-copied { opacity: 1; color: var(--neon2); }
+
 .post-body h2 { font-size: 1.5rem; }
 .post-body h3 { font-size: 1.2rem; }
 .post-body h4 { font-size: 1rem; color: var(--neon); }
@@ -1317,7 +1337,8 @@ body.palette-open { overflow: hidden; }
 /* ── 404 ERROR PAGE ── */
 
 .error-page {
-  min-height: 100vh;
+  /* 64px header + footer, so the panel still centres in what is left */
+  min-height: calc(100vh - 64px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1578,6 +1599,10 @@ body.palette-open { overflow: hidden; }
   .nav-search-kbd  { display: none; }
 }
 
+@media (hover: none) {
+  .post-body .heading-anchor { opacity: 0.45; }
+}
+
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
 
@@ -1601,5 +1626,6 @@ body.palette-open { overflow: hidden; }
 
   /* The skip link keeps its transform — that is how it hides — but slides
      instantly rather than animating into view. */
-  .skip-link { transition: none; }
+  .skip-link                 { transition: none; }
+  .post-body .heading-anchor { transition: none; }
 }

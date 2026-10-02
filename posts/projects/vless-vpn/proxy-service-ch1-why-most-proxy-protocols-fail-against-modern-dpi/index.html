@@ -103,20 +103,20 @@
         <div class="post-body">
           <p>Most VPN and proxy protocols weren't designed to be invisible. They were designed to be fast, secure, or easy to deploy. But when you put them in front of a modern DPI system, everything falls apart. Why is that?</p>
 <hr>
-<h2 id="how-dpi-identifies-proxy-traffic">How DPI identifies proxy traffic</h2>
+<h2 id="how-dpi-identifies-proxy-traffic">How DPI identifies proxy traffic<a class="heading-anchor" href="#how-dpi-identifies-proxy-traffic" aria-label="Permalink to this section">#</a></h2>
 <p>DPI doesn't need to decrypt anything. It works on metadata — packet sizes, timing, handshake structure, header bytes, entropy patterns.</p>
 <p>Three main techniques:</p>
 <p><strong>1. Protocol fingerprinting.</strong> Every protocol has a handshake signature. OpenVPN starts with a specific opcode byte (<code>0x38</code> for <code>P_CONTROL_HARD_RESET_CLIENT_V2</code>). WireGuard opens with a fixed 4-byte message type. These are static, predictable, and trivial to match with a regex on the first packet. And DPI sees this VPN service.</p>
 <p><strong>2. Entropy analysis.</strong> Encrypted traffic has near-uniform byte distribution. Normal HTTPS also has high entropy, but it's wrapped in TLS with recognizable structure — certificates, extensions, ALPN negotiation. A raw encrypted stream without that framing (like Shadowsocks or early VMess) stands out. It's not HTTP, not TLS, not any known protocol — just high-entropy noise. That alone is a signal.</p>
 <p><strong>3. Statistical fingerprinting.</strong> Packet size distributions and timing patterns vary between protocols. A WireGuard keepalive is always 32 bytes. Shadowsocks handshake packets cluster around specific sizes depending on cipher choice. DPI systems build statistical models and flag traffic that matches known distributions, even if the content is opaque.</p>
 <hr>
-<h2 id="protocol-breakdown">Protocol breakdown</h2>
+<h2 id="protocol-breakdown">Protocol breakdown<a class="heading-anchor" href="#protocol-breakdown" aria-label="Permalink to this section">#</a></h2>
 <table><thead><tr><th>Protocol</th><th>How it gets caught</th><th>How hard to block</th></tr></thead><tbody><tr><td>OpenVPN</td><td>Static opcode first packet</td><td>Trivial</td></tr><tr><td>WireGuard</td><td>Fixed handshake + 32-byte keepalives</td><td>Trivial</td></tr><tr><td>Shadowsocks</td><td>Entropy analysis, no protocol framing</td><td>Moderate</td></tr><tr><td>VMess</td><td>Packet length patterns, timing</td><td>Moderate</td></tr><tr><td>VLESS + TLS</td><td>Depends on TLS implementation</td><td>Hard</td></tr><tr><td>VLESS + REALITY</td><td>TLS 1.3 impersonation, real cert</td><td>Very hard</td></tr></tbody></table>
 <p>OpenVPN and WireGuard are the easiest to block. Their handshakes are essentially self-announcing — a single signature rule catches them. Some DPI systems don't even bother with deep analysis; they just match the first few bytes.</p>
 <p>Shadowsocks improved on this significantly. No fixed header, no recognizable handshake. But it still produces a stream of high-entropy data with no protocol framing. Modern DPI detects this by exclusion — if it's not TLS, not HTTP, not SSH, not DNS, and it's high-entropy on a common port, flag it. The "looks like nothing" approach worked for years, but statistical detection caught up.</p>
 <p>VMess has similar issues. The protocol adds its own framing, and the packet length distribution is distinguishable from real HTTPS under analysis. Later versions improved, but the fundamental problem remains: it's a custom protocol pretending to be nothing, in an environment where "nothing" is suspicious.</p>
 <hr>
-<h2 id="the-tls-impersonation-approach">The TLS impersonation approach</h2>
+<h2 id="the-tls-impersonation-approach">The TLS impersonation approach<a class="heading-anchor" href="#the-tls-impersonation-approach" aria-label="Permalink to this section">#</a></h2>
 <p>The insight that changed everything: don't invent a new protocol. Instead, make proxy traffic look exactly like regular HTTPS to a real, legitimate website.</p>
 <p>This is what VLESS + REALITY does.</p>
 <p>A normal TLS 1.3 handshake:</p>
@@ -148,13 +148,13 @@ Client --&gt; proxy server --&gt; authenticates via pre-shared key
        --&gt; traffic routed through proxy
 </code></pre></div>
 <hr>
-<h2 id="why-sni-target-selection-matters">Why SNI target selection matters</h2>
+<h2 id="why-sni-target-selection-matters">Why SNI target selection matters<a class="heading-anchor" href="#why-sni-target-selection-matters" aria-label="Permalink to this section">#</a></h2>
 <p>Not every domain works as an impersonation target. The SNI target needs to:</p>
 <ul><li>Support TLS 1.3 (mandatory — REALITY only works with 1.3)</li><li>Support HTTP/2 — needed for the handshake to look complete</li><li>Be plausible for the client's geography and usage patterns</li><li>Be a high-traffic domain (so connections to it don't stand out)</li><li>Not use certificate pinning or other mechanisms that break the proxy handshake</li></ul>
 <p>Some popular targets fail silently. One well-known example — a major tech company's domain supports TLS 1.3 but its H2 implementation breaks the handshake flow. No error on the server side, but the connection drops. Took a while to figure that out.</p>
 <p>The ideal target is a large, boring, high-traffic site that's accessed constantly from everywhere. Search engines, CDN providers, major web platforms. The kind of domain where one more TLS connection is invisible in the noise.</p>
 <hr>
-<h2 id="what-this-means-for-architecture">What this means for architecture</h2>
+<h2 id="what-this-means-for-architecture">What this means for architecture<a class="heading-anchor" href="#what-this-means-for-architecture" aria-label="Permalink to this section">#</a></h2>
 <p>If REALITY solves the detection problem at the protocol level, the remaining engineering challenges are everything around it — routing, scaling, user management, operational security, and making sure nothing else in the stack leaks metadata that undoes the transport-level privacy.</p>
 <p>That's what the rest of this series covers.</p>
 <p>Next: Proxy service — Ch.2: Architecture — Marzban, XRay, and the Routing Problem</p>

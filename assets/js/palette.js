@@ -141,7 +141,7 @@ const OCB_PALETTE = {
         document.body.classList.add('palette-open');
         OCB_PALETTE.inputEl.value = '';
         OCB_PALETTE.inputEl.focus();
-        OCB_PALETTE.render(OCB_PALETTE.search(''), '');
+        OCB_PALETTE.render(OCB_PALETTE.search(''), []);
         OCB_PALETTE.load();
     },
 
@@ -229,7 +229,7 @@ const OCB_PALETTE = {
 
     runNow() {
         const q = OCB_PALETTE.sanitize(OCB_PALETTE.inputEl.value);
-        OCB_PALETTE.render(OCB_PALETTE.search(q), q);
+        OCB_PALETTE.render(OCB_PALETTE.search(q), OCB_PALETTE.terms(q));
     },
 
     isTyping(el) {
@@ -244,27 +244,33 @@ const OCB_PALETTE = {
 
     /* ── Matching ── */
 
+    /* Splits a query into lowercase terms. Every term must match for a post
+       to qualify, so "nmap ctf" finds posts about both rather than nothing. */
+    terms(q) {
+        return String(q || '').toLowerCase().split(/\s+/).filter(Boolean);
+    },
+
     /* Returns up to MAX_RESULTS items of { kind, label, url, meta, score }.
        Lower score sorts first: a title hit beats a tag hit beats body text. */
     search(q) {
-        const lower = q.toLowerCase();
+        const terms = OCB_PALETTE.terms(q);
 
-        if (!lower) {
+        if (!terms.length) {
             return OCB_PALETTE.posts.slice(0, OCB_PALETTE.MAX_RESULTS)
                 .map(OCB_PALETTE.toPostItem);
         }
 
         const hits = [];
-        OCB_PALETTE.posts.forEach(function scorePost(p) {
-            const score = OCB_PALETTE.scorePost(p, lower);
+        OCB_PALETTE.posts.forEach(function collect(p) {
+            const score = OCB_PALETTE.scorePost(p, terms);
             if (score === null) return;
             const item = OCB_PALETTE.toPostItem(p);
             item.score = score;
             hits.push(item);
         });
 
-        OCB_PALETTE.LINKS.forEach(function scoreLink(l) {
-            if (!l.label.toLowerCase().includes(lower)) return;
+        OCB_PALETTE.LINKS.forEach(function collectLink(l) {
+            if (!OCB_PALETTE.matchesAll(l.label, terms)) return;
             hits.push({ kind: 'page', label: l.label, url: l.url, meta: 'page', score: 1 });
         });
 
@@ -272,13 +278,30 @@ const OCB_PALETTE = {
         return hits.slice(0, OCB_PALETTE.MAX_RESULTS);
     },
 
-    scorePost(p, lower) {
-        if ((p.title || '').toLowerCase().includes(lower))  return 0;
+    matchesAll(text, terms) {
+        const lower = String(text || '').toLowerCase();
+        return terms.every(function hit(term) { return lower.includes(term); });
+    },
+
+    /* A post scores its *weakest* term match, so one that matches every term
+       in its title still outranks one that needed the body text. */
+    scorePost(p, terms) {
+        let worst = 0;
+        for (let i = 0; i < terms.length; i += 1) {
+            const score = OCB_PALETTE.scoreTerm(p, terms[i]);
+            if (score === null) return null;
+            if (score > worst) { worst = score; }
+        }
+        return worst;
+    },
+
+    scoreTerm(p, term) {
+        if ((p.title || '').toLowerCase().includes(term))  return 0;
         if ((p.tags || []).some(function hit(t) {
-            return String(t).toLowerCase().includes(lower);
+            return String(t).toLowerCase().includes(term);
         })) return 2;
-        if ((p.excerpt || '').toLowerCase().includes(lower)) return 3;
-        if ((p.text || '').toLowerCase().includes(lower))    return 4;
+        if ((p.excerpt || '').toLowerCase().includes(term)) return 3;
+        if ((p.text || '').toLowerCase().includes(term))    return 4;
         return null;
     },
 
@@ -290,7 +313,7 @@ const OCB_PALETTE = {
 
     /* ── Rendering ── */
 
-    render(items, q) {
+    render(items, terms) {
         OCB_PALETTE.items  = items;
         OCB_PALETTE.cursor = 0;
         OCB_PALETTE.listEl.replaceChildren();
@@ -304,15 +327,16 @@ const OCB_PALETTE = {
         }
 
         items.forEach(function addRow(item, i) {
-            OCB_PALETTE.listEl.appendChild(OCB_PALETTE.buildRow(item, i, q));
+            OCB_PALETTE.listEl.appendChild(OCB_PALETTE.buildRow(item, i, terms));
         });
 
         const noun = items.length === 1 ? 'result' : 'results';
-        OCB_PALETTE.setStatus(items.length + ' ' + noun + (q ? '' : ' · latest posts'));
+        OCB_PALETTE.setStatus(items.length + ' ' + noun
+            + (terms.length ? '' : ' · latest posts'));
         OCB_PALETTE.highlightCursor();
     },
 
-    buildRow(item, index, q) {
+    buildRow(item, index, terms) {
         const li = document.createElement('li');
         li.className = 'palette-item';
         li.id = 'js-palette-item-' + index;
@@ -323,7 +347,7 @@ const OCB_PALETTE = {
 
         const label = document.createElement('span');
         label.className = 'palette-item-label';
-        OCB_PALETTE.fillHighlighted(label, item.label, q);
+        OCB_PALETTE.fillHighlighted(label, item.label, terms);
 
         const meta = document.createElement('span');
         meta.className = 'palette-item-meta';
@@ -334,32 +358,45 @@ const OCB_PALETTE = {
         return li;
     },
 
-    /* Appends text to parent, wrapping each case-insensitive match of q in
-       <mark>. Text nodes only — no markup is ever parsed from post data. */
-    fillHighlighted(parent, text, q) {
+    /* Appends text to parent, wrapping every match of every term in <mark>.
+       Text nodes only — no markup is ever parsed from post data, and no regex
+       is built from the query, so punctuation in a term cannot break it. */
+    fillHighlighted(parent, text, terms) {
         const value = String(text || '');
-        if (!q) {
-            parent.appendChild(document.createTextNode(value));
-            return;
-        }
-        const lower  = value.toLowerCase();
-        const lowerQ = q.toLowerCase();
+        const list  = terms || [];
+        const lower = value.toLowerCase();
         let   cursor = 0;
-        let   idx    = lower.indexOf(lowerQ);
 
-        while (idx !== -1) {
-            if (idx > cursor) {
-                parent.appendChild(document.createTextNode(value.slice(cursor, idx)));
+        while (cursor < value.length) {
+            const next = OCB_PALETTE.nextMatch(lower, list, cursor);
+            if (!next) break;
+            if (next.index > cursor) {
+                parent.appendChild(document.createTextNode(value.slice(cursor, next.index)));
             }
             const mark = document.createElement('mark');
-            mark.appendChild(document.createTextNode(value.slice(idx, idx + q.length)));
+            mark.appendChild(
+                document.createTextNode(value.slice(next.index, next.index + next.length)));
             parent.appendChild(mark);
-            cursor = idx + q.length;
-            idx = lower.indexOf(lowerQ, cursor);
+            cursor = next.index + next.length;
         }
         if (cursor < value.length) {
             parent.appendChild(document.createTextNode(value.slice(cursor)));
         }
+    },
+
+    /* Earliest occurrence of any term at or after `from`, longest wins on a
+       tie so overlapping terms do not split a match. */
+    nextMatch(lower, terms, from) {
+        let best = null;
+        terms.forEach(function pick(term) {
+            const idx = lower.indexOf(term, from);
+            if (idx === -1) return;
+            if (!best || idx < best.index
+                || (idx === best.index && term.length > best.length)) {
+                best = { index: idx, length: term.length };
+            }
+        });
+        return best;
     },
 
     setStatus(msg) {
