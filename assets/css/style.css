@@ -257,20 +257,30 @@ code, pre { font-family: var(--mono); }
 }
 
 
+/* auto-fit collapses the empty tracks, so four tiles sit in one row on
+   desktop and fall to 2x2 near 400px without a media query. */
 .stats-strip {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 2.5rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.75rem;
   margin-top: 3.5rem;
-  padding-top: 2rem;
-  border-top: 1px solid var(--border);
 }
 
-.stat { display: flex; flex-direction: column; gap: 0.3rem; }
+.stat {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 1.1rem 1.25rem;
+  background: var(--bg2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
 
 .stat-value {
   font-family: var(--mono);
-  font-size: 1.35rem;
+  /* fluid so the longest value (the ISO date) still fits a 2-column tile
+     at phone width without overflowing */
+  font-size: clamp(1.15rem, 3.4vw, 1.5rem);
   font-weight: 500;
   color: var(--neon);
   line-height: 1;
@@ -278,7 +288,7 @@ code, pre { font-family: var(--mono); }
 
 .stat-label {
   font-family: var(--mono);
-  font-size: 0.68rem;
+  font-size: 0.65rem;
   color: var(--text2);
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1417,8 +1427,12 @@ body.palette-open { overflow: hidden; }
 :focus-visible { outline: 2px solid var(--neon); outline-offset: 2px; }
 
 
+/* Off-screen until focused. inline-block is required: transform has no
+   effect on a non-replaced inline element, which would leave the link
+   sitting visible in the top-left corner of every page. */
 .skip-link {
-  position: absolute;
+  position: fixed;
+  display: inline-block;
   top: 0.5rem;
   left: 0.5rem;
   z-index: 10001;
@@ -1429,7 +1443,7 @@ body.palette-open { overflow: hidden; }
   border: 1px solid var(--neon);
   border-radius: 6px;
   padding: 0.5rem 0.9rem;
-  transform: translateY(-200%);
+  transform: translateY(-300%);
   transition: transform 0.2s;
 }
 
